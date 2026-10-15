@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mariadb:11.4
+        env:
+          MARIADB_DATABASE: alacena
+          MARIADB_USER: alacena
+          MARIADB_PASSWORD: alacena
+          MARIADB_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: alacena
+      DB_USER: alacena
+      DB_PASS: alacena
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql, mbstring
+          tools: composer
+
+      - name: Instalar dependencias
+        run: composer install --no-interaction --no-progress
+
+      - name: Sintaxis y estilo (PSR-12)
+        run: composer lint
+
+      - name: Cargar esquema y datos de ejemplo
+        run: |
+          mysql -h 127.0.0.1 -u alacena -palacena alacena < database/schema.sql
+          mysql -h 127.0.0.1 -u alacena -palacena alacena < database/seed.sql
+
+      - name: Pruebas (unitarias + integración)
+        run: composer test

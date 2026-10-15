@@ -1,0 +1,52 @@
+# Entorno local completo con un solo comando:  docker compose up -d
+#   App:         http://localhost:8080
+#   phpMyAdmin:  http://localhost:8081   (usuario y contraseña: los de .env)
+#   Mailpit:     http://localhost:8025   (bandeja donde llegan los correos que manda la app)
+
+# Nombre fijo del proyecto: así no importa cómo se llame la carpeta
+# (si no, Docker usa el nombre de la carpeta y al renombrarla crea una base nueva)
+name: alacena
+services:
+  web:
+    build: ./docker/php
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    env_file: .env
+    depends_on:
+      - db
+      - mailpit
+
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:-alacena}
+      MARIADB_USER: ${DB_USER:-alacena}
+      MARIADB_PASSWORD: ${DB_PASS:-alacena}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASS:-root}
+    ports:
+      - "3306:3306"
+    volumes:
+      - datos:/var/lib/mysql
+      # La primera vez que se crea la base, carga el esquema y los datos de ejemplo
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+
+  # Servidor de correo de prueba: recibe todo lo que envía mail() y no lo manda a nadie de verdad
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+
+volumes:
+  datos:

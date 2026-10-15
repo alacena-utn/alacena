@@ -1,0 +1,6 @@
+{
+  "editor.formatOnSave": true,
+  "files.eol": "\n",
+  "php.validate.enable": true,
+  "phpcs.standard": "phpcs.xml"
+}

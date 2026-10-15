@@ -1,0 +1,9 @@
+DirectoryIndex index.php index.html
+
+# Apache: manda todas las peticiones /api/... al punto de entrada de la API
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/ api/index.php [QSA,L]
+
+Options -Indexes

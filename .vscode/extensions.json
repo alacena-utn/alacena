@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "bmewburn.vscode-intelephense-client",
+    "shevaua.phpcs",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-mysql",
+    "github.vscode-pull-request-github",
+    "ritwickdey.liveserver"
+  ]
+}

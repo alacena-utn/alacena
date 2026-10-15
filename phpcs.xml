@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ruleset name="Alacena">
+    <description>Estilo de código del equipo: PSR-12</description>
+    <file>src</file>
+    <file>public/api</file>
+    <file>tests</file>
+    <!-- Las vistas mezclan HTML y PHP: se revisa solo su sintaxis (composer lint) -->
+    <exclude-pattern>src/Vistas/*</exclude-pattern>
+    <arg name="extensions" value="php"/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+    <rule ref="PSR12"/>
+</ruleset>

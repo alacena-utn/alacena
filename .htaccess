@@ -1,0 +1,8 @@
+# Solo se usa si el hosting obliga a subir el proyecto entero a la raíz web (ej. htdocs/):
+# bloquea el acceso a las carpetas internas y sirve todo desde public/.
+RewriteEngine On
+RewriteRule ^(src|database|tests|vendor|docs|scripts|docker)(/|$) - [F,L]
+RewriteRule (^|/)\. - [F,L]
+RewriteRule ^(composer\.(json|lock)|phpunit\.xml|phpcs\.xml|docker-compose\.yml)$ - [F,L]
+RewriteCond %{REQUEST_URI} !/public/
+RewriteRule ^(.*)$ public/$1 [L]
