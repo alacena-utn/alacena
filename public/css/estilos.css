@@ -741,6 +741,198 @@ body::after {
 
 /* ══════════ P2 · Página principal, Mi cocina y Mi despensa ══════════ */
 
+
+/* Página principal: texto a la izquierda, puerta con imanes a la derecha */
+.portada {
+  display: grid;
+  gap: 32px;
+  align-items: center;
+  padding: 8px 0 48px;
+}
+
+@media (min-width: 860px) {
+  .portada {
+    grid-template-columns: 1fr 1.1fr;
+  }
+}
+
+.portada__titulo {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  margin-bottom: 12px;
+}
+
+.portada__bajada {
+  font-size: 1.15rem;
+  max-width: 30em;
+}
+
+.portada__nota {
+  margin: 12px 0 0;
+  font: 700 1.5rem/1.2 var(--fuente-mano);
+  color: var(--color-acento);
+}
+
+/* La puerta con los imanes de ingredientes */
+.puerta-portada {
+  list-style: none;
+  margin: 0;
+  padding: 28px 12px 24px;
+  border: 2px dashed rgb(30 43 38 / 18%);
+  border-radius: 26px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px 8px;
+}
+
+.iman {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transform: rotate(-3deg);
+}
+
+.iman:nth-child(even) {
+  transform: translateY(16px) rotate(3deg);
+}
+
+.iman img {
+  width: 96px;
+  height: 96px;
+  filter:
+    drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 6px 7px rgb(30 50 40 / 30%));
+  transition: transform .3s cubic-bezier(.3, 1.6, .5, 1);
+}
+
+.iman:hover img {
+  transform: scale(1.07) rotate(-4deg);
+}
+
+.iman__cinta {
+  margin-top: 4px;
+  padding: 2px 12px 4px;
+  background: rgb(240 226 186 / 94%);
+  font: 700 1.5rem/1 var(--fuente-mano);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+  transform: rotate(-3deg);
+  white-space: nowrap;
+}
+
+.iman small {
+  margin-top: 4px;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--color-suave);
+}
+
+.iman__ya {
+  position: absolute;
+  top: -6px;
+  right: calc(50% - 60px);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 35% 30%, #ff8a80, var(--color-acento) 70%);
+  color: #fff;
+  font: 700 1.3rem/1 var(--fuente-mano);
+  box-shadow: 0 3px 6px rgb(0 0 0 / 30%);
+  transform: rotate(12deg);
+}
+
+/* Títulos de sección escritos a mano */
+.titulo-mano {
+  margin: 8px 0 28px;
+  font: 700 2.4rem/1.1 var(--fuente-mano);
+}
+
+/* Cómo funciona: tres post-its con chinche */
+.pasos-portada {
+  list-style: none;
+  margin: 0 0 56px;
+  padding: 0;
+  display: grid;
+  gap: 32px 24px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.postit {
+  position: relative;
+  padding: 26px 22px 22px;
+  background: var(--color-postit);
+  box-shadow: 0 12px 20px rgb(0 0 0 / 18%);
+  transform: rotate(-1.5deg);
+}
+
+.postit:nth-child(2) {
+  background: #f7c9d4;
+  transform: rotate(1.2deg);
+}
+
+.postit:nth-child(3) {
+  background: #cfe0f2;
+  transform: rotate(-.8deg);
+}
+
+.postit__chinche {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #9fd3ff, var(--color-marca-oscuro));
+  box-shadow: 0 2px 3px rgb(0 0 0 / 35%);
+}
+
+.postit h3 {
+  margin: 0 0 6px;
+  font: 700 1.9rem/1 var(--fuente-mano);
+}
+
+.postit p {
+  margin: 0;
+}
+
+/* ¿Por qué Alacena?: hoja de cuaderno más angosta */
+.portada__porque {
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+/* En el celular: imanes más chicos */
+@media (max-width: 520px) {
+  .puerta-portada {
+    gap: 20px 4px;
+    padding: 22px 6px 20px;
+  }
+
+  .iman img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .iman__cinta {
+    font-size: 1.25rem;
+  }
+
+  .iman__ya {
+    width: 34px;
+    height: 34px;
+    right: calc(50% - 48px);
+    font-size: 1.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iman img {
+    transition: none;
+  }
+}
+
 /* ══════════ P3 · Recetas ══════════ */
 
 .tarjeta-receta h2 a {
