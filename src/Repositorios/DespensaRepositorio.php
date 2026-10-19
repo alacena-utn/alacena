@@ -114,6 +114,29 @@ final class DespensaRepositorio
         return $consulta->fetchAll();
     }
 
+        /**
+     * Dibujo del ingrediente en public/img/ingredientes/ (ruta para usar con url()).
+     * Prueba con el nombre completo ("queso-cremoso") y después con la primera palabra ("queso"),
+     * salvo nombres como "Crema de leche" o "Atún en lata", que no son la primera palabra.
+     * Si un ingrediente nuevo todavía no tiene dibujo, devuelve un frasco genérico (comida.svg).
+     */
+    public static function dibujo(string $nombre): string
+    {
+        $tildes = ['á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n'];
+        $sinTildes = strtr(mb_strtolower($nombre), $tildes);
+        $completo = trim((string) preg_replace('/[^a-z0-9]+/', '-', $sinTildes), '-');
+        $candidatos = [$completo];
+        if (!preg_match('/ (de|en) /', $sinTildes)) {
+            $candidatos[] = strtok($completo, '-');
+        }
+        foreach ($candidatos as $archivo) {
+            if (is_file(dirname(__DIR__, 2) . '/public/img/ingredientes/' . $archivo . '.svg')) {
+                return 'img/ingredientes/' . $archivo . '.svg';
+            }
+        }
+        return 'img/ingredientes/comida.svg';
+    }
+
     /** Texto y estilo para mostrar el vencimiento: ["Vence mañana", "alerta"]. */
     public static function estadoVencimiento(?int $dias): array
     {
