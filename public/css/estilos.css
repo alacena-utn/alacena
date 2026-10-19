@@ -933,6 +933,235 @@ body::after {
   }
 }
 
+
+/* ─────────── Mi despensa ─────────── */
+
+/* Pestañas de ubicación: cintas de papel; la elegida es un post-it */
+.pestanas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 20px;
+}
+
+.pestanas a {
+  padding: 4px 16px 6px;
+  background: rgb(240 226 186 / 94%);
+  color: var(--color-texto);
+  font: 700 1.4rem/1.2 var(--fuente-mano);
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+  transform: rotate(-2deg);
+}
+
+.pestanas a:nth-child(even) {
+  transform: rotate(2deg);
+}
+
+.pestanas a[aria-current="page"] {
+  background: var(--color-postit);
+  box-shadow: 0 6px 10px rgb(0 0 0 / 18%);
+}
+
+.filtro-rapido {
+  max-width: 360px;
+  margin-bottom: 16px;
+}
+
+/* Cuánto queda y color de categoría */
+.nivel {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.nivel--0 {
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+}
+
+.nivel--1 {
+  background: var(--color-alerta-fondo);
+  color: var(--color-alerta);
+}
+
+.nivel--2 {
+  background: var(--color-info-fondo);
+  color: var(--color-texto);
+}
+
+.nivel--3 {
+  background: var(--color-exito-fondo);
+  color: var(--color-exito);
+}
+
+/* Computadora: la puerta con un imán por ingrediente */
+.puerta-despensa {
+  list-style: none;
+  margin: 0;
+  padding: 32px 16px 24px;
+  border: 2px dashed rgb(30 43 38 / 18%);
+  border-radius: 26px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 36px 12px;
+}
+
+.item-despensa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  transform: rotate(-2deg);
+}
+
+.item-despensa:nth-child(even) {
+  transform: translateY(12px) rotate(2deg);
+}
+
+.item-despensa__dibujo {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+}
+
+.item-despensa__dibujo img {
+  width: 96px;
+  height: 96px;
+  filter:
+    drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 6px 7px rgb(30 50 40 / 30%));
+  transition: transform .3s cubic-bezier(.3, 1.6, .5, 1);
+}
+
+.item-despensa:hover .item-despensa__dibujo img {
+  transform: scale(1.07) rotate(-4deg);
+}
+
+.item-despensa .iman__ya {
+  right: -10px;
+}
+
+.item-despensa__nombre {
+  margin: 0;
+  padding: 2px 12px 4px;
+  background: rgb(240 226 186 / 94%);
+  font: 700 1.5rem/1 var(--fuente-mano);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+  transform: rotate(-3deg);
+}
+
+.item-despensa__estado {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.item-despensa__estado .etiqueta {
+  transform: none;
+  font: 700 .8rem/1.4 var(--fuente);
+  padding: 2px 8px;
+}
+
+.item-despensa__lugar {
+  margin: 0;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--color-suave);
+}
+
+.item-despensa__acciones {
+  justify-content: center;
+}
+
+/* Agotado: el imán se ve apagado y el nombre tachado, como "se terminó" del modelo */
+.item-despensa--agotado .item-despensa__dibujo {
+  filter: grayscale(1) opacity(.45);
+}
+
+.item-despensa--agotado .item-despensa__nombre {
+  text-decoration: line-through;
+}
+
+/* Celular: lista en una hoja de cuaderno, un renglón por ingrediente */
+@media (max-width: 700px) {
+  .puerta-despensa {
+    display: block;
+    padding: 8px 12px 8px 40px;
+    border: none;
+    border-radius: 2px;
+    position: relative;
+    background: var(--color-superficie);
+    box-shadow: 0 12px 24px rgb(0 0 0 / 14%);
+  }
+
+  .puerta-despensa::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 26px;
+    width: 2px;
+    background: #f2a0a0;
+  }
+
+  .item-despensa,
+  .item-despensa:nth-child(even) {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 12px 0;
+    text-align: left;
+    transform: none;
+    border-bottom: 1px solid #cfe0f2;
+  }
+
+  .item-despensa:last-child {
+    border-bottom: none;
+  }
+
+  .item-despensa__dibujo,
+  .item-despensa__dibujo img {
+    width: 52px;
+    height: 52px;
+  }
+
+  .item-despensa .iman__ya {
+    width: 30px;
+    height: 30px;
+    top: -8px;
+    right: -12px;
+    font-size: 1rem;
+  }
+
+  .item-despensa__nombre {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    transform: none;
+    font-size: 1.5rem;
+  }
+
+  .item-despensa__estado {
+    justify-content: flex-start;
+    margin-top: 2px;
+  }
+
+  .item-despensa__acciones {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
+}
+
+
+
 /* ══════════ P3 · Recetas ══════════ */
 
 .tarjeta-receta h2 a {
