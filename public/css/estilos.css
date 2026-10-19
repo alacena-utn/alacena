@@ -549,6 +549,27 @@ tr:last-child td {
 
 /* ══════════ P3 · Recetas ══════════ */
 
+.tarjeta-receta h2 a { color: inherit; text-decoration: none; }
+.tarjeta-receta h2 a:hover { color: var(--color-marca-oscuro); text-decoration: underline; }
+.tarjeta-receta__datos { font-size: .9rem; color: var(--color-suave); }
+.tarjeta-receta .etiqueta { margin: 0 4px 4px 0; }
+.detalle-receta { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 800px) { .detalle-receta { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); } }
+.lista-ingredientes { list-style: none; padding: 0; margin: 0; }
+.lista-ingredientes li { padding: 8px 0; border-bottom: 1px solid var(--color-borde); }
+.lista-ingredientes li:last-child { border-bottom: none; }
+.lista-ingredientes .tengo > span:first-child { color: var(--color-exito); font-weight: 700; }
+.lista-ingredientes .falta > span:first-child { color: var(--color-error); font-weight: 700; }
+.lista-pasos { padding-left: 1.4em; margin: 0; }
+.lista-pasos li { padding: 8px 0; }
+.fila-ingrediente {
+  display: grid; gap: 8px 12px; align-items: end; padding: 12px 0; border-bottom: 1px solid var(--color-borde);
+  grid-template-columns: minmax(160px, 3fr) minmax(80px, 1fr) minmax(80px, 1fr) auto auto;
+}
+.fila-ingrediente__opcional { display: inline-flex; gap: 6px; align-items: center; min-height: 44px; }
+@media (max-width: 700px) { .fila-ingrediente { grid-template-columns: 1fr 1fr; } .fila-ingrediente .campo:first-child { grid-column: 1 / -1; } }
+#agregar-ingrediente { margin-top: 12px; }
+
 /* ══════════ P4 · Contacto y consultas ══════════ */
 
 
