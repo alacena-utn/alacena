@@ -1123,6 +1123,10 @@ body::after {
     border-bottom: 1px solid #cfe0f2;
   }
 
+  .puerta-despensa .item-despensa[hidden] {
+  display: none;
+  }
+
   .item-despensa:last-child {
     border-bottom: none;
   }
