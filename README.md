@@ -82,7 +82,7 @@ docker compose exec web composer install
 
 | | Módulo | Nombre | GitHub |
 |---|---|---|---|
-| P1 | Cuentas + Infraestructura | | |
+| P1 | Cuentas + Infraestructura | Daiana | Daiana1411 |
 | P2 | Despensa + Diseño | Julian | julianmartinez093-tech |
 | P3 | Recetas + Base de datos (coordinación) | Pablo | pablito2032 |
 | P4 | Contacto + Calidad | | |
