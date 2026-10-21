@@ -87,26 +87,7 @@ if (!isset(DespensaRepositorio::UBICACIONES[$ubicacion])) {
 $items = $repo->listar($usuarioId, '', $ubicacion);
 $error = fn(string $campo) => isset($errores[$campo]) ? '<p class="error-campo">' . e($errores[$campo]) . '</p>' : '';
 
-/**
- * Dibujo del ingrediente en public/img/ingredientes/.
- * Prueba con el nombre completo ("queso-cremoso") y después con la primera palabra ("queso"),
- * salvo nombres como "Crema de leche" o "Atún en lata", que no son la primera palabra.
- * Si un ingrediente nuevo todavía no tiene dibujo, muestra un frasco genérico (comida.svg).
- */
-$dibujo = function (string $nombre): string {
-    $sinTildes = strtr(mb_strtolower($nombre), ['á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n']);
-    $completo = trim((string) preg_replace('/[^a-z0-9]+/', '-', $sinTildes), '-');
-    $candidatos = [$completo];
-    if (!preg_match('/ (de|en) /', $sinTildes)) {
-        $candidatos[] = strtok($completo, '-');
-    }
-    foreach ($candidatos as $archivo) {
-        if (is_file(dirname(__DIR__) . '/img/ingredientes/' . $archivo . '.svg')) {
-            return 'img/ingredientes/' . $archivo . '.svg';
-        }
-    }
-    return 'img/ingredientes/comida.svg';
-};
+
 
 $titulo = 'Mi despensa';
 require parcial('encabezado');
@@ -196,7 +177,8 @@ require parcial('encabezado');
             ?>
             <li class="item-despensa<?= $nivel === 0 ? ' item-despensa--agotado' : '' ?>" data-nombre="<?= e(mb_strtolower($fila['nombre'])) ?>">
                 <div class="item-despensa__dibujo">
-                    <img src="<?= e(url($dibujo($fila['nombre']))) ?>" alt="" width="96" height="96">
+                            <img src="<?= e(url(DespensaRepositorio::dibujo($fila['nombre']))) ?>" alt="" width="96" height="96">
+
 
                 </div>
                 <div class="item-despensa__datos">
