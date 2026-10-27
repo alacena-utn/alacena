@@ -58,7 +58,8 @@ final class IngredienteAdminRepositorio
             $parametros['id'] = $id;
         } else {
             $sql = 'INSERT INTO ingrediente
-                    (nombre, categoria_id, unidad_default, icono, gramos_por_unidad, es_basico, perecedero, vida_util_dias)
+                    (nombre, categoria_id, unidad_default, icono, gramos_por_unidad,
+                     es_basico, perecedero, vida_util_dias)
                     VALUES (:nombre, :categoria_id, :unidad_default, :icono, :gramos_por_unidad,
                             :es_basico, :perecedero, :vida_util_dias)';
         }
@@ -82,7 +83,10 @@ final class IngredienteAdminRepositorio
             $consulta = $this->db->prepare("SELECT COUNT(*) FROM {$tabla} WHERE {$columna} = :id");
             $consulta->execute(['id' => $id]);
             if ((int) $consulta->fetchColumn() > 0) {
-                throw new DomainException('No se puede eliminar: el ingrediente está en uso en recetas, despensas, preferencias o sustituciones.');
+                throw new DomainException(
+                    'No se puede eliminar: el ingrediente está en uso en recetas, despensas, '
+                    . 'preferencias o sustituciones.'
+                );
             }
         }
         try {

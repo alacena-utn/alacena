@@ -65,7 +65,10 @@ final class P5IngredientesTest extends TestCase
         self::assertCount(1, $lectura->todos());
         $this->db->prepare('INSERT INTO sinonimo (ingrediente_id, texto) VALUES (?, ?)')->execute([$id, 'Carrot']);
         self::assertCount(1, $lectura->buscar('Carrot'));
-        self::assertSame([], $this->controlador->guardar($id, $this->datos(['nombre' => 'Zanahoria fresca']), $this->repo->categorias()));
+        self::assertSame(
+            [],
+            $this->controlador->guardar($id, $this->datos(['nombre' => 'Zanahoria fresca']), $this->repo->categorias())
+        );
         self::assertSame('Zanahoria fresca', $this->repo->obtener($id)['nombre']);
         self::assertNull($this->repo->obtener($id)['gramos_por_unidad']);
         self::assertNull($this->repo->obtener($id)['vida_util_dias']);
@@ -84,14 +87,19 @@ final class P5IngredientesTest extends TestCase
 
     public function testValidacionesImpidenDatosFueraDelEsquema(): void
     {
-        foreach ([
+        foreach (
+            [
             ['nombre', ''], ['nombre', str_repeat('x', 81)], ['categoria_id', '999'],
             ['categoria_id', '1 OR 1=1'], ['unidad_default', ''], ['unidad_default', str_repeat('x', 11)],
             ['icono', str_repeat('x', 61)], ['gramos_por_unidad', '-1'], ['gramos_por_unidad', '0'],
             ['gramos_por_unidad', '1000000'], ['gramos_por_unidad', '1.234'],
             ['vida_util_dias', '0'], ['vida_util_dias', '32768'], ['vida_util_dias', '1.5'],
-        ] as [$campo, $valor]) {
-            self::assertArrayHasKey($campo, $this->controlador->guardar(0, $this->datos([$campo => $valor]), $this->repo->categorias()));
+            ] as [$campo, $valor]
+        ) {
+            self::assertArrayHasKey(
+                $campo,
+                $this->controlador->guardar(0, $this->datos([$campo => $valor]), $this->repo->categorias())
+            );
         }
         self::assertSame(0, (int) $this->db->query('SELECT COUNT(*) FROM ingrediente')->fetchColumn());
     }
@@ -108,11 +116,13 @@ final class P5IngredientesTest extends TestCase
     public function testTodasLasRelacionesImpidenLaBaja(): void
     {
         $id = $this->repo->guardar(0, $this->datos());
-        foreach ([
+        foreach (
+            [
             ['receta_ingrediente', 'ingrediente_id'], ['despensa_item', 'ingrediente_id'],
             ['usuario_basico', 'ingrediente_id'], ['restriccion_usuario', 'ingrediente_id'],
             ['sustitucion', 'ingrediente_id'], ['sustitucion', 'reemplazo_id'],
-        ] as [$tabla, $columna]) {
+            ] as [$tabla, $columna]
+        ) {
             $this->db->prepare("INSERT INTO {$tabla} ({$columna}) VALUES (?)")->execute([$id]);
             try {
                 $this->repo->borrar($id);
