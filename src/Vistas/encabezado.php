@@ -40,9 +40,6 @@ $menu[] = ['contacto.php', 'Contacto'];
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($titulo ?? 'Alacena') ?> · Alacena</title>
     <meta name="description" content="Alacena: tu despensa y qué cocinar con lo que tenés">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Figtree:wght@400;600;700;800&family=Space+Mono:wght@700&display=swap">
     <link rel="stylesheet" href="<?= e(url('css/estilos.css')) ?>">
     <script src="<?= e(url('js/sitio.js')) ?>" defer></script>
 </head>

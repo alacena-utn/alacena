@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../src/bootstrap.php';
 
 use Alacena\Controladores\UsuarioControlador;
@@ -47,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear usuario - Alacena</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&amp;family=Figtree:wght@400;600;700;800&amp;family=Space+Mono:wght@700&amp;display=swap">
     <link rel="stylesheet" href="../css/estilos.css">
 </head>
 <body>

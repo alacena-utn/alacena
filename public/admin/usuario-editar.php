@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-require_once dirname(__DIR__,2) . '/vendor/autoload.php';
 require_once dirname(__DIR__,2) . '/src/bootstrap.php';
 
 use Alacena\Controladores\UsuarioControlador;
@@ -84,7 +83,6 @@ if ($email !== '' && $repo->existeEmail($email, $id)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar usuario - Alacena</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&amp;family=Figtree:wght@400;600;700;800&amp;family=Space+Mono:wght@700&amp;display=swap">
     <link rel="stylesheet" href="../css/estilos.css">
 </head>
 <body>

@@ -3,6 +3,16 @@
    P2 es responsable de este archivo: colores, tipografía y componentes.
    Regla: los colores y medidas se usan siempre a través de las variables.
    ===================================================================== */
+
+/* Tipografías guardadas en el proyecto (public/fonts, licencia OFL): se ven igual sin internet
+   y no dependen de Google. Figtree 400/600/700/800, Caveat 700 y Space Mono 700. */
+@font-face { font-family: "Figtree"; font-weight: 400; font-display: swap; src: url("../fonts/figtree-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Figtree"; font-weight: 600; font-display: swap; src: url("../fonts/figtree-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Figtree"; font-weight: 700; font-display: swap; src: url("../fonts/figtree-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Figtree"; font-weight: 800; font-display: swap; src: url("../fonts/figtree-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Caveat"; font-weight: 700; font-display: swap; src: url("../fonts/caveat-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Space Mono"; font-weight: 700; font-display: swap; src: url("../fonts/space-mono-latin-700-normal.woff2") format("woff2"); }
+
 :root {
   --color-fondo: #cfe6dc;
   --color-superficie: #fffdf6;
