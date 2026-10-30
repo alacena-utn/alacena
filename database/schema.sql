@@ -21,6 +21,9 @@ CREATE TABLE usuario (
     nombre           VARCHAR(80)  NOT NULL,
     hash_contrasena  VARCHAR(255) NOT NULL,          -- password_hash() de PHP, nunca la contraseña
     rol              ENUM('general','admin') NOT NULL DEFAULT 'general',
+    color            VARCHAR(10)  NOT NULL DEFAULT 'verde',  -- color de la heladera elegido (UsuarioRepositorio::COLORES)
+    disposicion      VARCHAR(12)  NOT NULL DEFAULT 'normal', -- 'normal' o 'panoramica' (UsuarioRepositorio::DISPOSICIONES)
+    volumen          TINYINT UNSIGNED NOT NULL DEFAULT 50,   -- volumen de los sonidos, de 0 a 100
     creado_en        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='Cuentas de usuario. La identidad la maneja la propia app (sesiones PHP).';
@@ -35,7 +38,7 @@ CREATE TABLE categoria (
 
 CREATE TABLE ingrediente (
     id                 INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    nombre             VARCHAR(80)  NOT NULL UNIQUE, -- nombre canónico
+    nombre             VARCHAR(80)  NOT NULL,        -- nombre canónico
     categoria_id       SMALLINT UNSIGNED NOT NULL,
     icono              VARCHAR(60)  NULL,            -- clave del icono (OpenMoji)
     unidad_default     VARCHAR(10)  NOT NULL,        -- g, ml, u
@@ -43,7 +46,14 @@ CREATE TABLE ingrediente (
     es_basico          BOOLEAN      NOT NULL DEFAULT FALSE,  -- sal, aceite, agua
     perecedero         BOOLEAN      NOT NULL DEFAULT TRUE,
     vida_util_dias     SMALLINT     NULL,
-    CONSTRAINT fk_ingrediente_categoria FOREIGN KEY (categoria_id) REFERENCES categoria(id)
+    -- NULL = lista general. Con un usuario: ingrediente propio que agregó desde su despensa
+    -- (solo lo ve él; el administrador lo puede pasar a la lista general)
+    usuario_id         INT UNSIGNED NULL,
+    -- 0 para la lista general: así el nombre no se repite en la lista general ni entre los propios de cada uno
+    ambito             INT UNSIGNED AS (IFNULL(usuario_id, 0)) PERSISTENT,
+    UNIQUE KEY uq_ingrediente_nombre (nombre, ambito),
+    CONSTRAINT fk_ingrediente_categoria FOREIGN KEY (categoria_id) REFERENCES categoria(id),
+    CONSTRAINT fk_ingrediente_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Variantes regionales: palta = aguacate, morrón = pimiento
@@ -206,6 +216,12 @@ CREATE TABLE contacto (
     estado          ENUM('nueva','respondida') NOT NULL DEFAULT 'nueva',
     correo_enviado  BOOLEAN      NOT NULL DEFAULT FALSE,   -- si mail() pudo enviarlo
     creado_en       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Respuesta desde la administración (se manda por correo y el usuario con cuenta la ve en Contacto)
+    respuesta       TEXT         NULL,
+    respondida_en   DATETIME     NULL,
+    respondida_por  INT UNSIGNED NULL,
+    respuesta_enviada BOOLEAN    NOT NULL DEFAULT FALSE,   -- si mail() pudo enviar la respuesta
     KEY idx_contacto_estado (estado, creado_en),
-    CONSTRAINT fk_contacto_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE SET NULL
+    CONSTRAINT fk_contacto_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE SET NULL,
+    CONSTRAINT fk_contacto_respondio FOREIGN KEY (respondida_por) REFERENCES usuario(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

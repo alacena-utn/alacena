@@ -24,6 +24,16 @@ mysql -u root -p alacena < database/schema.sql
 mysql -u root -p alacena < database/seed.sql
 ```
 
+## Migraciones
+
+Si ya tenías la base creada y `schema.sql` cambió, en `migraciones/` está el cambio suelto para no perder tus datos:
+```bash
+mysql -u alacena -p alacena < database/migraciones/001-tanda-heladera.sql
+mysql -u alacena -p alacena < database/migraciones/002-tanda-heladera-2.sql   # siempre en orden
+mysql -u alacena -p alacena < database/migraciones/003-tanda-heladera-3.sql
+mysql -u alacena -p alacena < database/migraciones/004-tanda-heladera-4.sql
+```
+
 ## Reglas
 - Todo cambio de tablas va en `schema.sql` **y** se avisa en el grupo: afecta a los cuatro.
 - Nunca se sube un volcado con datos de usuarios reales.
