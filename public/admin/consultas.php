@@ -61,7 +61,7 @@ $consultas = $repo->listar($buscar, $estado);
 
 $titulo = 'Consultas recibidas';
 
-parcial('encabezado', ['titulo' => $titulo]);
+require parcial('encabezado');
 ?>
 
 <main class="contenedor">
@@ -203,4 +203,4 @@ parcial('encabezado', ['titulo' => $titulo]);
     </section>
 </main>
 
-<?php parcial('pie'); ?>
+<?php require parcial('pie'); ?>
