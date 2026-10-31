@@ -27,7 +27,7 @@ INSERT INTO ingrediente (id, nombre, categoria_id, unidad_default, gramos_por_un
  (7, 'Batata', 1, 'u', 200, FALSE, TRUE, 21),    (8, 'Palta', 2, 'u', 200, FALSE, TRUE, 5),
  (9, 'Frutilla', 2, 'g', NULL, FALSE, TRUE, 4),  (10, 'Manteca', 3, 'g', NULL, FALSE, TRUE, 30),
  (11, 'Crema de leche', 3, 'ml', NULL, FALSE, TRUE, 7), (12, 'Queso cremoso', 3, 'g', NULL, FALSE, TRUE, 14),
- (13, 'Carne picada', 4, 'g', NULL, FALSE, TRUE, 2), (14, 'Pollo (pechuga)', 4, 'u', 200, FALSE, TRUE, 3),
+ (13, 'Carne picada', 4, 'g', NULL, FALSE, TRUE, 2), (14, 'Pollo', 4, 'u', 200, FALSE, TRUE, 3),
  (15, 'Huevo', 5, 'u', 55, FALSE, TRUE, 21),     (16, 'Harina 0000', 6, 'g', NULL, FALSE, FALSE, 365),
  (17, 'Fideos', 6, 'g', NULL, FALSE, FALSE, 730), (18, 'Arroz', 6, 'g', NULL, FALSE, FALSE, 730),
  (19, 'Aceite', 7, 'ml', NULL, TRUE, FALSE, 540), (20, 'Sal', 7, 'g', NULL, TRUE, FALSE, NULL),
@@ -42,7 +42,40 @@ INSERT INTO ingrediente (id, nombre, categoria_id, unidad_default, gramos_por_un
  (36, 'Atún en lata', 6, 'u', 170, FALSE, FALSE, 730), (37, 'Lechuga', 1, 'u', 300, FALSE, TRUE, 5),
  (38, 'Limón', 2, 'u', 100, FALSE, TRUE, 21), (39, 'Banana', 2, 'u', 120, FALSE, TRUE, 6),
  (40, 'Azúcar', 6, 'g', NULL, FALSE, FALSE, 730), (41, 'Pimienta', 7, 'g', NULL, TRUE, FALSE, 365),
- (42, 'Caldo de verduras', 6, 'u', NULL, FALSE, FALSE, 365), (43, 'Puré de tomate', 6, 'g', NULL, FALSE, FALSE, 365);
+ (42, 'Caldo de verduras', 6, 'u', NULL, FALSE, FALSE, 365), (43, 'Puré de tomate', 6, 'g', NULL, FALSE, FALSE, 365),
+ (44, 'Bife', 4, 'u', 200, FALSE, TRUE, 3),
+ (45, 'Manzana', 2, 'u', 180, FALSE, TRUE, 30),
+ (46, 'Naranja', 2, 'u', 200, FALSE, TRUE, 21),
+ (47, 'Pera', 2, 'u', 170, FALSE, TRUE, 14),
+ (48, 'Durazno', 2, 'u', 150, FALSE, TRUE, 5),
+ (49, 'Uva', 2, 'g', NULL, FALSE, TRUE, 7),
+ (50, 'Ananá', 2, 'u', 1500, FALSE, TRUE, 7),
+ (51, 'Kiwi', 2, 'u', 80, FALSE, TRUE, 14),
+ (52, 'Sandía', 2, 'u', 4000, FALSE, TRUE, 10),
+ (53, 'Mandarina', 2, 'u', 120, FALSE, TRUE, 14),
+ (54, 'Cereza', 2, 'g', NULL, FALSE, TRUE, 5),
+ (55, 'Berenjena', 1, 'u', 300, FALSE, TRUE, 10),
+ (56, 'Brócoli', 1, 'u', 400, FALSE, TRUE, 7),
+ (57, 'Espinaca', 1, 'g', NULL, FALSE, TRUE, 5),
+ (58, 'Pepino', 1, 'u', 250, FALSE, TRUE, 10),
+ (59, 'Champiñón', 1, 'g', NULL, FALSE, TRUE, 6),
+ (60, 'Remolacha', 1, 'u', 150, FALSE, TRUE, 21),
+ (61, 'Coliflor', 1, 'u', 800, FALSE, TRUE, 10),
+ (62, 'Rabanito', 1, 'u', 20, FALSE, TRUE, 7),
+ (63, 'Yogur', 3, 'ml', NULL, FALSE, TRUE, 21),
+ (64, 'Ricota', 3, 'g', NULL, FALSE, TRUE, 7),
+ (65, 'Mozzarella', 3, 'g', NULL, FALSE, TRUE, 14),
+ (66, 'Salchicha', 4, 'u', 50, FALSE, TRUE, 14),
+ (67, 'Chorizo', 4, 'u', 120, FALSE, TRUE, 5),
+ (68, 'Merluza', 4, 'u', 150, FALSE, TRUE, 2),
+ (69, 'Langostinos', 4, 'g', NULL, FALSE, TRUE, 2),
+ (70, 'Pan', 6, 'g', NULL, FALSE, TRUE, 3),
+ (71, 'Tapas de empanada', 6, 'u', NULL, FALSE, TRUE, 20),
+ (72, 'Mayonesa', 6, 'g', NULL, FALSE, FALSE, 90),
+ (73, 'Miel', 6, 'g', NULL, FALSE, FALSE, 730),
+ (74, 'Chocolate', 6, 'g', NULL, FALSE, FALSE, 365),
+ (75, 'Yerba', 6, 'g', NULL, FALSE, FALSE, 365),
+ (76, 'Café', 6, 'g', NULL, FALSE, FALSE, 365);
 
 INSERT INTO sinonimo (ingrediente_id, texto, region) VALUES
  (1, 'patata', 'ES'), (3, 'pimiento', NULL), (3, 'ají morrón', 'AR'), (4, 'jitomate', 'MX'),
@@ -52,7 +85,11 @@ INSERT INTO sinonimo (ingrediente_id, texto, region) VALUES
  (14, 'suprema', 'AR'), (16, 'harina de trigo', NULL), (17, 'pasta', NULL),
  (21, 'frijol', 'MX'), (21, 'alubia', 'ES'),
  (35, 'zapallo', 'AR'), (24, 'leche entera', NULL), (30, 'lentejas', NULL), (31, 'harina de maíz', NULL),
- (33, 'guisantes', 'ES'), (43, 'salsa de tomate', NULL), (26, 'jamón', NULL);
+ (33, 'guisantes', 'ES'), (43, 'salsa de tomate', NULL), (26, 'jamón', NULL),
+ (44, 'churrasco', 'AR'), (44, 'filete', NULL),
+ (14, 'pechuga', NULL), (48, 'melocotón', 'ES'), (50, 'piña', NULL), (53, 'tangerina', NULL), (59, 'hongo', NULL),
+ (60, 'betabel', 'MX'), (62, 'rábano', NULL), (63, 'yogurt', NULL), (64, 'requesón', NULL), (65, 'muzzarella', 'AR'),
+ (68, 'pescado', NULL), (69, 'camarones', NULL), (71, 'discos de empanada', NULL);
 
 INSERT INTO etiqueta (id, nombre) VALUES (1, 'vegetariana'), (2, 'sin_tacc'), (3, 'economica');
 
@@ -219,6 +256,12 @@ INSERT INTO despensa_item (usuario_id, ingrediente_id, nivel, fecha_vencimiento,
  (4, 14, 2, CURDATE() + INTERVAL 60 DAY, 'freezer'), (4, 18, 3, NULL, 'alacena'),
  (4, 30, 2, NULL, 'alacena'),                        (4, 28, 2, CURDATE() + INTERVAL 8 DAY, 'heladera'),
  (4, 2, 1, NULL, 'alacena');
+
+-- Algunos ítems con la cantidad exacta (la unidad es la del ingrediente)
+UPDATE despensa_item SET cantidad = 6, unidad = 'u' WHERE usuario_id = 3 AND ingrediente_id = 15;
+UPDATE despensa_item SET cantidad = 1000, unidad = 'ml' WHERE usuario_id = 3 AND ingrediente_id = 24;
+UPDATE despensa_item SET cantidad = 500, unidad = 'g' WHERE usuario_id = 3 AND ingrediente_id = 17;
+UPDATE despensa_item SET cantidad = 4, unidad = 'u' WHERE usuario_id = 3 AND ingrediente_id = 1;
 
 INSERT INTO contacto (usuario_id, nombre, email, asunto, mensaje, estado, correo_enviado, creado_en) VALUES
  (3, 'María López', 'maria@alacena.test', 'Sugerencia de receta', '¿Podrían agregar recetas sin horno? Gracias.', 'nueva', TRUE, NOW() - INTERVAL 1 DAY),
