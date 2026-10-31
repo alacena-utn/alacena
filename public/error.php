@@ -31,7 +31,14 @@ http_response_code(match ($motivo) {
 $titulo = $tituloError;
 require parcial('encabezado');
 ?>
+<div class="con-stickers">
+<?php
+$stickers = ['papa', 'calabaza', 'cebolla-de-verdeo', 'ajo', 'lechuga', 'berenjena', 'remolacha', 'coliflor', 'pepino', 'champinon'];
+$zona = 'costados';
+require parcial('stickers');
+?>
 <section class="tarjeta tarjeta--angosta" role="alert">
+  <img class="tarjeta__dibujo" src="<?= e(url('img/ingredientes/frasco.svg')) ?>" alt="" width="88" height="88">
   <h1><?= e($tituloError) ?></h1>
   <p><?= e($detalle) ?></p>
   <p class="acciones">
@@ -43,4 +50,12 @@ require parcial('encabezado');
     <?php endif; ?>
   </p>
 </section>
+<div class="stickers-abajo">
+<?php
+$stickers = ['harina', 'arroz', 'sal', 'lenteja', 'polenta'];
+$zona = 'abajo';
+require parcial('stickers');
+?>
+</div>
+</div>
 <?php require parcial('pie'); ?>
