@@ -32,12 +32,21 @@ if (esPost()) {
     }
 
     Sesion::ingresar($usuario);
-    Sesion::avisar('exito', 'Hola, ' . $usuario['nombre'] . '.');
+    // Mi cocina ya saluda con "Hola, …"; el panel de administración no, así que ahí va el aviso
+    if ($usuario['rol'] === Sesion::ROL_ADMIN) {
+        Sesion::avisar('exito', 'Hola, ' . explode(' ', (string) $usuario['nombre'])[0] . '.');
+    }
     redirigir($usuario['rol'] === Sesion::ROL_ADMIN ? 'admin/index.php' : 'app/index.php');
 }
 
 $titulo = 'Ingresar';
 require parcial('encabezado');
+?>
+<div class="con-stickers">
+<?php
+$stickers = ['tomate', 'leche', 'huevo', 'limon', 'queso-cremoso', 'palta', 'zanahoria', 'frutilla', 'manzana', 'naranja'];
+$zona = 'costados';
+require parcial('stickers');
 ?>
 <section class="tarjeta tarjeta--angosta">
   <h1>Ingresar</h1>
@@ -55,4 +64,12 @@ require parcial('encabezado');
   </form>
   <p class="texto-suave">¿No tenés cuenta? <a href="<?= e(url('registro.php')) ?>">Creá una gratis</a>.</p>
 </section>
+<div class="stickers-abajo">
+<?php
+$stickers = ['pan', 'cafe', 'uva', 'kiwi', 'miel'];
+$zona = 'abajo';
+require parcial('stickers');
+?>
+</div>
+</div>
 <?php require parcial('pie'); ?>

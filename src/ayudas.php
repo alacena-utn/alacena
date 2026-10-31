@@ -58,3 +58,43 @@ function campo(string $nombre): string
 {
     return trim((string) ($_POST[$nombre] ?? ''));
 }
+
+/**
+ * Ícono (sticker) de un ingrediente para el estilo Heladera: public/img/ingredientes/<nombre>.svg.
+ * Primero busca el nombre completo sin tildes ("Cebolla de verdeo" → cebolla-de-verdeo.svg);
+ * si no está, la primera palabra ("Pollo asado" → pollo.svg, "Cebolla morada" → cebolla.svg).
+ * Si no hay dibujo, devuelve el frasco genérico. Los ingredientes propios (los que un usuario agregó
+ * desde su despensa) siempre llevan el frasco: es el dibujo que no usa ningún producto de la lista.
+ */
+function iconoIngrediente(string $nombre, bool $propio = false): string
+{
+    if ($propio) {
+        return url('img/ingredientes/frasco.svg');
+    }
+    $texto = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($nombre)) ?: $nombre;
+    $palabras = preg_split('/[^a-z]+/', strtolower($texto), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    foreach ([implode('-', $palabras), $palabras[0] ?? ''] as $candidato) {
+        $archivo = 'img/ingredientes/' . $candidato . '.svg';
+        if ($candidato !== '' && is_file(dirname(__DIR__) . '/public/' . $archivo)) {
+            return url($archivo);
+        }
+    }
+    return url('img/ingredientes/frasco.svg');
+}
+
+/** Enlace "← Volver a …" (flecha a mano) que va arriba de las páginas de administración. */
+function enlaceVolver(string $ruta, string $texto): string
+{
+    return '<p><a class="volver" href="' . e(url($ruta)) . '"><span class="volver__flecha" aria-hidden="true">←</span> '
+        . e($texto) . '</a></p>';
+}
+
+/**
+ * URL de un archivo de public/ (CSS o JS) con su fecha de modificación al final (?v=…).
+ * Así el navegador baja la versión nueva cada vez que el archivo cambia, en lugar de usar la guardada.
+ */
+function recurso(string $ruta): string
+{
+    $archivo = dirname(__DIR__) . '/public/' . $ruta;
+    return url($ruta) . (is_file($archivo) ? '?v=' . filemtime($archivo) : '');
+}

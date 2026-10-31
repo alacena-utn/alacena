@@ -9,6 +9,21 @@ use PDO;
 /** Acceso a la tabla usuario. Las contraseñas se guardan siempre con password_hash(). */
 final class UsuarioRepositorio
 {
+    /** Colores de la puerta de la heladera que puede elegir cada usuario (clave => nombre). */
+    public const COLORES = [
+        'verde' => 'Verde agua',
+        'crema' => 'Crema',
+        'celeste' => 'Celeste',
+        'rosa' => 'Rosa',
+        'noche' => 'Noche (oscuro)',
+    ];
+
+    /** Disposiciones de la pantalla (en la computadora). */
+    public const DISPOSICIONES = [
+        'normal' => 'Normal',
+        'panoramica' => 'Panorámica',
+    ];
+
     public function __construct(private PDO $db)
     {
     }
@@ -86,6 +101,30 @@ final class UsuarioRepositorio
         }
     }
 
+    /**
+     * Guarda una preferencia de pantalla: 'color' (uno de COLORES), 'disposicion' (una de DISPOSICIONES)
+     * o 'volumen' (un entero de 0 a 100). Devuelve false si la preferencia o el valor no son válidos.
+     */
+    public function guardarPreferencia(int $id, string $clave, string $valor): bool
+    {
+        if ($clave === 'volumen') {
+            $numero = filter_var($valor, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 100]]);
+            if ($numero === false) {
+                return false;
+            }
+            $valor = (string) $numero;
+        } else {
+            $validos = ['color' => self::COLORES, 'disposicion' => self::DISPOSICIONES][$clave] ?? [];
+            if (!isset($validos[$valor])) {
+                return false;
+            }
+        }
+        // $clave sale de una lista fija (color, disposicion o volumen), nunca del usuario
+        $this->db->prepare("UPDATE usuario SET {$clave} = :valor WHERE id = :id")
+            ->execute(['valor' => $valor, 'id' => $id]);
+        return true;
+    }
+
     public function borrar(int $id): void
     {
         $this->db->prepare('DELETE FROM usuario WHERE id = :id')->execute(['id' => $id]);
@@ -93,9 +132,7 @@ final class UsuarioRepositorio
 
     public function contarAdministradores(): int
     {
-        $consulta = $this->db->prepare('SELECT COUNT(*) FROM usuario WHERE rol = :rol');
-        $consulta->execute(['rol' => 'admin']);
-        return (int) $consulta->fetchColumn();
+        return (int) $this->db->query("SELECT COUNT(*) FROM usuario WHERE rol = 'admin'")->fetchColumn();
     }
 
     /**

@@ -39,7 +39,12 @@ if (esPost()) {
 
     if ($errores === []) {
         $id = $repo->crear($nombre, $email, $contrasena, Sesion::ROL_GENERAL);
-        Sesion::ingresar(['id' => $id, 'nombre' => $nombre, 'email' => $email, 'rol' => Sesion::ROL_GENERAL]);
+        // El color que eligió antes de tener cuenta (cookie) pasa a la cuenta nueva
+        $color = Sesion::color();
+        $repo->guardarPreferencia($id, 'color', $color);
+        Sesion::ingresar([
+            'id' => $id, 'nombre' => $nombre, 'email' => $email, 'rol' => Sesion::ROL_GENERAL, 'color' => $color,
+        ]);
         Sesion::avisar('exito', '¡Bienvenido/a a Alacena! Empezá cargando lo que tenés en tu despensa.');
         redirigir('app/index.php');
     }
@@ -47,6 +52,12 @@ if (esPost()) {
 
 $titulo = 'Crear cuenta';
 require parcial('encabezado');
+?>
+<div class="con-stickers">
+<?php
+$stickers = ['banana', 'miel', 'cebolla', 'morron', 'pollo', 'brocoli', 'uva', 'pan', 'pera', 'sandia'];
+$zona = 'costados';
+require parcial('stickers');
 ?>
 <section class="tarjeta tarjeta--angosta">
   <h1>Crear cuenta</h1>
@@ -78,5 +89,13 @@ require parcial('encabezado');
     <button class="boton" type="submit">Crear cuenta</button>
   </form>
 </section>
-<script src="<?= e(url('js/validacion.js')) ?>" defer></script>
+<div class="stickers-abajo">
+<?php
+$stickers = ['durazno', 'yogur', 'choclo', 'cereza', 'anana'];
+$zona = 'abajo';
+require parcial('stickers');
+?>
+</div>
+</div>
+<script src="<?= e(recurso('js/validacion.js')) ?>" defer></script>
 <?php require parcial('pie'); ?>
