@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * Consultas recibidas por el formulario de contacto (solo administradores):
+ * listado con buscador y filtro, responder (se guarda, se manda por correo y el usuario con cuenta
+ * la ve en Contacto → Mis consultas), marcar como respondida o nueva, y borrar.
+ */
+
 declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
+use Alacena\Correo;
 use Alacena\Db;
 use Alacena\Repositorios\ContactoRepositorio;
 use Alacena\Sesion;
@@ -14,193 +21,134 @@ $repo = new ContactoRepositorio(Db::conexion());
 
 if (esPost()) {
     Sesion::verificarCsrf();
-
-    $id = filter_var(
-        $_POST['id'] ?? null,
-        FILTER_VALIDATE_INT
-    );
-
+    $id = (int) ($_POST['id'] ?? 0);
     $accion = campo('accion');
-
-    if ($id === false || $id === null || $id < 1) {
-        Sesion::avisar('error', 'El identificador de la consulta no es válido.');
-        redirigir('admin/consultas.php');
-    }
-
-    if ($accion === 'borrar') {
+    if ($accion === 'responder') {
+        $consulta = $repo->obtener($id);
+        $respuesta = trim((string) ($_POST['respuesta'] ?? ''));
+        if ($consulta === null) {
+            Sesion::avisar('error', 'La consulta ya no existe.');
+        } elseif (mb_strlen($respuesta) < 2 || mb_strlen($respuesta) > 4000) {
+            Sesion::avisar('error', 'Escribí la respuesta (hasta 4000 caracteres).');
+            redirigir('admin/consultas.php?responder=' . $id . '#consulta-' . $id);
+        } else {
+            $cuerpo = "Hola, {$consulta['nombre']}:\n\n" . $respuesta . "\n\n"
+                . "— El equipo de Alacena\n\n"
+                . "Tu consulta (" . date('d/m/Y', strtotime($consulta['creado_en'])) . "): {$consulta['asunto']}\n"
+                . '> ' . str_replace("\n", "\n> ", $consulta['mensaje']);
+            $enviada = Correo::enviar($consulta['email'], 'Re: ' . $consulta['asunto'], $cuerpo);
+            $repo->responder($id, $respuesta, Sesion::idUsuario(), $enviada);
+            Sesion::avisar(
+                $enviada ? 'exito' : 'info',
+                $enviada
+                    ? 'Se envió la respuesta a ' . $consulta['email'] . '.'
+                    : 'La respuesta quedó guardada, pero el correo no se pudo enviar.'
+                        . ($consulta['usuario_id'] ? ' Igual la va a ver en Contacto → Mis consultas.' : '')
+            );
+        }
+        redirigir('admin/consultas.php#consulta-' . $id);
+    } elseif ($accion === 'borrar') {
         $ok = $repo->borrar($id);
-
-        Sesion::avisar(
-            $ok ? 'exito' : 'error',
-            $ok ? 'Se borró la consulta.' : 'La consulta ya no existe.'
-        );
+        Sesion::avisar($ok ? 'exito' : 'error', $ok ? 'Se borró la consulta.' : 'La consulta ya no existe.');
     } elseif (isset(ContactoRepositorio::ESTADOS[$accion])) {
-        $ok = $repo->cambiarEstado($id, $accion);
-
-        Sesion::avisar(
-            $ok ? 'exito' : 'error',
-            $ok
-                ? 'Se actualizó el estado de la consulta.'
-                : 'No se pudo actualizar la consulta.'
-        );
-    } else {
-        Sesion::avisar('error', 'La acción solicitada no es válida.');
+        $repo->cambiarEstado($id, $accion);
+        Sesion::avisar('exito', 'La consulta quedó como “' . ContactoRepositorio::ESTADOS[$accion] . '”.');
     }
-
     redirigir('admin/consultas.php');
 }
 
-$buscar = trim((string) ($_GET['buscar'] ?? ''));
-$estado = trim((string) ($_GET['estado'] ?? ''));
-
+$busqueda = trim((string) ($_GET['q'] ?? ''));
+$estado = (string) ($_GET['estado'] ?? '');
 if (!isset(ContactoRepositorio::ESTADOS[$estado])) {
     $estado = '';
 }
+$consultas = $repo->listar($busqueda, $estado);
+$abierta = (int) ($_GET['responder'] ?? 0);   // si la respuesta vino vacía, ese formulario queda abierto
 
-$consultas = $repo->listar($buscar, $estado);
-
-$titulo = 'Consultas recibidas';
-
+$titulo = 'Consultas · Administración';
 require parcial('encabezado');
 ?>
+<?= enlaceVolver('admin/index.php', 'Volver al panel') ?>
+<h1>Consultas recibidas</h1>
 
-<main class="contenedor">
-    <section class="seccion-admin">
-        <h1>Consultas recibidas</h1>
+<form class="buscador" method="get" role="search">
+  <div class="campo">
+    <label for="q">Buscar</label>
+    <input id="q" name="q" type="search" placeholder="Nombre, email, asunto o texto" value="<?= e($busqueda) ?>">
+  </div>
+  <div class="campo">
+    <label for="estado">Estado</label>
+    <select id="estado" name="estado">
+      <option value="">Todas</option>
+      <?php foreach (ContactoRepositorio::ESTADOS as $valor => $texto) : ?>
+        <option value="<?= e($valor) ?>"<?= $estado === $valor ? ' selected' : '' ?>><?= e($texto) ?></option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+  <button class="boton boton--secundario" type="submit">Buscar</button>
+</form>
 
-        <p>
-            Desde esta sección podés revisar los mensajes enviados
-            mediante el formulario de contacto.
+<?php if ($consultas === []) : ?>
+  <p class="vacio">No hay consultas<?= $busqueda !== '' || $estado !== '' ? ' con esos filtros' : '' ?>.</p>
+<?php endif; ?>
+
+<?php foreach ($consultas as $c) : ?>
+  <article class="tarjeta consulta<?= $c['estado'] === 'nueva' ? ' consulta--nueva' : '' ?>" id="consulta-<?= e($c['id']) ?>">
+    <header class="encabezado-pagina">
+      <div>
+        <h2><?= e($c['asunto']) ?></h2>
+        <p class="texto-suave">
+          <?= e($c['nombre']) ?> · <a href="mailto:<?= e($c['email']) ?>"><?= e($c['email']) ?></a>
+          · <?= e(date('d/m/Y H:i', strtotime($c['creado_en']))) ?>
+          <?= $c['usuario'] ? ' · usuario registrado' : '' ?>
         </p>
-
-        <form method="get" action="">
-            <div class="campo">
-                <label for="buscar">Buscar consultas</label>
-                <input
-                    type="search"
-                    id="buscar"
-                    name="buscar"
-                    value="<?= e($buscar) ?>"
-                    placeholder="Nombre, correo, asunto o mensaje"
-                >
-            </div>
-
-            <div class="campo">
-                <label for="estado">Filtrar por estado</label>
-                <select id="estado" name="estado">
-                    <option value="">Todos los estados</option>
-                    <?php foreach (ContactoRepositorio::ESTADOS as $clave => $nombre): ?>
-                        <option
-                            value="<?= e($clave) ?>"
-                            <?= $estado === $clave ? 'selected' : '' ?>
-                        >
-                            <?= e($nombre) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <button type="submit">Buscar</button>
-            <a href="<?= e(url('admin/consultas.php')) ?>">Limpiar filtros</a>
-        </form>
-
-        <p>
-            Resultados encontrados: <?= count($consultas) ?>
+      </div>
+      <span class="etiqueta<?= $c['estado'] === 'nueva' ? ' etiqueta--alerta' : ' etiqueta--exito' ?>"><?= e(ContactoRepositorio::ESTADOS[$c['estado']]) ?></span>
+    </header>
+    <p class="consulta__mensaje"><?= nl2br(e($c['mensaje'])) ?></p>
+    <?php if (!$c['correo_enviado']) : ?>
+      <p class="texto-suave"><small>El aviso por correo no se pudo enviar; la consulta quedó guardada igual.</small></p>
+    <?php endif; ?>
+    <?php if ($c['respuesta'] !== null) : ?>
+      <?php /* La respuesta ya enviada: una notita pegada abajo de la consulta */ ?>
+      <div class="consulta__respuesta">
+        <p class="consulta__quien">
+          Respondió <?= e(explode(' ', (string) ($c['respondio'] ?? 'la administración'))[0]) ?>
+          · <?= e(date('d/m/Y H:i', strtotime($c['respondida_en']))) ?>
+          <?= $c['respuesta_enviada'] ? '' : ' · <span class="etiqueta etiqueta--alerta">el correo no salió</span>' ?>
         </p>
-
-        <?php if ($consultas === []): ?>
-            <p>No se encontraron consultas con esos criterios.</p>
-        <?php else: ?>
-            <div class="tabla-contenedor">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Nombre</th>
-                            <th>Correo</th>
-                            <th>Asunto</th>
-                            <th>Mensaje</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($consultas as $consulta): ?>
-                            <tr>
-                                <td>
-                                    <?= e((string) ($consulta['creado_en'] ?? '')) ?>
-                                </td>
-                                <td>
-                                    <?= e((string) ($consulta['nombre'] ?? '')) ?>
-                                </td>
-                                <td>
-                                    <a href="mailto:<?= e((string) ($consulta['email'] ?? '')) ?>">
-                                        <?= e((string) ($consulta['email'] ?? '')) ?>
-                                    </a>
-                                </td>
-                                <td>
-                                    <?= e((string) ($consulta['asunto'] ?? '')) ?>
-                                </td>
-                                <td>
-                                    <?= nl2br(e((string) ($consulta['mensaje'] ?? ''))) ?>
-                                </td>
-                                <td>
-                                    <?= e(
-                                        ContactoRepositorio::ESTADOS[
-                                            (string) ($consulta['estado'] ?? '')
-                                        ] ?? 'Sin estado'
-                                    ) ?>
-                                </td>
-                                <td>
-                                    <?php foreach (ContactoRepositorio::ESTADOS as $clave => $nombre): ?>
-                                        <?php if (($consulta['estado'] ?? '') !== $clave): ?>
-                                            <form
-                                                method="post"
-                                                action="<?= e(url('admin/consultas.php')) ?>"
-                                            >
-                                                <?= Sesion::campoCsrf() ?>
-                                                <input
-                                                    type="hidden"
-                                                    name="id"
-                                                    value="<?= (int) $consulta['id'] ?>"
-                                                >
-                                                <input
-                                                    type="hidden"
-                                                    name="accion"
-                                                    value="<?= e($clave) ?>"
-                                                >
-                                                <button type="submit">
-                                                    Marcar como <?= e($nombre) ?>
-                                                </button>
-                                            </form>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
-
-                                    <form
-                                        method="post"
-                                        action="<?= e(url('admin/consultas.php')) ?>"
-                                    >
-                                        <?= Sesion::campoCsrf() ?>
-                                        <input
-                                            type="hidden"
-                                            name="id"
-                                            value="<?= (int) $consulta['id'] ?>"
-                                        >
-                                        <input
-                                            type="hidden"
-                                            name="accion"
-                                            value="borrar"
-                                        >
-                                        <button type="submit">Borrar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+        <p><?= nl2br(e($c['respuesta'])) ?></p>
+      </div>
+    <?php endif; ?>
+    <?php /* Responder: un <details> se abre sin JavaScript */ ?>
+    <details class="responder"<?= $abierta === (int) $c['id'] ? ' open' : '' ?>>
+      <summary class="boton boton--chico"><?= $c['respuesta'] !== null ? 'Responder de nuevo' : 'Responder' ?></summary>
+      <form class="responder__form" method="post">
+        <?= Sesion::campoCsrf() ?>
+        <input type="hidden" name="id" value="<?= e($c['id']) ?>">
+        <label for="respuesta-<?= e($c['id']) ?>">Respuesta para <?= e($c['nombre']) ?></label>
+        <textarea id="respuesta-<?= e($c['id']) ?>" name="respuesta" rows="5" required minlength="2" maxlength="4000"
+                  placeholder="Hola, <?= e(explode(' ', $c['nombre'])[0]) ?>: …"></textarea>
+        <p class="texto-suave"><small>Le llega por correo a <?= e($c['email']) ?><?= $c['usuario'] ? ' y la ve en Contacto → Mis consultas' : '' ?>. La consulta queda como respondida.</small></p>
+        <button class="boton" name="accion" value="responder">Enviar respuesta</button>
+      </form>
+    </details>
+    <div class="acciones">
+      <form method="post">
+        <?= Sesion::campoCsrf() ?>
+        <input type="hidden" name="id" value="<?= e($c['id']) ?>">
+        <?php if ($c['estado'] === 'nueva') : ?>
+          <button class="boton boton--secundario boton--chico" name="accion" value="respondida">Marcar como respondida</button>
+        <?php else : ?>
+          <button class="boton boton--secundario boton--chico" name="accion" value="nueva">Marcar como nueva</button>
         <?php endif; ?>
-    </section>
-</main>
-
+      </form>
+      <form method="post" data-confirmar="¿Borrar la consulta de <?= e($c['nombre']) ?>?">
+        <?= Sesion::campoCsrf() ?>
+        <input type="hidden" name="id" value="<?= e($c['id']) ?>">
+        <button class="boton boton--peligro boton--chico" name="accion" value="borrar">Borrar</button>
+      </form>
+    </div>
+  </article>
+<?php endforeach; ?>
 <?php require parcial('pie'); ?>

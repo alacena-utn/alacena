@@ -472,6 +472,41 @@ final class PaginasTest extends TestCase
         $this->assertNull($general, 'Quedó en la lista general');
     }
 
+    public function testElAdministradorRespondeYElUsuarioVeLaRespuesta(): void
+    {
+        $asunto = 'Pregunta ' . uniqid();
+        $maria = new Navegador();
+        $maria->ingresar('maria@alacena.test', 'Usuario1234');
+        $maria->get('contacto.php');
+        $maria->post('contacto.php', [
+            'nombre' => 'María López', 'email' => 'maria@alacena.test', 'asunto' => $asunto,
+            'mensaje' => '¿Se pueden agregar ingredientes que no están?',
+        ]);
+        $consulta = Db::conexion()->prepare('SELECT id FROM contacto WHERE asunto = ?');
+        $consulta->execute([$asunto]);
+        $id = (int) $consulta->fetchColumn();
+
+        $admin = new Navegador();
+        $admin->ingresar('admin@alacena.test', 'Admin1234');
+        [, $html] = $admin->get('admin/consultas.php');
+        $this->assertStringContainsString('Volver al panel', $html);
+        $this->assertStringContainsString('name="respuesta"', $html);
+        $admin->post('admin/consultas.php', [
+            'accion' => 'responder', 'id' => $id, 'respuesta' => 'Sí, desde tu despensa.',
+        ]);
+
+        $fila = Db::conexion()
+            ->query('SELECT estado, respuesta, respondida_por FROM contacto WHERE id = ' . $id)->fetch();
+        [, $htmlMaria] = $maria->get('contacto.php');
+        Db::conexion()->exec('DELETE FROM contacto WHERE id = ' . $id);
+
+        $this->assertSame('respondida', $fila['estado']);
+        $this->assertSame('Sí, desde tu despensa.', $fila['respuesta']);
+        $this->assertNotNull($fila['respondida_por']);
+        $this->assertStringContainsString('Mis consultas', $htmlMaria);
+        $this->assertStringContainsString('Sí, desde tu despensa.', $htmlMaria);
+    }
+
     private function seccionSelector(string $html): string
     {
         $inicio = (int) strpos($html, 'id="resultado-selector"');
