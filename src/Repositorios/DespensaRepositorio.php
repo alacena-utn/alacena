@@ -21,20 +21,24 @@ final class DespensaRepositorio
 
     /**
      * Ítems de la despensa del usuario. "dias" = días que faltan para que venza (negativo si ya venció).
+     * Orden: primero lo que vence antes; lo que no tiene fecha, después; lo vencido, al final.
      * @return list<array<string, mixed>>
      */
     public function listar(int $usuarioId, string $texto = '', string $ubicacion = ''): array
     {
         $consulta = $this->db->prepare(
-            'SELECT d.id, d.ingrediente_id, i.nombre, c.nombre AS categoria, c.color_hex, d.nivel,
-                    d.fecha_vencimiento, d.ubicacion, DATEDIFF(d.fecha_vencimiento, CURDATE()) AS dias
+            'SELECT d.id, d.ingrediente_id, i.nombre, i.usuario_id IS NOT NULL AS propio,
+                    c.nombre AS categoria, c.color_hex, d.nivel,
+                    d.cantidad, COALESCE(d.unidad, i.unidad_default) AS unidad, d.fecha_vencimiento,
+                    d.ubicacion, DATEDIFF(d.fecha_vencimiento, CURDATE()) AS dias
              FROM despensa_item d
              JOIN ingrediente i ON i.id = d.ingrediente_id
              JOIN categoria c ON c.id = i.categoria_id
              WHERE d.usuario_id = :usuario
                AND i.nombre LIKE :texto
                AND (:ubicacion1 = \'\' OR d.ubicacion = :ubicacion2)
-             ORDER BY d.fecha_vencimiento IS NULL, d.fecha_vencimiento, i.nombre'
+             ORDER BY COALESCE(d.fecha_vencimiento < CURDATE(), 0),
+                      d.fecha_vencimiento IS NULL, d.fecha_vencimiento, i.nombre'
         );
         $consulta->execute([
             'usuario' => $usuarioId,
@@ -57,7 +61,10 @@ final class DespensaRepositorio
      * Alta (si $id es 0) o modificación. Devuelve false si ese ingrediente ya está
      * cargado en la misma ubicación (la base no permite duplicados).
      *
-     * @param array{ingrediente_id: int, nivel: int, fecha_vencimiento: ?string, ubicacion: string} $datos
+     * La cantidad exacta es opcional: si viene, se guarda con la unidad del ingrediente.
+     *
+     * @param array{ingrediente_id: int, nivel: int, cantidad: ?float, unidad: ?string,
+     *              fecha_vencimiento: ?string, ubicacion: string} $datos
      */
     public function guardar(int $usuarioId, array $datos, int $id = 0): bool
     {
@@ -65,19 +72,22 @@ final class DespensaRepositorio
             'usuario' => $usuarioId,
             'ingrediente' => $datos['ingrediente_id'],
             'nivel' => $datos['nivel'],
+            'cantidad' => $datos['cantidad'],
+            'unidad' => $datos['cantidad'] === null ? null : $datos['unidad'],
             'vence' => $datos['fecha_vencimiento'],
             'ubicacion' => $datos['ubicacion'],
         ];
         try {
             if ($id === 0) {
                 $this->db->prepare(
-                    'INSERT INTO despensa_item (usuario_id, ingrediente_id, nivel, fecha_vencimiento, ubicacion)
-                     VALUES (:usuario, :ingrediente, :nivel, :vence, :ubicacion)'
+                    'INSERT INTO despensa_item (usuario_id, ingrediente_id, nivel, cantidad, unidad,
+                                                fecha_vencimiento, ubicacion)
+                     VALUES (:usuario, :ingrediente, :nivel, :cantidad, :unidad, :vence, :ubicacion)'
                 )->execute($valores);
             } else {
                 $this->db->prepare(
                     'UPDATE despensa_item SET ingrediente_id = :ingrediente, nivel = :nivel,
-                            fecha_vencimiento = :vence, ubicacion = :ubicacion
+                            cantidad = :cantidad, unidad = :unidad, fecha_vencimiento = :vence, ubicacion = :ubicacion
                      WHERE id = :id AND usuario_id = :usuario'
                 )->execute($valores + ['id' => $id]);
             }
@@ -104,7 +114,8 @@ final class DespensaRepositorio
     public function porVencer(int $usuarioId, int $dias = 7): array
     {
         $consulta = $this->db->prepare(
-            'SELECT d.id, i.nombre, d.fecha_vencimiento, d.ubicacion, DATEDIFF(d.fecha_vencimiento, CURDATE()) AS dias
+            'SELECT d.id, i.nombre, i.usuario_id IS NOT NULL AS propio, d.fecha_vencimiento, d.ubicacion,
+                    DATEDIFF(d.fecha_vencimiento, CURDATE()) AS dias
              FROM despensa_item d JOIN ingrediente i ON i.id = d.ingrediente_id
              WHERE d.usuario_id = :usuario AND d.nivel > 0 AND d.fecha_vencimiento IS NOT NULL
                AND d.fecha_vencimiento <= CURDATE() + INTERVAL :dias DAY
@@ -114,27 +125,83 @@ final class DespensaRepositorio
         return $consulta->fetchAll();
     }
 
-        /**
-     * Dibujo del ingrediente en public/img/ingredientes/ (ruta para usar con url()).
-     * Prueba con el nombre completo ("queso-cremoso") y después con la primera palabra ("queso"),
-     * salvo nombres como "Crema de leche" o "Atún en lata", que no son la primera palabra.
-     * Si un ingrediente nuevo todavía no tiene dibujo, devuelve un frasco genérico (comida.svg).
+    /**
+     * Ingredientes que el usuario tiene disponibles (no agotados ni vencidos), sin repetir
+     * aunque estén en dos ubicaciones. Es la lista del selector de Mi cocina.
+     * "dias" = días hasta el vencimiento más cercano (null si no tiene fecha).
+     * Orden: lo que vence antes primero; lo que no tiene fecha, al final.
+     * @return list<array{id: int, nombre: string, dias: ?int}>
      */
-    public static function dibujo(string $nombre): string
+    public function disponibles(int $usuarioId): array
     {
-        $tildes = ['á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n'];
-        $sinTildes = strtr(mb_strtolower($nombre), $tildes);
-        $completo = trim((string) preg_replace('/[^a-z0-9]+/', '-', $sinTildes), '-');
-        $candidatos = [$completo];
-        if (!preg_match('/ (de|en) /', $sinTildes)) {
-            $candidatos[] = strtok($completo, '-');
+        $consulta = $this->db->prepare(
+            // Va adentro de otra consulta: MariaDB no deja ordenar por el alias de un MIN() con IS NULL
+            'SELECT * FROM (
+                SELECT i.id, i.nombre, i.usuario_id IS NOT NULL AS propio,
+                       MIN(DATEDIFF(d.fecha_vencimiento, CURDATE())) AS dias
+                FROM despensa_item d JOIN ingrediente i ON i.id = d.ingrediente_id
+                WHERE d.usuario_id = :usuario AND d.nivel > 0
+                  AND (d.fecha_vencimiento IS NULL OR d.fecha_vencimiento >= CURDATE())
+                GROUP BY i.id, i.nombre, i.usuario_id
+             ) AS disponibles
+             ORDER BY dias IS NULL, dias, nombre'
+        );
+        $consulta->execute(['usuario' => $usuarioId]);
+        return $consulta->fetchAll();
+    }
+
+    /**
+     * Cantidad legible: (6, 'u') → "6 unidades", (1, 'u') → "1 unidad", (500, 'g') → "500 g",
+     * (1.5, 'kg') → "1,5 kg". Devuelve '' si no hay cantidad.
+     */
+    public static function textoCantidad(string|float|null $cantidad, ?string $unidad): string
+    {
+        if ($cantidad === null || $cantidad === '') {
+            return '';
         }
-        foreach ($candidatos as $archivo) {
-            if (is_file(dirname(__DIR__, 2) . '/public/img/ingredientes/' . $archivo . '.svg')) {
-                return 'img/ingredientes/' . $archivo . '.svg';
-            }
+        $numero = rtrim(rtrim(number_format((float) $cantidad, 2, ',', '.'), '0'), ',');
+        if ($unidad === 'u' || $unidad === null || $unidad === '') {
+            return $numero . ((float) $cantidad === 1.0 ? ' unidad' : ' unidades');
         }
-        return 'img/ingredientes/comida.svg';
+        return $numero . ' ' . $unidad;
+    }
+
+    /** Grupos del contador de la despensa (clave => texto). "por_vencer" = de hoy a 3 días. */
+    public const ESTADOS = [
+        'bien' => 'bien',
+        'por_vencer' => 'por vencer',
+        'vencidos' => 'vencidos',
+        'agotados' => 'agotados',
+    ];
+
+    /**
+     * Grupo del contador al que pertenece un ítem de listar(). Cada ítem va en un solo grupo:
+     * agotado gana a vencido, y vencido a por vencer.
+     * @param array<string, mixed> $item
+     */
+    public static function estado(array $item): string
+    {
+        $dias = $item['dias'] === null ? null : (int) $item['dias'];
+        return match (true) {
+            (int) $item['nivel'] === 0 => 'agotados',
+            $dias !== null && $dias < 0 => 'vencidos',
+            $dias !== null && $dias <= 3 => 'por_vencer',
+            default => 'bien',
+        };
+    }
+
+    /**
+     * Cuántos ítems hay en cada grupo del contador.
+     * @param list<array<string, mixed>> $items filas de listar()
+     * @return array{bien: int, por_vencer: int, vencidos: int, agotados: int}
+     */
+    public static function resumen(array $items): array
+    {
+        $resumen = ['bien' => 0, 'por_vencer' => 0, 'vencidos' => 0, 'agotados' => 0];
+        foreach ($items as $item) {
+            $resumen[self::estado($item)]++;
+        }
+        return $resumen;
     }
 
     /** Texto y estilo para mostrar el vencimiento: ["Vence mañana", "alerta"]. */

@@ -243,6 +243,51 @@ final class PaginasTest extends TestCase
         $this->assertStringContainsString('class="vista-dibujo"', $html);
     }
 
+    public function testLaDespensaGuardaLaCantidadExactaConSuUnidad(): void
+    {
+        $web = new Navegador();
+        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->get('app/despensa.php');
+        $campos = ['accion' => 'guardar', 'id' => 0, 'ingrediente_id' => 38, 'nivel' => 0,
+            'cantidad' => '3', 'ubicacion' => 'heladera', 'fecha_vencimiento' => ''];
+        $web->post('app/despensa.php', $campos);
+
+        $consulta = Db::conexion()->prepare(
+            'SELECT id, nivel, cantidad, unidad FROM despensa_item WHERE usuario_id = 3 AND ingrediente_id = 38'
+        );
+        $consulta->execute();
+        $item = $consulta->fetch();
+        [, $html] = $web->get('app/despensa.php');
+        $web->post('app/despensa.php', ['accion' => 'guardar', 'id' => $item['id'], 'cantidad' => '0'] + $campos);
+        $consulta->execute();
+        $agotado = $consulta->fetch();
+        Db::conexion()->exec('DELETE FROM despensa_item WHERE usuario_id = 3 AND ingrediente_id = 38');
+
+        $this->assertSame(3.0, (float) $item['cantidad']);
+        $this->assertSame('u', $item['unidad']);
+        $this->assertSame(2, (int) $item['nivel'], 'Con cantidad mayor a 0 no puede quedar "agotado"');
+        $this->assertStringContainsString('3 unidades', $html);
+        $this->assertSame(0, (int) $agotado['nivel'], 'Cantidad 0 = agotado');
+    }
+
+    public function testElSelectorDeMiCocinaBuscaRecetasConLosIngredientesElegidos(): void
+    {
+        $web = new Navegador();
+        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        // Huevo (15) y Papa (1): la tortilla los usa a los dos; los panqueques, solo el huevo
+        [, $html] = $web->get('app/index.php?ing[]=15&ing[]=1');
+        $resultado = $this->seccionSelector($html);
+        $this->assertStringContainsString('Tortilla de papas', $resultado);
+        $this->assertStringNotContainsString('Panqueques', $resultado);
+
+        [, $html] = $web->get('app/index.php?ing[]=15&ing[]=1&modo=alguno');
+        $this->assertStringContainsString('Panqueques', $this->seccionSelector($html));
+
+        // Carne picada (13) no está en la despensa de María: se ignora
+        [, $html] = $web->get('app/index.php?ing[]=13');
+        $this->assertStringContainsString('Todavía no elegiste nada', $this->seccionSelector($html));
+    }
+
     public function testLasTarjetasDeRecetasMuestranLoQueFaltaTachado(): void
     {
         $web = new Navegador();
@@ -250,6 +295,56 @@ final class PaginasTest extends TestCase
         [, $html] = $web->get('app/recetas.php?q=zapallitos');
         $this->assertStringContainsString('alt="Tapa de tarta (te falta)"', $html);
         $this->assertStringContainsString('alt="Huevo"', $html);
+    }
+
+    public function testLaDespensaMuestraElContadorYLosVencidosAlFinal(): void
+    {
+        $web = new Navegador();
+        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        [, $html] = $web->get('app/despensa.php');
+        // María tiene el tomate vencido (ayer): cuenta como vencido, va gris y al final, con "Cambiar fecha"
+        $this->assertMatchesRegularExpression('/contador__item--vencidos"[^>]*>\s*<strong>1<\/strong>/', $html);
+        $this->assertStringContainsString('class="cambiar-fecha"', $html);
+        $filas = preg_match_all('/<tr(?: class="vencido")? data-nombre="([^"]+)"/', $html, $m);
+        $this->assertGreaterThan(1, $filas);
+        $this->assertSame('tomate', end($m[1]), 'Lo vencido va al final de la lista');
+        $this->assertStringContainsString('<tr class="vencido" data-nombre="tomate"', $html);
+        $this->assertStringContainsString('Agregar producto', $html);
+    }
+
+    public function testLosNumerosDelContadorFiltranLaDespensa(): void
+    {
+        $web = new Navegador();
+        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $filas = function (string $html): array {
+            preg_match_all('/<tr(?: class="vencido")? data-nombre="([^"]+)"/', $html, $m);
+            return $m[1];
+        };
+
+        [, $html] = $web->get('app/despensa.php?estado=vencidos');
+        $this->assertSame(['tomate'], $filas($html));
+        $this->assertStringContainsString('aria-current="true"', $html);
+
+        [, $html] = $web->get('app/despensa.php?estado=por_vencer');
+        $this->assertEqualsCanonicalizing(['queso cremoso', 'leche', 'zapallito'], $filas($html));
+
+        // Con ubicación y estado a la vez: en el freezer no hay nada vencido
+        [, $html] = $web->get('app/despensa.php?ubicacion=freezer&estado=vencidos');
+        $this->assertSame([], $filas($html));
+        $this->assertStringContainsString('No hay productos vencidos en esta ubicación', $html);
+    }
+
+    public function testElSelectorPonePrimeroLoQueVenceConElGloboYa(): void
+    {
+        $web = new Navegador();
+        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        [, $html] = $web->get('app/index.php');
+        $patron = '/<label class="selector__sticker([^"]*)">\s*<input[^>]+>\s*<img[^>]+>\s*<span>([^<]+)/';
+        preg_match_all($patron, $html, $m);
+        // El queso cremoso vence mañana: va primero y con "¡ya!". El tomate venció: no aparece.
+        $this->assertSame('Queso cremoso', $m[2][0]);
+        $this->assertSame(' selector__sticker--ya', $m[1][0]);
+        $this->assertNotContains('Tomate', $m[2]);
     }
 
     public function testElDetalleTienePasosParaTildar(): void
@@ -326,6 +421,55 @@ final class PaginasTest extends TestCase
         [, , $destino] = $web->post('salir.php', []);
         $this->assertStringEndsWith('index.php', $destino);
         $this->assertSame(302, $web->get('app/despensa.php')[0], 'Después de salir ya no hay sesión');
+    }
+
+    public function testUnIngredienteQueNoEstaSeAgregaComoPropioConElFrasco(): void
+    {
+        $db = Db::conexion();
+        $nombre = 'Quinoa ' . substr(uniqid(), -5);
+        $web = new Navegador();
+        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        [, $html] = $web->get('app/despensa.php');
+        $this->assertStringContainsString('¿No está en la lista? Agregalo', $html);
+        $this->assertStringContainsString('“Agotado”', $html, 'Explica qué es "Agotado"');
+        $campos = ['accion' => 'guardar', 'id' => 0, 'ingrediente_id' => 0, 'nombre_nuevo' => $nombre,
+            'categoria_nueva' => 6, 'unidad_nueva' => 'g', 'nivel' => 2, 'cantidad' => '500',
+            'ubicacion' => 'alacena', 'fecha_vencimiento' => ''];
+        $web->post('app/despensa.php', $campos);
+        $consulta = $db->prepare('SELECT id, usuario_id, unidad_default FROM ingrediente WHERE nombre = ?');
+        $consulta->execute([$nombre]);
+        $nuevo = $consulta->fetch();
+        [, $html] = $web->get('app/despensa.php');
+
+        // Otro usuario no lo ve; si escribe un sinónimo de la lista, se usa ese y no se crea nada
+        $otro = new Navegador();
+        $otro->ingresar('juan@alacena.test', 'Usuario1234');
+        [, $htmlOtro] = $otro->get('app/despensa.php');
+        $otro->post('app/despensa.php', ['nombre_nuevo' => 'piña', 'cantidad' => ''] + $campos);
+        $piña = (int) $db->query("SELECT COUNT(*) FROM ingrediente WHERE nombre = 'piña'")->fetchColumn();
+
+        // El administrador lo pasa a la lista general
+        $admin = new Navegador();
+        $admin->ingresar('admin@alacena.test', 'Admin1234');
+        [, $htmlAdmin] = $admin->get('admin/ingredientes.php?propios');
+        $admin->post('admin/ingredientes.php', ['accion' => 'general', 'id' => $nuevo['id']]);
+        $general = $db->query('SELECT usuario_id FROM ingrediente WHERE id = ' . (int) $nuevo['id'])->fetchColumn();
+
+        $db->exec('DELETE FROM despensa_item WHERE ingrediente_id = ' . (int) $nuevo['id']);
+        $db->exec('DELETE FROM despensa_item WHERE usuario_id = 4
+                   AND ingrediente_id = 50 AND cantidad IS NULL AND nivel = 2 AND ubicacion = \'alacena\'');
+        $db->exec('DELETE FROM ingrediente WHERE id = ' . (int) $nuevo['id']);
+
+        $this->assertNotFalse($nuevo, 'Se creó el ingrediente');
+        $this->assertSame(3, (int) $nuevo['usuario_id'], 'Es propio de María');
+        $this->assertSame('g', $nuevo['unidad_default']);
+        $fila = (int) strpos($html, 'data-nombre="' . mb_strtolower($nombre) . '"');
+        $this->assertGreaterThan(0, $fila);
+        $this->assertStringContainsString('frasco.svg', substr($html, $fila, 600), 'En la despensa lleva el frasco');
+        $this->assertStringNotContainsString($nombre, $htmlOtro, 'Los demás no lo ven');
+        $this->assertSame(0, $piña, '"piña" es sinónimo de Ananá: no se crea un ingrediente nuevo');
+        $this->assertStringContainsString('propio de María', $htmlAdmin);
+        $this->assertNull($general, 'Quedó en la lista general');
     }
 
     private function seccionSelector(string $html): string
