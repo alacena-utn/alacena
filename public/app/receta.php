@@ -33,17 +33,17 @@ require parcial('encabezado');
 ?>
 <p><a href="<?= e(url('app/recetas.php')) ?>">← Volver a recetas</a></p>
 <article>
-    <h1><?= e($receta['titulo']) ?></h1>
-    <p class="texto-suave"><?= e($receta['descripcion']) ?></p>
-    <p class="acciones">
-        <span class="etiqueta">Preparación: <?= e($receta['minutos_prep']) ?> min</span>
-        <span class="etiqueta">Cocción: <?= e($receta['minutos_coccion']) ?> min</span>
-        <span class="etiqueta"><?= e(RecetaRepositorio::DIFICULTADES[(int) $receta['dificultad']]) ?></span>
-        <span class="etiqueta"><?= e($receta['porciones_base']) ?> porciones</span>
-        <?php foreach ($receta['etiquetas'] as $etiqueta) : ?>
-            <span class="etiqueta"><?= e(str_replace('_', ' ', $etiqueta['nombre'])) ?></span>
-        <?php endforeach; ?>
-    </p>
+  <h1><?= e($receta['titulo']) ?></h1>
+  <p class="texto-suave"><?= e($receta['descripcion']) ?></p>
+  <p class="acciones">
+    <span class="etiqueta">Preparación: <?= e($receta['minutos_prep']) ?> min</span>
+    <span class="etiqueta">Cocción: <?= e($receta['minutos_coccion']) ?> min</span>
+    <span class="etiqueta"><?= e(RecetaRepositorio::DIFICULTADES[(int) $receta['dificultad']]) ?></span>
+    <span class="etiqueta"><?= e($receta['porciones_base']) ?> porciones</span>
+    <?php foreach ($receta['etiquetas'] as $etiqueta) : ?>
+      <span class="etiqueta"><?= e(str_replace('_', ' ', $etiqueta['nombre'])) ?></span>
+    <?php endforeach; ?>
+  </p>
 
   <div class="detalle-receta">
     <section class="tarjeta">
@@ -54,6 +54,7 @@ require parcial('encabezado');
           <li class="<?= $tiene ? 'tengo' : 'falta' ?>">
             <span aria-hidden="true"><?= $tiene ? '✓' : '✗' ?></span>
             <span class="solo-lectores"><?= $tiene ? 'Lo tenés:' : 'Te falta:' ?></span>
+            <img class="icono-chico" src="<?= e(iconoIngrediente($ing['nombre'])) ?>" alt="" width="28" height="28">
             <strong><?= e($ing['nombre']) ?></strong>
             <?= e($cantidad($ing['cantidad'], $ing['unidad'])) ?>
             <?php if ($ing['nota']) : ?><span class="texto-suave">(<?= e($ing['nota']) ?>)</span><?php endif; ?>
@@ -66,16 +67,25 @@ require parcial('encabezado');
 
     <section class="tarjeta">
       <h2>Paso a paso</h2>
-      <ol class="lista-pasos">
+      <?php /* Cada paso se puede tildar para saber por dónde vas. receta.js lo recuerda en este navegador. */ ?>
+      <ol class="lista-pasos" data-receta="<?= e($receta['id']) ?>">
         <?php foreach ($receta['pasos'] as $paso) : ?>
-          <li><?= e($paso['instruccion']) ?></li>
+          <li class="paso">
+            <label>
+              <input class="paso__check" type="checkbox">
+              <span class="paso__texto"><?= e($paso['instruccion']) ?></span>
+            </label>
+          </li>
         <?php endforeach; ?>
       </ol>
+      <p class="pasos-acciones" hidden>
+        <button class="boton boton--secundario boton--chico" type="button" id="reiniciar-pasos">Empezar de nuevo</button>
+      </p>
     </section>
   </div>
   <?php if ($receta['autor']) : ?>
     <p class="texto-suave"><small>Cargada por <?= e($receta['autor']) ?>.</small></p>
   <?php endif; ?>
 </article>
+<script src="<?= e(recurso('js/receta.js')) ?>" defer></script>
 <?php require parcial('pie'); ?>
-

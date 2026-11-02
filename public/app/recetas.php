@@ -32,6 +32,8 @@ require parcial('encabezado');
 ?>
 <h1>Recetas</h1>
 
+<?php /* En la disposición panorámica, los filtros quedan en una columna a la izquierda */ ?>
+<div class="catalogo">
 <form class="tarjeta buscador" method="get" role="search">
   <div class="campo">
     <label for="q">Buscar receta o ingrediente</label>
@@ -64,6 +66,7 @@ require parcial('encabezado');
   <?php endif; ?>
 </form>
 
+<div class="catalogo__resultados">
 <p class="texto-suave" role="status"><?= count($recetas) ?> receta<?= count($recetas) === 1 ? '' : 's' ?><?= $hayFiltros ? ' encontradas' : '' ?></p>
 
 <?php if ($recetas === []) : ?>
@@ -75,4 +78,6 @@ require parcial('encabezado');
     <?php endforeach; ?>
   </div>
 <?php endif; ?>
+</div>
+</div>
 <?php require parcial('pie'); ?>

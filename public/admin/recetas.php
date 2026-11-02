@@ -34,6 +34,7 @@ $recetas = $repo->buscar(['q' => $busqueda]);
 $titulo = 'Recetas · Administración';
 require parcial('encabezado');
 ?>
+<?= enlaceVolver('admin/index.php', 'Volver al panel') ?>
 <div class="encabezado-pagina">
   <h1>Recetas</h1>
   <a class="boton" href="<?= e(url('admin/receta-editar.php')) ?>">+ Nueva receta</a>
@@ -61,7 +62,15 @@ require parcial('encabezado');
           <td><a href="<?= e(url('app/receta.php?id=' . $r['id'])) ?>"><?= e($r['titulo']) ?></a></td>
           <td><?= e(RecetaRepositorio::DIFICULTADES[(int) $r['dificultad']]) ?></td>
           <td><?= e($r['minutos']) ?></td>
-          <td><?= e($r['total']) ?></td>
+          <td>
+            <?php $dibujos = RecetaRepositorio::ingredientesDeTarjeta($r['ingredientes'] ?? null); ?>
+            <span class="dibujos-fila" title="<?= e(implode(', ', array_column($dibujos, 'nombre'))) ?>">
+              <?php foreach (array_slice($dibujos, 0, 5) as $ing) : ?>
+                <img src="<?= e(iconoIngrediente($ing['nombre'])) ?>" alt="<?= e($ing['nombre']) ?>" width="28" height="28">
+              <?php endforeach; ?>
+              <?= count($dibujos) > 5 ? '<small>+' . (count($dibujos) - 5) . '</small>' : '' ?>
+            </span>
+          </td>
           <td><?= e(str_replace('_', ' ', (string) $r['etiquetas'])) ?></td>
           <td>
             <div class="acciones">
