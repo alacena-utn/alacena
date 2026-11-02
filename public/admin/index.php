@@ -16,24 +16,31 @@ Sesion::requiereAdmin();
 
 $totales = (new ResumenRepositorio(Db::conexion()))->totales();
 
+// [página, nombre, dato, descripción, dibujo, color de la nota]
 $secciones = [
-    ['recetas.php', 'Recetas', $totales['recetas'] . ' cargadas', 'Alta, baja y modificación del recetario.'],
-    ['ingredientes.php', 'Ingredientes', $totales['ingredientes'] . ' en el catálogo', 'Los ingredientes que se pueden usar en recetas y despensas.'],
-    ['consultas.php', 'Consultas', $totales['consultas_nuevas'] . ' sin responder', 'Mensajes que llegaron desde el formulario de contacto.'],
-    ['usuarios.php', 'Usuarios', $totales['usuarios'] . ' generales · ' . $totales['administradores'] . ' administradores', 'Cuentas, roles y contraseñas.'],
+    ['recetas.php', 'Recetas', $totales['recetas'] . ' cargadas', 'Alta, baja y modificación del recetario.', 'fideos', 'amarillo'],
+    ['ingredientes.php', 'Ingredientes', $totales['ingredientes'] . ' en el catálogo',
+        'Los ingredientes que se pueden usar en recetas y despensas.', 'zanahoria', 'rosa'],
+    ['consultas.php', 'Consultas', $totales['consultas_nuevas'] . ' sin responder',
+        'Mensajes que llegaron desde el formulario de contacto.', 'yerba', 'celeste'],
+    ['usuarios.php', 'Usuarios', $totales['usuarios'] . ' generales · ' . $totales['administradores'] . ' administradores',
+        'Cuentas, roles y contraseñas.', 'manzana', 'verde'],
 ];
 
 $titulo = 'Administración';
 require parcial('encabezado');
 ?>
 <h1>Administración</h1>
-<div class="grilla">
-  <?php foreach ($secciones as [$ruta, $nombre, $dato, $descripcion]) : ?>
-    <article class="tarjeta">
-      <h2><?= e($nombre) ?></h2>
-      <p><strong><?= e($dato) ?></strong></p>
-      <p class="texto-suave"><?= e($descripcion) ?></p>
-      <a class="boton boton--secundario" href="<?= e(url('admin/' . $ruta)) ?>">Gestionar <?= e(mb_strtolower($nombre)) ?></a>
+<?php /* Cada sección es una nota de color con su dibujo; toda la nota es el enlace (se levanta y se hamaca) */ ?>
+<div class="notas-panel">
+  <?php foreach ($secciones as [$ruta, $nombre, $dato, $descripcion, $dibujo, $color]) : ?>
+    <article class="postit postit--<?= e($color) ?> nota-panel">
+      <span class="postit__chinche" aria-hidden="true"></span>
+      <img class="nota-panel__dibujo" src="<?= e(url('img/ingredientes/' . $dibujo . '.svg')) ?>" alt="" width="72" height="72">
+      <h2><a href="<?= e(url('admin/' . $ruta)) ?>"><?= e($nombre) ?></a></h2>
+      <p class="nota-panel__dato"><?= e($dato) ?></p>
+      <p><?= e($descripcion) ?></p>
+      <span class="nota-panel__ir" aria-hidden="true">Gestionar →</span>
     </article>
   <?php endforeach; ?>
 </div>

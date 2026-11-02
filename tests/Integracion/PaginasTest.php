@@ -169,6 +169,32 @@ final class PaginasTest extends TestCase
         $this->assertStringEndsWith('error.php?motivo=no-encontrado', $destino);
     }
 
+    public function testAbmDeIngredientesAltaModificacionYBaja(): void
+    {
+        $nombre = 'Ingrediente ' . uniqid();
+        $web = new Navegador();
+        $web->ingresar('admin@alacena.test', 'Admin1234');
+        $web->get('admin/ingredientes.php?nuevo');
+        $campos = ['accion' => 'guardar', 'id' => 0, 'nombre' => $nombre, 'categoria_id' => 6,
+            'unidad_default' => 'g', 'perecedero' => '1', 'vida_util_dias' => '30'];
+        $web->post('admin/ingredientes.php', $campos);
+
+        $consulta = Db::conexion()->prepare('SELECT id FROM ingrediente WHERE nombre = ?');
+        $consulta->execute([$nombre]);
+        $id = (int) $consulta->fetchColumn();
+        $this->assertGreaterThan(0, $id, 'No se creó el ingrediente');
+
+        $web->get('admin/ingredientes.php?editar=' . $id);
+        $web->post('admin/ingredientes.php', ['id' => $id, 'nombre' => $nombre . ' editado'] + $campos);
+        $consulta->execute([$nombre . ' editado']);
+        $this->assertSame($id, (int) $consulta->fetchColumn());
+
+        $web->get('admin/ingredientes.php');
+        $web->post('admin/ingredientes.php', ['accion' => 'borrar', 'id' => $id]);
+        $consulta->execute([$nombre . ' editado']);
+        $this->assertFalse($consulta->fetchColumn());
+    }
+
     public function testElColorYLaDisposicionSeGuardanEnLaCuenta(): void
     {
         $web = new Navegador();
@@ -203,6 +229,18 @@ final class PaginasTest extends TestCase
         Db::conexion()->exec('UPDATE usuario SET volumen = 50 WHERE id = 3');
         $this->assertSame(80, (int) $volumen, 'Un volumen fuera de 0 a 100 no se guarda');
         $this->assertStringContainsString('data-volumen="80"', $html);
+    }
+
+    public function testElPanelDeAdministracionTieneNotasConDibujos(): void
+    {
+        $web = new Navegador();
+        $web->ingresar('admin@alacena.test', 'Admin1234');
+        [, $html] = $web->get('admin/index.php');
+        $this->assertSame(4, substr_count($html, 'class="postit postit--'));
+        [, $html] = $web->get('admin/ingredientes.php');
+        $this->assertStringContainsString('img/ingredientes/manzana.svg', $html);
+        [, $html] = $web->get('admin/ingredientes.php?editar=1');
+        $this->assertStringContainsString('class="vista-dibujo"', $html);
     }
 
     /** El HTML del resultado del selector (sin el resto de la página, que también tiene recetas). */
