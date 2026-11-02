@@ -243,6 +243,26 @@ final class PaginasTest extends TestCase
         $this->assertStringContainsString('class="vista-dibujo"', $html);
     }
 
+    public function testLasTarjetasDeRecetasMuestranLoQueFaltaTachado(): void
+    {
+        $web = new Navegador();
+        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        [, $html] = $web->get('app/recetas.php?q=zapallitos');
+        $this->assertStringContainsString('alt="Tapa de tarta (te falta)"', $html);
+        $this->assertStringContainsString('alt="Huevo"', $html);
+    }
+
+    public function testElDetalleTienePasosParaTildar(): void
+    {
+        $web = new Navegador();
+        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        [, $html] = $web->get('app/receta.php?id=1');
+        $this->assertSame(
+            (int) Db::conexion()->query('SELECT COUNT(*) FROM paso WHERE receta_id = 1')->fetchColumn(),
+            substr_count($html, 'class="paso__check"')
+        );
+    }
+
     /** El HTML del resultado del selector (sin el resto de la página, que también tiene recetas). */
     public function testLaBarraSinCuentaEsTodaDeImanesConAjustes(): void
     {

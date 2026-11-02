@@ -20,10 +20,13 @@ final class RecetaRepositorio
      *   q          texto: busca en el título, la descripción y los ingredientes (también por sinónimo)
      *   dificultad 1, 2 o 3
      *   etiqueta   id de etiqueta
-     *   puedo      true: solo las que se pueden hacer con lo que hay en la despensa
+     *   puedo        true: solo las que se pueden hacer con lo que hay en la despensa
+     *   ingredientes ids de ingredientes que la receta tiene que usar (selector de Mi cocina)
+     *   modo         'todos' (usa todos los elegidos, por defecto) o 'alguno' (usa al menos uno)
      * Si se pasa $usuarioId, cada receta trae cuántos ingredientes tiene el usuario ("tengo").
      *
-     * @param array{q?: string, dificultad?: int, etiqueta?: int, puedo?: bool} $filtros
+     * @param array{q?: string, dificultad?: int, etiqueta?: int, puedo?: bool,
+     *              ingredientes?: list<int>, modo?: string} $filtros
      * @return list<array<string, mixed>>
      */
     public function buscar(array $filtros = [], int $usuarioId = 0): array
@@ -50,6 +53,18 @@ final class RecetaRepositorio
             $condiciones[] = 'EXISTS (SELECT 1 FROM receta_etiqueta re
                 WHERE re.receta_id = r.id AND re.etiqueta_id = :etiqueta)';
             $parametros['etiqueta'] = (int) $filtros['etiqueta'];
+        }
+        $elegidos = array_values(array_unique(array_filter(array_map('intval', $filtros['ingredientes'] ?? []))));
+        if ($elegidos !== []) {
+            // Un parámetro por ingrediente (:ing0, :ing1...): la consulta sigue siendo preparada
+            $marcas = [];
+            foreach ($elegidos as $i => $idIngrediente) {
+                $marcas[] = ':ing' . $i;
+                $parametros['ing' . $i] = $idIngrediente;
+            }
+            $condiciones[] = '(SELECT COUNT(DISTINCT ri3.ingrediente_id) FROM receta_ingrediente ri3
+                WHERE ri3.receta_id = r.id AND ri3.ingrediente_id IN (' . implode(', ', $marcas) . ')) >= :minimo';
+            $parametros['minimo'] = ($filtros['modo'] ?? 'todos') === 'alguno' ? 1 : count($elegidos);
         }
 
         // La consulta de resumen va adentro de otra para poder filtrar y ordenar por "tengo" y "total"
@@ -117,6 +132,19 @@ final class RecetaRepositorio
         $consulta->execute(['id' => $id]);
         $receta['etiquetas'] = $consulta->fetchAll();
         return $receta;
+    }
+
+    /**
+     * Separa la columna "ingredientes" de buscar() y sugeridas().
+     * @return list<array{nombre: string, tengo: bool}>
+     */
+    public static function ingredientesDeTarjeta(?string $columna): array
+    {
+        $lista = [];
+        foreach (array_filter(explode("\n", (string) $columna)) as $renglon) {
+            $lista[] = ['nombre' => substr($renglon, 1), 'tengo' => $renglon[0] === '1'];
+        }
+        return $lista;
     }
 
     /** @return list<array{id: int, nombre: string}> */
@@ -229,6 +257,9 @@ final class RecetaRepositorio
      * Total de ingredientes obligatorios de cada receta y cuántos tiene el usuario.
      * Los básicos (sal, aceite, pimienta…) se cuentan como disponibles siempre.
      * Lo vencido o agotado (nivel 0) no cuenta.
+     * "ingredientes" trae los obligatorios para dibujarlos en la tarjeta, uno por renglón y de
+     * más a menos importante: un 1 o un 0 (si el usuario lo tiene) seguido del nombre.
+     * Se separa con RecetaRepositorio::ingredientesDeTarjeta().
      */
     private const SELECT_RESUMEN = 'SELECT r.id, r.titulo, r.descripcion, r.dificultad, r.porciones_base,
             r.minutos_prep + r.minutos_coccion AS minutos,
@@ -237,7 +268,10 @@ final class RecetaRepositorio
                         AND (d.ingrediente_id IS NOT NULL OR i.es_basico = 1) THEN 1 END) AS tengo,
             (SELECT GROUP_CONCAT(e.nombre ORDER BY e.nombre SEPARATOR \', \')
                FROM receta_etiqueta re JOIN etiqueta e ON e.id = re.etiqueta_id
-              WHERE re.receta_id = r.id) AS etiquetas
+              WHERE re.receta_id = r.id) AS etiquetas,
+            GROUP_CONCAT(CASE WHEN ri.es_opcional = 0 THEN CONCAT(
+                    IF(d.ingrediente_id IS NOT NULL OR i.es_basico = 1, \'1\', \'0\'), i.nombre) END
+                ORDER BY ri.peso DESC, i.nombre SEPARATOR \'\\n\') AS ingredientes
         FROM receta r
         LEFT JOIN receta_ingrediente ri ON ri.receta_id = r.id
         LEFT JOIN ingrediente i ON i.id = ri.ingrediente_id

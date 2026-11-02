@@ -22,8 +22,6 @@ final class ResumenRepositorio
                   (SELECT COUNT(*) FROM receta) AS recetas,
                   (SELECT COUNT(*) FROM ingrediente) AS ingredientes,
                   (SELECT COUNT(*) FROM contacto WHERE estado = 'nueva') AS consultas_nuevas";
-        $consulta = $this->db->prepare($sql);
-        $consulta->execute();
-        return array_map('intval', $consulta->fetch());
+        return array_map('intval', $this->db->query($sql)->fetch());
     }
 }

@@ -134,6 +134,7 @@ $opciones = function (int $elegido) use ($catalogo): string {
             $grupo = $ing['categoria'];
         }
         $html .= '<option value="' . e($ing['id']) . '" data-unidad="' . e($ing['unidad_default']) . '"'
+            . ' data-dibujo="' . e(iconoIngrediente($ing['nombre'])) . '"'
             . ((int) $ing['id'] === $elegido ? ' selected' : '') . '>' . e($ing['nombre']) . '</option>';
     }
     return $html . '</optgroup>';
@@ -143,7 +144,7 @@ $error = fn (string $campo) => isset($errores[$campo]) ? '<p class="error-campo"
 $titulo = $id ? 'Editar receta' : 'Nueva receta';
 require parcial('encabezado');
 ?>
-<p><a href="<?= e(url('admin/recetas.php')) ?>">← Volver a recetas</a></p>
+<?= enlaceVolver('admin/recetas.php', 'Volver a recetas') ?>
 <h1><?= e($titulo) ?></h1>
 <?php if ($errores !== []) : ?>
   <p class="aviso aviso--error" role="alert">Revisá los campos marcados.</p>
@@ -202,9 +203,11 @@ require parcial('encabezado');
   <section class="tarjeta">
     <h2>Ingredientes</h2>
     <?= $error('ingredientes') ?>
-    <div id="filas-ingredientes">
+    <div id="filas-ingredientes" data-frasco="<?= e(url('img/ingredientes/frasco.svg')) ?>">
       <?php foreach ($ingredientes as $i => $ing) : ?>
         <div class="fila-ingrediente">
+          <?php $nombreIng = (string) (array_column($catalogo, 'nombre', 'id')[(int) $ing['id']] ?? ''); ?>
+          <img class="fila-ingrediente__dibujo" src="<?= e($nombreIng !== '' ? iconoIngrediente($nombreIng) : url('img/ingredientes/frasco.svg')) ?>" alt="" width="44" height="44">
           <div class="campo">
             <label for="ing-<?= $i ?>-id">Ingrediente</label>
             <select id="ing-<?= $i ?>-id" name="ingredientes[<?= $i ?>][id]" data-campo="id"><?= $opciones((int) $ing['id']) ?></select>
@@ -244,5 +247,5 @@ require parcial('encabezado');
     <a class="boton boton--secundario" href="<?= e(url('admin/recetas.php')) ?>">Cancelar</a>
   </div>
 </form>
-<script src="<?= e(url('js/receta-form.js')) ?>" defer></script>
+<script src="<?= e(recurso('js/receta-form.js')) ?>" defer></script>
 <?php require parcial('pie'); ?>
