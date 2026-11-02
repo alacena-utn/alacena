@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Alacena;
 
+use Alacena\Repositorios\UsuarioRepositorio;
+
 /**
  * Todo lo relacionado con la sesión del usuario: quién está logueado, qué rol tiene,
  * protección de páginas, mensajes de aviso y el token contra envíos falsos (CSRF).
@@ -14,6 +16,8 @@ final class Sesion
 {
     public const ROL_GENERAL = 'general';
     public const ROL_ADMIN = 'admin';
+    /** Cookie con el color de la heladera de quien no tiene cuenta (pasa a la cuenta al registrarse). */
+    public const COOKIE_COLOR = 'alacena_color';
 
     public static function iniciar(): void
     {
@@ -32,7 +36,7 @@ final class Sesion
         }
     }
 
-    /** @return array{id: int, nombre: string, email: string, rol: string}|null */
+    /** @return array{id: int, nombre: string, email: string, rol: string, color?: string, disposicion?: string, volumen?: int}|null */
     public static function usuario(): ?array
     {
         self::iniciar();
@@ -67,7 +71,66 @@ final class Sesion
             'nombre' => (string) $usuario['nombre'],
             'email' => (string) $usuario['email'],
             'rol' => (string) $usuario['rol'],
+            'color' => (string) ($usuario['color'] ?? 'verde'),
+            'disposicion' => (string) ($usuario['disposicion'] ?? 'normal'),
+            'volumen' => (int) ($usuario['volumen'] ?? 50),
         ];
+    }
+
+    /** Volumen de los sonidos del usuario logueado (0 a 100; 50 si no hay nadie o si no eligió). */
+    public static function volumen(): int
+    {
+        return (int) (self::usuario()['volumen'] ?? 50);
+    }
+
+    /** Disposición de la pantalla del usuario logueado: 'normal' o 'panoramica'. */
+    public static function disposicion(): string
+    {
+        return (string) (self::usuario()['disposicion'] ?? 'normal');
+    }
+
+    /**
+     * Color de la heladera: el de la cuenta; sin cuenta, el de la cookie (lo elige en "Ajustes").
+     * 'verde' si no eligió ninguno.
+     */
+    public static function color(): string
+    {
+        $usuario = self::usuario();
+        if ($usuario !== null) {
+            return (string) ($usuario['color'] ?? 'verde');
+        }
+        $color = (string) ($_COOKIE[self::COOKIE_COLOR] ?? '');
+        return isset(UsuarioRepositorio::COLORES[$color]) ? $color : 'verde';
+    }
+
+    /** Guarda en una cookie (un año) el color elegido por alguien sin cuenta. Devuelve false si no es válido. */
+    public static function recordarColor(string $color): bool
+    {
+        if (!isset(UsuarioRepositorio::COLORES[$color])) {
+            return false;
+        }
+        if (!headers_sent()) {
+            setcookie(self::COOKIE_COLOR, $color, [
+                'expires' => time() + 365 * 24 * 3600,
+                'path' => '/',
+                'samesite' => 'Lax',
+                'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+            ]);
+        }
+        $_COOKIE[self::COOKIE_COLOR] = $color;
+        return true;
+    }
+
+    /**
+     * Actualiza una preferencia guardada en la sesión ('color', 'disposicion' o 'volumen').
+     * La base la actualiza UsuarioRepositorio::guardarPreferencia().
+     */
+    public static function cambiarPreferencia(string $clave, string $valor): void
+    {
+        self::iniciar();
+        if (isset($_SESSION['usuario'])) {
+            $_SESSION['usuario'][$clave] = $clave === 'volumen' ? (int) $valor : $valor;
+        }
     }
 
     public static function salir(): void
