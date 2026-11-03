@@ -27,15 +27,17 @@ Las contraseñas se guardan encriptadas con `password_hash()`; las de arriba son
 public/                 ← lo único que ve el navegador (raíz web)
   index.php             página principal (pública)
   registro.php · login.php · salir.php · error.php · contacto.php
+  nosotros.php          Quiénes somos (imán "Nosotros" sin cuenta; los datos están en src/equipo.php)
   app/                  páginas del usuario logueado: Mi cocina, Mi despensa, Recetas
   admin/                páginas solo para administradores: panel y ABM
-  css/ · js/ · img/
+  css/ · js/ · img/      (img/equipo: los dibujos de cada integrante para Quiénes somos)
   api/index.php         API JSON (buscador de ingredientes)
 src/                    código PHP que no se ve desde el navegador
   bootstrap.php         arranque: cada página empieza con require de este archivo
   ayudas.php            e() para escapar HTML, url(), redirigir(), parcial()...
   Sesion.php            sesión del usuario, roles, protección de páginas y token CSRF
   Correo.php            envío con mail()
+  equipo.php            integrantes para "Quiénes somos": nombre, actividades, GitHub, LinkedIn y correo
   Repositorios/         todas las consultas SQL (una clase por tabla principal)
   Vistas/               partes comunes: encabezado (con el menú) y pie
 database/               schema.sql (estructura) y seed.sql (datos de ejemplo)
@@ -87,8 +89,8 @@ docker compose exec web composer install
 | P1 | Cuentas + Infraestructura | Daiana | Daiana1411 |
 | P2 | Despensa + Diseño | Julian | julianmartinez093-tech |
 | P3 | Recetas + Base de datos (coordinación) | Pablo | pablito2032 |
-| P4 | Contacto + Calidad | | |
-| P5 | Administración: ABM de usuarios e ingredientes | | |
+| P4 | Contacto + Calidad | Ariana | |
+| P5 | Administración: ABM de usuarios e ingredientes | Susana | |
 
 División de tareas: [docs/tareas-incremento-1.md](docs/tareas-incremento-1.md) · Cómo trabajamos: [CONTRIBUTING.md](CONTRIBUTING.md) · Decisiones: [docs/decisiones.md](docs/decisiones.md) · Modelo de datos: [docs/modelo-datos.md](docs/modelo-datos.md)
 

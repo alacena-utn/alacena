@@ -31,7 +31,11 @@ if ($usuario !== null) {
     }
     $menu[] = ['contacto.php', 'Contacto'];
 } else {
-    $menu = [['index.php', 'Inicio'], ['contacto.php', 'Contacto'], ['login.php', 'Ingresar'], ['registro.php', 'Crear cuenta']];
+    // "Nosotros" (Quiénes somos) va solo en el menú sin cuenta
+    $menu = [
+        ['index.php', 'Inicio'], ['nosotros.php', 'Nosotros'], ['contacto.php', 'Contacto'],
+        ['login.php', 'Ingresar'], ['registro.php', 'Crear cuenta'],
+    ];
 }
 
 /** Los imanes de colores para elegir el color de la heladera (con y sin cuenta). */
@@ -73,7 +77,7 @@ $imanesColor = function (): void {
     </a>
     <button class="barra__boton" type="button" aria-expanded="false" aria-controls="menu-principal">Menú</button>
     <nav id="menu-principal" class="menu" aria-label="Principal">
-      <ul>
+      <ul<?= $usuario === null ? ' class="menu__invitado"' : '' ?>>
         <?php foreach ($menu as [$ruta, $texto]) : ?>
           <li><a href="<?= e(url($ruta)) ?>"<?= $marcar($ruta) ?>><?= e($texto) ?></a></li>
         <?php endforeach; ?>

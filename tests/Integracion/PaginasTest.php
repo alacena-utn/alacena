@@ -38,9 +38,42 @@ final class PaginasTest extends TestCase
     public function testLasPaginasPublicasResponden(): void
     {
         $web = new Navegador();
-        foreach (['index.php', 'login.php', 'registro.php', 'contacto.php'] as $pagina) {
+        foreach (['index.php', 'login.php', 'registro.php', 'contacto.php', 'nosotros.php'] as $pagina) {
             $this->assertSame(200, $web->get($pagina)[0], "{$pagina} tiene que responder 200");
         }
+    }
+
+    public function testQuienesSomosMuestraAlEquipoYSoloEstaEnElMenuSinCuenta(): void
+    {
+        $web = new Navegador();
+        [$estado, $html] = $web->get('nosotros.php');
+        $this->assertSame(200, $estado);
+        $this->assertStringContainsString('Quiénes somos', $html);
+        $equipo = require dirname(__DIR__, 2) . '/src/equipo.php';
+        $this->assertCount(5, $equipo);
+        foreach ($equipo as $persona) {
+            $this->assertStringContainsString($persona['area'], $html);
+            $this->assertStringContainsString('img/equipo/' . $persona['imagen'] . '.svg', $html);
+            if ($persona['nombre'] !== '') {
+                $this->assertStringContainsString($persona['nombre'], $html);
+            }
+            if ($persona['github'] !== '') {
+                $this->assertStringContainsString('href="' . $persona['github'] . '"', $html);
+            }
+        }
+        $this->assertStringContainsString('contacto.php', $html);
+        $this->assertStringContainsString('ingredientes/yerba.svg', $html, 'El mate a un costado');
+        $this->assertStringContainsString('ingredientes/cafe.svg', $html, 'El café al otro');
+
+        [, $inicio] = $web->get('index.php');
+        $this->assertStringContainsString('nosotros.php', $inicio, 'El inicio tiene el enlace');
+        $this->assertStringContainsString('<span class="solo-lectores">', $html);
+        $this->assertDoesNotMatchRegularExpression('/\bP[1-5]\b/', strip_tags($html), 'El rol interno no se muestra');
+        $imanNosotros = '#class="menu__invitado".*href="[^"]*nosotros\.php"#s';
+        $this->assertMatchesRegularExpression($imanNosotros, $inicio, 'Sin cuenta, el menú tiene el imán Nosotros');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
+        [, $cocina] = $web->get('app/index.php');
+        $this->assertStringNotContainsString('nosotros.php', $cocina, 'Con cuenta no está en el menú');
     }
 
     public function testLasTipografiasNoDependenDeGoogle(): void

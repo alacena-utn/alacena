@@ -2,7 +2,7 @@
 
 /**
  * Página principal (pública): la pregunta, qué es Cooki, acceso al registro y al ingreso,
- * una vitrina con todos los dibujos de ingredientes en movimiento y cómo funciona.
+ * una vitrina con todos los dibujos de ingredientes en movimiento, cómo funciona y el enlace a "Quiénes somos".
  */
 
 declare(strict_types=1);
@@ -113,7 +113,7 @@ require parcial('stickers');
 <section class="tarjeta portada__porque">
   <h2>¿Por qué Cooki?</h2>
   <p>En Argentina se pierden o desperdician alrededor de 16 millones de toneladas de alimentos por año, y buena parte se tira en casa porque se vence o porque nos olvidamos de que estaba. Cooki es un proyecto de estudiantes de la UTN Facultad Regional Haedo para ayudar a decidir qué cocinar con lo que ya hay.</p>
-  <p><a href="<?= e(url('contacto.php')) ?>">Escribinos</a> si tenés sugerencias.</p>
+  <p><a class="portada__equipo" href="<?= e(url('nosotros.php')) ?>">Conocé quiénes somos</a> o <a href="<?= e(url('contacto.php')) ?>">escribinos</a> si tenés sugerencias.</p>
 </section>
 </div>
 <script src="<?= e(recurso('js/inicio.js')) ?>" defer></script>
