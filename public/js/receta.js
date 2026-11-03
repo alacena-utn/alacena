@@ -3,7 +3,7 @@
 const listaPasos = document.querySelector('.lista-pasos[data-receta]');
 
 if (listaPasos) {
-  const clave = 'alacena.pasos.' + listaPasos.dataset.receta;
+  const clave = 'cooki.pasos.' + listaPasos.dataset.receta;
   const pasos = [...listaPasos.querySelectorAll('.paso')];
   const checks = pasos.map((paso) => paso.querySelector('.paso__check'));
   const acciones = document.querySelector('.pasos-acciones');

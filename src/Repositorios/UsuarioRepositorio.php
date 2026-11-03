@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Repositorios;
+namespace Cooki\Repositorios;
 
 use PDO;
 

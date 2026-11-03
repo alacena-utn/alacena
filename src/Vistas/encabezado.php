@@ -6,8 +6,8 @@
  *   require parcial('encabezado');
  */
 
-use Alacena\Repositorios\UsuarioRepositorio;
-use Alacena\Sesion;
+use Cooki\Repositorios\UsuarioRepositorio;
+use Cooki\Sesion;
 
 $usuario = Sesion::usuario();
 $avisos = Sesion::avisos();
@@ -49,8 +49,8 @@ $imanesColor = function (): void {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= e($titulo ?? 'Alacena') ?> · Alacena</title>
-  <meta name="description" content="Alacena: tu despensa y qué cocinar con lo que tenés">
+  <title><?= e($titulo ?? 'Cooki') ?> · Cooki</title>
+  <meta name="description" content="Cooki: tu despensa y qué cocinar con lo que tenés">
   <?php /* recurso(): agrega ?v=fecha del archivo, así el navegador baja el CSS y el JS nuevos cada vez que cambian */ ?>
   <link rel="icon" type="image/svg+xml" href="<?= e(url('img/ingredientes/fideos.svg')) ?>">
   <link rel="stylesheet" href="<?= e(recurso('css/estilos.css')) ?>">
@@ -66,8 +66,8 @@ $imanesColor = function (): void {
       <img class="marca__dibujo" src="<?= e(url('img/ingredientes/fideos.svg')) ?>" alt="" width="46" height="46">
       <?php /* Cada letra es un <span> para que salten de a una al pasar el mouse (los lectores leen la palabra) */ ?>
       <span class="marca__rotulo">
-        <span class="solo-lectores">Alacena</span>
-        <?php foreach (mb_str_split('Alacena') as $i => $letra) : ?><span class="marca__letra" style="--i: <?= $i ?>" aria-hidden="true"><?= e($letra) ?></span><?php endforeach; ?>
+        <span class="solo-lectores">Cooki</span>
+        <?php foreach (mb_str_split('Cooki') as $i => $letra) : ?><span class="marca__letra" style="--i: <?= $i ?>" aria-hidden="true"><?= e($letra) ?></span><?php endforeach; ?>
       </span>
       <span class="marca__vapor" aria-hidden="true"><i></i><i></i><i></i></span>
     </a>

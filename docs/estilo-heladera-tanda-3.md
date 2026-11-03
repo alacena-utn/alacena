@@ -19,7 +19,7 @@
 
 | # | Pedido | Estado | Incremento | Rol |
 |---|---|---|---|---|
-| A | Inicio como el del repo: pregunta en vez del nombre, frase "Alacena es la puerta de tu heladera:", "→ y usá primero lo que vence" | Hecho | 1 | P2 |
+| A | Inicio como el del repo: pregunta en vez del nombre, frase "Cooki es la puerta de tu heladera:", "→ y usá primero lo que vence" | Hecho | 1 | P2 |
 | B | Título "¿Qué puedo cocinar?" con un dibujo que baila siempre, se acerca al pasar el mouse y cambia al tocarlo | Hecho | 1 | P2 |
 | C | Vitrina: todos los dibujos moviéndose dentro del recuadro (sin cinta a la vista, sin nombres) y cada uno se mueve al pasar el mouse | Hecho | 1 | P2 |
 | D | "Cómo funciona" con papeles de colores que se mueven como las demás notas | Hecho | 1 | P2 |
@@ -51,7 +51,7 @@ Para actualizarla tenés dos opciones:
   - **baila siempre** (`@keyframes bailar`);
   - **se agranda** al pasar el mouse;
   - **al tocarlo cambia por otro dibujo al azar**, con un saltito y el sonido "pop".
-- **Debajo:** "**Alacena es la puerta de tu heladera:** anotá lo que tenés…", los botones y "→ y usá primero lo que vence".
+- **Debajo:** "**Cooki es la puerta de tu heladera:** anotá lo que tenés…", los botones y "→ y usá primero lo que vence".
 - **Vitrina:**
   - **todos los dibujos** (76) se desplazan solos de derecha a izquierda, en tres filas, dentro del recuadro punteado;
   - no hay una cinta dibujada: los bordes se esfuman para que parezca que entran y salen del recuadro;
@@ -59,7 +59,7 @@ Para actualizarla tenés dos opciones:
   - igual que en la versión anterior, sin nombres ni fechas; solo algunos llevan el "¡ya!" (morrón, tomate, leche, frutilla);
   - la lista va dos veces seguida para que la vuelta no se note; da una vuelta completa en 90 segundos.
 - **Cómo funciona:** tres **papeles de colores** (amarillo, rosa y celeste) con chinche, que se levantan y se hamacan al pasar el mouse, como los demás post-its.
-- **¿Por qué Alacena?:** igual que en el repo, como hoja rayada angosta y centrada.
+- **¿Por qué Cooki?:** igual que en el repo, como hoja rayada angosta y centrada.
 - **"la puerta de tu heladera"** ya no aparece al lado del logo en ninguna página.
 - **Puerta punteada:** como en el repo, en la computadora (desde 900 px) el contenido de todas las páginas va dentro de un recuadro punteado redondeado. En el celular no aparece, para no perder espacio.
 
@@ -76,7 +76,7 @@ Para actualizarla tenés dos opciones:
 
 ### 1 · El dibujo de los fideos como marca
 
-- En todas las páginas, el **sticker de los fideos** va al lado del rótulo "ALACENA" (se mueve un poco al pasar el mouse) y es el **ícono de la pestaña** (`<link rel="icon">`).
+- En todas las páginas, el **sticker de los fideos** va al lado del rótulo "COOKI" (se mueve un poco al pasar el mouse) y es el **ícono de la pestaña** (`<link rel="icon">`).
 
 ### 2 · Simetría y tamaños
 
@@ -152,7 +152,7 @@ Para actualizarla tenés dos opciones:
 
 | Prueba | Qué comprueba |
 |---|---|
-| `testPaginaPrincipal…` (actualizada) | "¿Qué puedo cocinar?", "Alacena es la puerta de tu heladera:" y el dibujo de los fideos |
+| `testPaginaPrincipal…` (actualizada) | "¿Qué puedo cocinar?", "Cooki es la puerta de tu heladera:" y el dibujo de los fideos |
 | `testAdministradorVaAlPanel` (actualizada) | El panel enlaza a la gestión de recetas |
 | `testElVolumenSeGuardaEnLaCuenta` | Arranca en 50, guarda 80 y rechaza 150 |
 | `testElPanelDeAdministracionTieneNotasConDibujos` | Las 4 notas, el dibujo en la lista de ingredientes y la vista previa |

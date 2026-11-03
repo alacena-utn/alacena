@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena;
+namespace Cooki;
 
 use PDO;
 
@@ -21,7 +21,7 @@ final class Db
                 'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
                 Config::get('DB_HOST', '127.0.0.1'),
                 Config::get('DB_PORT', '3306'),
-                Config::get('DB_NAME', 'alacena')
+                Config::get('DB_NAME', 'cooki')
             );
             self::$pdo = new PDO($dsn, Config::get('DB_USER', 'root'), Config::get('DB_PASS'), [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

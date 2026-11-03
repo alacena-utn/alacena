@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 spl_autoload_register(function (string $clase): void {
-    $prefijo = 'Alacena\\';
+    $prefijo = 'Cooki\\';
     if (strncmp($clase, $prefijo, strlen($prefijo)) !== 0) {
         return;
     }
@@ -22,6 +22,6 @@ spl_autoload_register(function (string $clase): void {
 
 require_once __DIR__ . '/ayudas.php';
 
-\Alacena\Config::cargar(dirname(__DIR__) . '/.env');
+\Cooki\Config::cargar(dirname(__DIR__) . '/.env');
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');

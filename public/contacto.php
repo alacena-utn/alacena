@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/bootstrap.php';
 
-use Alacena\Config;
-use Alacena\Correo;
-use Alacena\Db;
-use Alacena\Repositorios\ContactoRepositorio;
-use Alacena\Sesion;
+use Cooki\Config;
+use Cooki\Correo;
+use Cooki\Db;
+use Cooki\Repositorios\ContactoRepositorio;
+use Cooki\Sesion;
 
 $usuario = Sesion::usuario();
 $errores = [];
@@ -52,14 +52,14 @@ if (esPost()) {
         $id = $repo->crear($datos, $usuario['id'] ?? null);
 
         // 2. Se envía por correo a la dirección (simulada) del sitio
-        $cuerpo = "Nueva consulta desde el sitio Alacena\n\n"
+        $cuerpo = "Nueva consulta desde el sitio Cooki\n\n"
             . "Nombre: {$datos['nombre']}\n"
             . "Email: {$datos['email']}\n"
             . "Asunto: {$datos['asunto']}\n\n"
             . $datos['mensaje'] . "\n\n"
             . "Consulta n.º {$id} · " . date('d/m/Y H:i');
         $enviado = Correo::enviar(
-            Config::get('MAIL_CONTACTO', 'contacto@alacena.test'),
+            Config::get('MAIL_CONTACTO', 'contacto@cooki.test'),
             'Consulta: ' . $datos['asunto'],
             $cuerpo,
             $datos['email']
@@ -119,7 +119,7 @@ require parcial('encabezado');
             title="Mapa: UTN Facultad Regional Haedo"
             src="https://www.google.com/maps?q=UTN+Facultad+Regional+Haedo,+Par%C3%ADs+532,+Haedo&amp;output=embed"
             loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    <p class="texto-suave"><small>Correo: <?= e(Config::get('MAIL_CONTACTO', 'contacto@alacena.test')) ?> (dirección de prueba del proyecto)</small></p>
+    <p class="texto-suave"><small>Correo: <?= e(Config::get('MAIL_CONTACTO', 'contacto@cooki.test')) ?> (dirección de prueba del proyecto)</small></p>
   </section>
 </div>
 

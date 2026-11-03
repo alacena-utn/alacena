@@ -5,10 +5,10 @@
 // Desde otros archivos: window.sonar('iman' | 'hoja' | 'pop-arriba' | 'pop-abajo' | 'birome' |
 //   'nota-despega' | 'nota-pega' | 'sticker-pega' | 'sticker-arranca' | 'clic' | 'iman-grave' | 'error', tono?)
 (() => {
-  const CLAVE = 'alacena.sonidos';
+  const CLAVE = 'cooki.sonidos';
   // Volumen general (0 a 100). 50 = sutil pero audible. Con cuenta viene de la base (<html data-volumen>);
   // sin cuenta, de este navegador. La ganancia real es volumen / 100 * 1.1 (50 → 0.55).
-  const CLAVE_VOLUMEN = 'alacena.volumen';
+  const CLAVE_VOLUMEN = 'cooki.volumen';
   const conCuenta = document.documentElement.dataset.volumen !== undefined;
   let volumen = 50;
   try {
@@ -136,9 +136,9 @@
     },
     // Prender los sonidos
     tic: (c) => tono(c, { frecuencia: 1320, duracion: 0.06, volumen: 0.08 }),
-    // Siete notas suaves que suben, una por letra de "ALACENA"
+    // Cinco notas suaves que suben, una por letra de "COOKI"
     marca: (c) => {
-      [0, 2, 4, 5, 7, 9, 12].forEach((paso, i) => {
+      [0, 4, 7, 9, 12].forEach((paso, i) => {
         tono(c, { frecuencia: 523 * 2 ** (paso / 12), duracion: 0.12, tipo: 'triangle', volumen: 0.035, demora: i * 0.055 });
       });
     },
@@ -150,7 +150,7 @@
     if (c) SONIDOS[nombre](c, n);
   };
 
-  // El nombre "ALACENA": al pasar el mouse, una nota por letra (como la ola de las letras).
+  // El nombre "COOKI": al pasar el mouse, una nota por letra (como la ola de las letras).
   // Una vez cada 1,5 s como mucho; el navegador recién deja sonar después del primer clic en la página.
   let ultimaMarca = 0;
   document.querySelector('.marca')?.addEventListener('mouseenter', () => {

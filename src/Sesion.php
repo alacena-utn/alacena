@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Alacena;
+namespace Cooki;
 
-use Alacena\Repositorios\UsuarioRepositorio;
+use Cooki\Repositorios\UsuarioRepositorio;
 
 /**
  * Todo lo relacionado con la sesión del usuario: quién está logueado, qué rol tiene,
@@ -17,14 +17,14 @@ final class Sesion
     public const ROL_GENERAL = 'general';
     public const ROL_ADMIN = 'admin';
     /** Cookie con el color de la heladera de quien no tiene cuenta (pasa a la cuenta al registrarse). */
-    public const COOKIE_COLOR = 'alacena_color';
+    public const COOKIE_COLOR = 'cooki_color';
 
     public static function iniciar(): void
     {
         if (session_status() === PHP_SESSION_ACTIVE) {
             return;
         }
-        session_name('alacena');
+        session_name('cooki');
         session_set_cookie_params([
             'httponly' => true,      // JavaScript no puede leer la cookie de sesión
             'samesite' => 'Lax',     // otro sitio no puede enviar formularios con nuestra sesión

@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
-use Alacena\Correo;
-use Alacena\Db;
-use Alacena\Repositorios\ContactoRepositorio;
-use Alacena\Sesion;
+use Cooki\Correo;
+use Cooki\Db;
+use Cooki\Repositorios\ContactoRepositorio;
+use Cooki\Sesion;
 
 Sesion::requiereAdmin();
 
@@ -33,7 +33,7 @@ if (esPost()) {
             redirigir('admin/consultas.php?responder=' . $id . '#consulta-' . $id);
         } else {
             $cuerpo = "Hola, {$consulta['nombre']}:\n\n" . $respuesta . "\n\n"
-                . "— El equipo de Alacena\n\n"
+                . "— El equipo de Cooki\n\n"
                 . "Tu consulta (" . date('d/m/Y', strtotime($consulta['creado_en'])) . "): {$consulta['asunto']}\n"
                 . '> ' . str_replace("\n", "\n> ", $consulta['mensaje']);
             $enviada = Correo::enviar($consulta['email'], 'Re: ' . $consulta['asunto'], $cuerpo);

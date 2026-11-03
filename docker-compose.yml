@@ -5,7 +5,7 @@
 
 # Nombre fijo del proyecto: así no importa cómo se llame la carpeta
 # (si no, Docker usa el nombre de la carpeta y al renombrarla crea una base nueva)
-name: alacena
+name: cooki
 services:
   web:
     build: ./docker/php
@@ -21,9 +21,9 @@ services:
   db:
     image: mariadb:11.4
     environment:
-      MARIADB_DATABASE: ${DB_NAME:-alacena}
-      MARIADB_USER: ${DB_USER:-alacena}
-      MARIADB_PASSWORD: ${DB_PASS:-alacena}
+      MARIADB_DATABASE: ${DB_NAME:-cooki}
+      MARIADB_USER: ${DB_USER:-cooki}
+      MARIADB_PASSWORD: ${DB_PASS:-cooki}
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASS:-root}
     ports:
       - "3306:3306"

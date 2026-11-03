@@ -1,6 +1,6 @@
 -- Tanda 4 del estilo Heladera: ingredientes propios de cada usuario y respuestas a las consultas.
 -- Solo hace falta si ya tenías la base creada (con Docker también sirve: docker compose down -v && docker compose up -d).
---   mysql -u alacena -p alacena < database/migraciones/004-tanda-heladera-4.sql
+--   mysql -u cooki -p cooki < database/migraciones/004-tanda-heladera-4.sql
 -- Antes tienen que estar corridas la 001, la 002 y la 003.
 
 -- Ingredientes propios: usuario_id NULL = lista general. El nombre ya no es único en toda la tabla,

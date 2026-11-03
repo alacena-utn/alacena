@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
-use Alacena\Db;
-use Alacena\Repositorios\IngredienteRepositorio;
-use Alacena\Sesion;
+use Cooki\Db;
+use Cooki\Repositorios\IngredienteRepositorio;
+use Cooki\Sesion;
 
 Sesion::requiereAdmin();
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena;
+namespace Cooki;
 
 /**
  * Lee la configuración desde variables de entorno o desde el archivo .env.

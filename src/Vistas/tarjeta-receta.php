@@ -6,7 +6,7 @@
  * Muestra los dibujos de hasta 5 ingredientes (y "+N" con el resto); los que faltan van en gris y tachados.
  */
 
-use Alacena\Repositorios\RecetaRepositorio;
+use Cooki\Repositorios\RecetaRepositorio;
 
 $faltan = (int) $receta['total'] - (int) $receta['tengo'];
 $dibujos = RecetaRepositorio::ingredientesDeTarjeta($receta['ingredientes'] ?? null);

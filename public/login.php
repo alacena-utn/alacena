@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/bootstrap.php';
 
-use Alacena\Db;
-use Alacena\Repositorios\UsuarioRepositorio;
-use Alacena\Sesion;
+use Cooki\Db;
+use Cooki\Repositorios\UsuarioRepositorio;
+use Cooki\Sesion;
 
 if (Sesion::estaLogueado()) {
     redirigir(Sesion::esAdmin() ? 'admin/index.php' : 'app/index.php');

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Tests\Dominio;
+namespace Cooki\Tests\Dominio;
 
-use Alacena\Dominio\Puntaje;
+use Cooki\Dominio\Puntaje;
 use PHPUnit\Framework\TestCase;
 
 /** Prueba de ejemplo: copiar este estilo (un caso por método, nombre que explica el caso). */

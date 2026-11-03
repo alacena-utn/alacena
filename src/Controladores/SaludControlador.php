@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Controladores;
+namespace Cooki\Controladores;
 
-use Alacena\Db;
-use Alacena\Http\Respuesta;
+use Cooki\Db;
+use Cooki\Http\Respuesta;
 use Throwable;
 
 /** GET /api/salud — indica si la API y la base de datos responden. */

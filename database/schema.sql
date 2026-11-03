@@ -1,8 +1,8 @@
 -- =====================================================================
---  Alacena · Esquema de base de datos (MariaDB 10.6+ / MySQL 8.0+)
+--  Cooki · Esquema de base de datos (MariaDB 10.6+ / MySQL 8.0+)
 --  Incremento 1 (2.º parcial de Programación): usuarios con rol, tabla de contacto
 --  y autor de cada receta. Las tablas de modo cocina quedan para el incremento 2.
---  Ejecutar sobre una base vacía:  mysql -u root -p alacena < database/schema.sql
+--  Ejecutar sobre una base vacía:  mysql -u root -p cooki < database/schema.sql
 -- =====================================================================
 
 SET NAMES utf8mb4;

@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-use Alacena\Config;
-use Alacena\Controladores\IngredientesControlador;
-use Alacena\Controladores\SaludControlador;
-use Alacena\Http\ErrorHttp;
-use Alacena\Http\Respuesta;
-use Alacena\Http\Router;
+use Cooki\Config;
+use Cooki\Controladores\IngredientesControlador;
+use Cooki\Controladores\SaludControlador;
+use Cooki\Http\ErrorHttp;
+use Cooki\Http\Respuesta;
+use Cooki\Http\Router;
 
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 

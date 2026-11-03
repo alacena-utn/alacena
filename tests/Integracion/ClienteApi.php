@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Tests\Integracion;
+namespace Cooki\Tests\Integracion;
 
 /**
  * Levanta el servidor de desarrollo de PHP en un puerto libre y hace peticiones HTTP reales a la API.

@@ -1,7 +1,9 @@
-# Alacena
+# Cooki
 
 Aplicación web que te dice qué cocinar con lo que tenés en la despensa y te avisa qué está por vencer.
 Proyecto integrador · Tecnicatura Universitaria en Programación · UTN Facultad Regional Haedo.
+
+> El proyecto se llamaba **Alacena** hasta el 02/11/2026. Si ya lo tenías instalado, mirá [database/README.md](database/README.md#si-ya-tenías-la-base-de-alacena).
 
 **Stack:** HTML + CSS + JavaScript (sin frameworks) · PHP 8 · MariaDB / MySQL
 
@@ -12,10 +14,10 @@ Proyecto integrador · Tecnicatura Universitaria en Programación · UTN Faculta
 
 | Rol | Email | Contraseña |
 |---|---|---|
-| Administrador | `admin@alacena.test` | `Admin1234` |
-| Administrador | `docente@alacena.test` | `Admin1234` |
-| General | `maria@alacena.test` (con despensa cargada) | `Usuario1234` |
-| General | `juan@alacena.test` · `sofia@alacena.test` (despensa vacía) | `Usuario1234` |
+| Administrador | `admin@cooki.test` | `Admin1234` |
+| Administrador | `docente@cooki.test` | `Admin1234` |
+| General | `maria@cooki.test` (con despensa cargada) | `Usuario1234` |
+| General | `juan@cooki.test` · `sofia@cooki.test` (despensa vacía) | `Usuario1234` |
 
 Las contraseñas se guardan encriptadas con `password_hash()`; las de arriba son solo de prueba.
 
@@ -45,8 +47,8 @@ docker/ + docker-compose.yml   PHP + MariaDB + phpMyAdmin + Mailpit
 ## Cómo levantarlo
 
 ```bash
-git clone https://github.com/alacena-utn/alacena.git
-cd alacena
+git clone https://github.com/cooki-utn/cooki.git
+cd cooki
 cp .env.example .env
 ```
 
@@ -63,9 +65,9 @@ docker compose exec web composer install
 
 **Con XAMPP o Laragon**
 1. Copiá la carpeta del proyecto dentro de `htdocs`.
-2. En phpMyAdmin creá la base `alacena` (cotejamiento `utf8mb4_unicode_ci`) e importá `database/schema.sql` y después `database/seed.sql`.
+2. En phpMyAdmin creá la base `cooki` (cotejamiento `utf8mb4_unicode_ci`) e importá `database/schema.sql` y después `database/seed.sql`.
 3. En `.env`: `DB_HOST=127.0.0.1`, `DB_USER=root`, `DB_PASS=` (vacío). Sin `.env` también funciona: esos son los valores por defecto.
-4. Abrí `http://localhost/alacena/public/`.
+4. Abrí `http://localhost/cooki/public/`.
 
 > Con XAMPP la función `mail()` no tiene servidor de correo: la consulta de contacto se guarda igual en la base y la página lo indica en el panel de consultas.
 

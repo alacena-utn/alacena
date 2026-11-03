@@ -13,9 +13,9 @@ jobs:
       db:
         image: mariadb:11.4
         env:
-          MARIADB_DATABASE: alacena
-          MARIADB_USER: alacena
-          MARIADB_PASSWORD: alacena
+          MARIADB_DATABASE: cooki
+          MARIADB_USER: cooki
+          MARIADB_PASSWORD: cooki
           MARIADB_ROOT_PASSWORD: root
         ports:
           - 3306:3306
@@ -26,9 +26,9 @@ jobs:
     env:
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
-      DB_NAME: alacena
-      DB_USER: alacena
-      DB_PASS: alacena
+      DB_NAME: cooki
+      DB_USER: cooki
+      DB_PASS: cooki
 
     steps:
       - uses: actions/checkout@v4
@@ -47,8 +47,8 @@ jobs:
 
       - name: Cargar esquema y datos de ejemplo
         run: |
-          mysql -h 127.0.0.1 -u alacena -palacena alacena < database/schema.sql
-          mysql -h 127.0.0.1 -u alacena -palacena alacena < database/seed.sql
+          mysql -h 127.0.0.1 -u cooki -pcooki cooki < database/schema.sql
+          mysql -h 127.0.0.1 -u cooki -pcooki cooki < database/seed.sql
 
       - name: Pruebas (unitarias + integración)
         run: composer test

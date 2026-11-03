@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/bootstrap.php';
 
-use Alacena\Sesion;
+use Cooki\Sesion;
 
 $mensajes = [
     'login' => ['No pudimos ingresar', 'El email o la contraseña no son correctos. Revisalos y probá de nuevo.'],

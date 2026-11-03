@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Tests\Dominio;
+namespace Cooki\Tests\Dominio;
 
-use Alacena\Repositorios\DespensaRepositorio;
-use Alacena\Repositorios\RecetaRepositorio;
+use Cooki\Repositorios\DespensaRepositorio;
+use Cooki\Repositorios\RecetaRepositorio;
 use PHPUnit\Framework\TestCase;
 
 /** Funciones de formato que no necesitan la base de datos. */

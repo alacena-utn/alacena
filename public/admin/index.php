@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
-use Alacena\Db;
-use Alacena\Repositorios\ResumenRepositorio;
-use Alacena\Sesion;
+use Cooki\Db;
+use Cooki\Repositorios\ResumenRepositorio;
+use Cooki\Sesion;
 
 Sesion::requiereAdmin();
 

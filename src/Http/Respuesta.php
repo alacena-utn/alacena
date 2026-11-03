@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Http;
+namespace Cooki\Http;
 
 /** Ayudas para responder JSON de forma uniforme. */
 final class Respuesta

@@ -9,7 +9,7 @@
  *                        Va dentro de un contenedor "con-stickers", antes de la hoja.
  *   $zona = 'abajo'    → hasta 5, desparramados debajo de la hoja (no en fila: cada uno a otra altura).
  *                        Va dentro del mismo contenedor, después de la hoja.
- *   $zona = 'porque'   → hasta 6, a los costados de "¿Por qué Alacena?" en el inicio.
+ *   $zona = 'porque'   → hasta 6, a los costados de "¿Por qué Cooki?" en el inicio.
  */
 
 // Lugar de cada sticker: [izquierda en %, arriba en %, giro en grados, retraso del vaivén en s]

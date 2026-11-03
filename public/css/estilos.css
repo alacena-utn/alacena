@@ -1,5 +1,5 @@
 /* =====================================================================
-   Alacena · Estilos comunes a todas las páginas · ESTILO "HELADERA"
+   Cooki · Estilos comunes a todas las páginas · ESTILO "HELADERA"
    La página es la puerta de una heladera: los avisos son post-its,
    las tarjetas son hojas de cuaderno con cinta, los ingredientes son
    stickers y el menú son imanes.
@@ -582,7 +582,7 @@ body { transition: background-color .5s; }
 .pasos-portada .postit--rosa { background: #F7C9D4; --giro: 1.2deg; }
 .pasos-portada .postit--celeste { background: #CFE0F2; --giro: -.8deg; }
 .postit--rosa .postit__chinche, .postit--celeste .postit__chinche { background: radial-gradient(circle at 35% 30%, #9FD3FF, var(--color-azul) 70%); }
-/* ¿Por qué Alacena?: hoja de cuaderno más angosta y centrada */
+/* ¿Por qué Cooki?: hoja de cuaderno más angosta y centrada */
 .portada__porque {
   max-width: 760px; margin-inline: auto;
   --giro: .5deg;
@@ -1035,7 +1035,7 @@ td small { display: block; }
   .stickers-deco__dibujo:hover { scale: 1.25; animation: menear .5s ease-in-out infinite alternate; }
   /* Los de abajo no llegan hasta el borde inferior de su zona */
   .stickers-deco--abajo .stickers-deco__dibujo { top: min(var(--y), calc(100% - 120px)); }
-  /* Inicio: a los costados de "¿Por qué Alacena?", un poco más chicos */
+  /* Inicio: a los costados de "¿Por qué Cooki?", un poco más chicos */
   .con-stickers--porque { display: block; }
   .con-stickers--porque > .tarjeta { width: auto; }
   .stickers-deco--porque .stickers-deco__dibujo { width: clamp(64px, 5.6vw, 92px); }

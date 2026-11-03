@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Alacena">
+<ruleset name="Cooki">
     <description>Estilo de código del equipo: PSR-12</description>
     <file>src</file>
     <file>public/api</file>

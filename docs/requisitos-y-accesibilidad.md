@@ -2,7 +2,7 @@
 
 ## 1. Objetivo
 
-Documentar los requisitos funcionales y técnicos del proyecto Alacena, y registrar las verificaciones de accesibilidad y validación del HTML realizadas sobre sus páginas.
+Documentar los requisitos funcionales y técnicos del proyecto Cooki, y registrar las verificaciones de accesibilidad y validación del HTML realizadas sobre sus páginas.
 
 ## 2. Lista de requisitos
 
