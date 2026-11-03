@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Tests\Integracion;
+namespace Cooki\Tests\Integracion;
 
-use Alacena\Db;
-use Alacena\Repositorios\IngredienteRepositorio;
+use Cooki\Db;
+use Cooki\Repositorios\IngredienteRepositorio;
 use PDOException;
 use PHPUnit\Framework\TestCase;
 

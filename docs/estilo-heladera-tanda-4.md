@@ -1,7 +1,7 @@
 # Estilo Heladera · Tanda 4 de cambios
 
 > **Fecha:** 28/10/2026
-> **Sobre:** la carpeta `alacena-estilo-heladera-tanda-3`, con los cambios hechos a mano: el dibujo inicial al azar, la animación de "¿Por qué Alacena?", la vitrina desparramada y los "¡ya!" al azar.
+> **Sobre:** la carpeta `alacena-estilo-heladera-tanda-3`, con los cambios hechos a mano: el dibujo inicial al azar, la animación de "¿Por qué Cooki?", la vitrina desparramada y los "¡ya!" al azar.
 > **Resultado:** `alacena-estilo-heladera-tanda-4.zip`
 > **Verificación:**
 > - `composer lint` sin errores ni advertencias.
@@ -25,7 +25,7 @@
 | 1 | Barra de navegación de un solo estilo | Hecho: Ingresar, Crear cuenta y la cuenta son imanes como Inicio y Contacto | 1 | P2 |
 | 2 | Cambiar el color sin cuenta | Hecho: imán "Ajustes ▾" con los colores, el sonido y el volumen; se guarda en una cookie y pasa a la cuenta al registrarse | 1 | P2 + P3 |
 | 3 | Dibujos en las partes vacías | Hecho: Ingresar, Crear cuenta, error, Contacto y las listas vacías | 1 | P2 |
-| 4 | Efecto al pasar el mouse por "ALACENA" | Hecho: las letras saltan como una ola, los fideos echan vapor y suenan siete notas | 1 | P2 |
+| 4 | Efecto al pasar el mouse por "COOKI" | Hecho: las letras saltan como una ola, los fideos echan vapor y suenan cinco notas (siete, cuando se llamaba Alacena) | 1 | P2 |
 | 5 | Dibujos al agregar un ingrediente y agregar uno que no está | Hecho: buscador con stickers e ingrediente propio con el frasco; aclaración de "Agotado" | Adelanta el 2 | P2 + P3 |
 | 6 | Aviso visual al eliminar | Hecho: nota despegada con niebla, en los 5 lugares donde se borra | 1 | P2 |
 | 7 | Responder las consultas desde la administración | Hecho: se guarda, sale por correo y el usuario la ve en "Mis consultas" | Adelanta el 2 | P3 + P5 |
@@ -61,7 +61,7 @@ Para actualizarla tenés dos opciones:
   - los imanes de colores;
   - el sonido y el volumen (aparecen solo con JavaScript);
   - una nota: "Con una cuenta, el color queda guardado en todos tus dispositivos".
-- **Dónde se guarda:** el color va a la cookie `alacena_color` (un año) desde `app/preferencias.php`, que ahora acepta pedidos sin cuenta, pero solo para el color.
+- **Dónde se guarda:** el color va a la cookie `cooki_color` (un año) desde `app/preferencias.php`, que ahora acepta pedidos sin cuenta, pero solo para el color.
   - `Sesion::color()` lee la cookie y solo acepta valores de `UsuarioRepositorio::COLORES`, así que un valor trucho se ignora.
   - Con JavaScript cambia al instante; sin JavaScript, el formulario recarga la página.
 - **Al registrarse:** `registro.php` pasa el color de la cookie a la cuenta nueva.
@@ -83,12 +83,12 @@ Para actualizarla tenés dos opciones:
   - Mi cocina sin sugerencias;
   - consultas, recetas, ingredientes y usuarios de la administración.
 
-### 4 · Efecto en "ALACENA"
+### 4 · Efecto en "COOKI"
 
 - Cada letra es un `<span>`. Al pasar el mouse (o al llegar con el teclado), las letras saltan una tras otra, como una ola.
 - Los fideos echan tres hilos de vapor.
-- Suenan siete notas suaves que suben, una por letra. Como mucho una vez cada 1,5 segundos, y el navegador recién deja sonar después del primer clic en la página.
-- Los lectores de pantalla leen "Alacena" de corrido.
+- Suenan notas suaves que suben, una por letra (cinco con "COOKI"). Como mucho una vez cada 1,5 segundos, y el navegador recién deja sonar después del primer clic en la página.
+- Los lectores de pantalla leen "Cooki" de corrido.
 
 ### 5 · Agregar un ingrediente (`public/app/despensa.php`, `public/js/despensa.js`)
 
@@ -228,7 +228,7 @@ Para actualizarla tenés dos opciones:
 | 1 | Crear cuenta: dibujos más grandes | Hasta **110 px** (antes 76), con `clamp()` para pantallas más chicas |
 | 2 | Ingresar: dibujos más grandes y llenar abajo de la hoja | 110 px. La puerta ocupa todo el alto: **10 stickers a los costados**, de arriba hasta abajo, y **5 desparramados debajo de la hoja**, cada uno a otra altura (no en fila) |
 | 3 | Error: lo mismo | Igual que Ingresar (15 dibujos distintos) |
-| 4 | Inicio: dibujos a los costados de "¿Por qué Alacena?" | 3 por lado (mandarina, ricota, espinaca / chocolate, langostinos, merluza), que se mecen y se agrandan al pasar el mouse. Desde 1260 px, porque más angosto no hay lugar |
+| 4 | Inicio: dibujos a los costados de "¿Por qué Cooki?" | 3 por lado (mandarina, ricota, espinaca / chocolate, langostinos, merluza), que se mecen y se agrandan al pasar el mouse. Desde 1260 px, porque más angosto no hay lugar |
 | 5 | Agregar ingrediente: ver el dibujo elegido | Además del dibujo chico arriba del buscador, el elegido aparece **grande en la esquina de la nota** y se menea cada vez que cambia. En el celular no se muestra, porque no hay lugar al lado del título |
 
 **Otros:**

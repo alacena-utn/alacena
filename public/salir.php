@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/bootstrap.php';
 
-use Alacena\Sesion;
+use Cooki\Sesion;
 
 if (!esPost()) {
     redirigir(Sesion::estaLogueado() ? 'app/index.php' : 'index.php');

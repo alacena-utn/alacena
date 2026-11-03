@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/bootstrap.php';
 
-use Alacena\Db;
-use Alacena\Repositorios\UsuarioRepositorio;
-use Alacena\Sesion;
+use Cooki\Db;
+use Cooki\Repositorios\UsuarioRepositorio;
+use Cooki\Sesion;
 
 if (Sesion::estaLogueado()) {
     redirigir('app/index.php');
@@ -45,7 +45,7 @@ if (esPost()) {
         Sesion::ingresar([
             'id' => $id, 'nombre' => $nombre, 'email' => $email, 'rol' => Sesion::ROL_GENERAL, 'color' => $color,
         ]);
-        Sesion::avisar('exito', '¡Bienvenido/a a Alacena! Empezá cargando lo que tenés en tu despensa.');
+        Sesion::avisar('exito', '¡Bienvenido/a a Cooki! Empezá cargando lo que tenés en tu despensa.');
         redirigir('app/index.php');
     }
 }

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Controladores;
+namespace Cooki\Controladores;
 
-use Alacena\Db;
-use Alacena\Http\Respuesta;
-use Alacena\Repositorios\IngredienteRepositorio;
+use Cooki\Db;
+use Cooki\Http\Respuesta;
+use Cooki\Repositorios\IngredienteRepositorio;
 
 /** GET /api/ingredientes?q=texto — buscador con sinónimos (ejemplo completo de punta a punta). */
 final class IngredientesControlador

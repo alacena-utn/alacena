@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Http;
+namespace Cooki\Http;
 
 /**
  * Enrutador mínimo: asocia método + ruta (con parámetros {id}) a una función.
@@ -35,7 +35,7 @@ final class Router
 
     /**
      * Obtiene la ruta de la API a partir de la URL, sin importar en qué carpeta esté instalado
-     * el proyecto: "/alacena/public/api/ingredientes?q=x" → "/ingredientes".
+     * el proyecto: "/cooki/public/api/ingredientes?q=x" → "/ingredientes".
      */
     public static function rutaDesdeUri(string $uri): string
     {

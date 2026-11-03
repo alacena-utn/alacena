@@ -9,9 +9,9 @@ RUN apt-get update \
  && docker-php-ext-install pdo_mysql \
  && a2enmod rewrite \
  && sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf \
- && printf '<Directory /var/www/html/public>\n    AllowOverride All\n</Directory>\n' > /etc/apache2/conf-available/alacena.conf \
- && a2enconf alacena \
- && printf 'sendmail_path = "/usr/bin/msmtp -t --host=mailpit --port=1025 --from=no-responder@alacena.test"\n' > /usr/local/etc/php/conf.d/correo.ini
+ && printf '<Directory /var/www/html/public>\n    AllowOverride All\n</Directory>\n' > /etc/apache2/conf-available/cooki.conf \
+ && a2enconf cooki \
+ && printf 'sendmail_path = "/usr/bin/msmtp -t --host=mailpit --port=1025 --from=no-responder@cooki.test"\n' > /usr/local/etc/php/conf.d/correo.ini
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

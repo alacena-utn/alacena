@@ -66,7 +66,7 @@ Se mantiene **la misma estructura y los mismos nombres de clase**: parte común 
 
 | Bloque | Ahora |
 |---|---|
-| `.portada__titulo` | El nombre "ALACENA" como rótulo grande inclinado |
+| `.portada__titulo` | El nombre "COOKI" como rótulo grande inclinado |
 | **Nuevas** `.portada__puerta`, `.sticker`, `.sticker--1` a `--8`, `@keyframes pegar` | La puerta punteada con 8 stickers que "se pegan" con una animación al cargar. El borde blanco de cada sticker es un `filter: drop-shadow` |
 | `.pasos-portada h3` | Títulos a mano en rojo |
 | **Nuevas** `.postit`, `.postit__chinche` | Post-it amarillo de "Usalo pronto" en Mi cocina |
@@ -112,7 +112,7 @@ Devuelve la dirección del ícono de un ingrediente según **la primera palabra 
 
 ```php
 <div class="marca-grupo">
-  <a class="marca" href="...">Alacena</a>
+  <a class="marca" href="...">Cooki</a>
   <span class="marca__bajada">la puerta de tu heladera</span>
 </div>
 ```

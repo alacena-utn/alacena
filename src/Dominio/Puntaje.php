@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Dominio;
+namespace Cooki\Dominio;
 
 /**
  * Lógica pura del motor de recomendación: sin base de datos ni HTTP.

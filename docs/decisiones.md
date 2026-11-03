@@ -28,7 +28,7 @@ Formato: decisiones tipo ADR (ver la guía de metodología del equipo, sección 
 - **Contexto:** al cargar la despensa, el usuario puede tener algo que no está en la lista de ingredientes. Además, quien no tiene cuenta también quiere elegir el color de la heladera.
 - **Decisión:**
   - columna `ingrediente.usuario_id` (NULL = lista general; con un usuario = ingrediente propio, que solo ve él). El nombre deja de ser único en toda la tabla: es único dentro de la lista general y dentro de los propios de cada usuario (columna generada `ambito` + `UNIQUE (nombre, ambito)`). Si el nombre ya existe en la lista general (o es un sinónimo, como "piña"), se usa ese y no se crea otro. Los propios llevan siempre el dibujo del frasco, que no usa ningún ingrediente de la lista. El administrador los ve marcados y los puede pasar a la lista general; recién ahí se pueden usar en recetas;
-  - sin cuenta, el color se guarda en la cookie `alacena_color` (un año) y pasa a la cuenta al registrarse.
+  - sin cuenta, el color se guarda en la cookie `cooki_color` (un año) y pasa a la cuenta al registrarse.
 - **Alternativas descartadas:** que el ingrediente nuevo vaya directo a la lista general (se llenaría de nombres repetidos o mal escritos); una tabla aparte para los propios (habría que duplicar todas las consultas de la despensa); guardar el color sin cuenta en el navegador con JavaScript (la página cargaría primero en verde y después cambiaría).
 - **Consecuencias:** migración `database/migraciones/004-tanda-heladera-4.sql`. `IngredienteRepositorio::todos()` y `buscar()` (la API) muestran solo la lista general, salvo en la despensa del dueño. Al borrar un usuario se borran sus ingredientes propios.
 - **Participaron:** P3

@@ -5,7 +5,7 @@ Probar cada punto con los usuarios de prueba del README y marcar ✅ cuando est�
 
 | # | Requisito | Dónde se cumple | Cómo mostrarlo | ✅ |
 |---|---|---|---|---|
-| 1 | Temática libre, articulada con otras materias | Alacena es el proyecto final de la tecnicatura (Gestión de Desarrollo de Software) | README | |
+| 1 | Temática libre, articulada con otras materias | Cooki es el proyecto final de la tecnicatura (Gestión de Desarrollo de Software) | README | |
 | 2 | Base MySQL con al menos 3 tablas: contactos, usuarios y contenido, relacionadas | `contacto`, `usuario`, `receta` (+ ingredientes, pasos, despensa). Relaciones: contacto→usuario, receta→usuario, despensa→usuario e ingrediente | `database/schema.sql`, diagrama en `docs/modelo-datos.md`, phpMyAdmin → Diseñador | |
 | 3 | Dos niveles de usuario; admins y generales cargados; contraseñas encriptadas | Columna `usuario.rol` (`admin`/`general`). `seed.sql` carga 2 administradores y 3 generales. `password_hash()` al crear y `password_verify()` al ingresar | phpMyAdmin → tabla usuario (se ven los hashes `$2y$...`) | |
 | 4 | Página principal con nombre, menú, descripción, registro de generales y acceso con login | `public/index.php` (menú en `src/Vistas/encabezado.php`), `registro.php`, `login.php` | Abrir la raíz del sitio | |

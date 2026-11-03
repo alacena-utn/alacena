@@ -1,7 +1,7 @@
 -- Tanda 3 del estilo Heladera: volumen de los sonidos por usuario, "Pollo" sin "(pechuga)"
 -- y 32 ingredientes nuevos (frutas, verduras, lácteos, carnes y almacén), cada uno con su dibujo.
 -- Solo hace falta si ya tenías la base creada (con Docker también sirve: docker compose down -v && docker compose up -d).
---   mysql -u alacena -p alacena < database/migraciones/003-tanda-heladera-3.sql
+--   mysql -u cooki -p cooki < database/migraciones/003-tanda-heladera-3.sql
 -- Antes tienen que estar corridas la 001 y la 002.
 
 ALTER TABLE usuario ADD COLUMN IF NOT EXISTS volumen TINYINT UNSIGNED NOT NULL DEFAULT 50 AFTER disposicion;

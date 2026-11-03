@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Tests\Integracion;
+namespace Cooki\Tests\Integracion;
 
 use PHPUnit\Framework\TestCase;
 

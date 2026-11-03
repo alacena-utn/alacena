@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Tests\Integracion;
+namespace Cooki\Tests\Integracion;
 
-use Alacena\Db;
+use Cooki\Db;
 use PDOException;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +28,7 @@ final class PaginasTest extends TestCase
         [$estado, $html] = (new Navegador())->get('index.php');
         $this->assertSame(200, $estado);
         $this->assertStringContainsString('¿Qué puedo cocinar?', $html);
-        $this->assertStringContainsString('Alacena es la puerta de tu heladera:', $html);
+        $this->assertStringContainsString('Cooki es la puerta de tu heladera:', $html);
         $this->assertStringContainsString('fideos.svg', $html, 'El logo y la pestaña usan el dibujo de los fideos');
         $this->assertStringContainsString('aria-label="Principal"', $html);
         $this->assertStringContainsString('registro.php', $html);
@@ -53,7 +53,7 @@ final class PaginasTest extends TestCase
     public function testTodasLasPaginasDeAdministracionResponden(): void
     {
         $web = new Navegador();
-        $this->assertStringEndsWith('admin/index.php', $web->ingresar('admin@alacena.test', 'Admin1234'));
+        $this->assertStringEndsWith('admin/index.php', $web->ingresar('admin@cooki.test', 'Admin1234'));
         $paginas = ['admin/index.php', 'admin/recetas.php', 'admin/receta-editar.php', 'admin/ingredientes.php',
             'admin/ingredientes.php?nuevo', 'admin/usuarios.php', 'admin/usuarios.php?nuevo', 'admin/consultas.php'];
         foreach ($paginas as $pagina) {
@@ -72,14 +72,14 @@ final class PaginasTest extends TestCase
 
     public function testIngresoIncorrectoRedirigeALaPaginaDeError(): void
     {
-        $destino = (new Navegador())->ingresar('maria@alacena.test', 'otra-cosa');
+        $destino = (new Navegador())->ingresar('maria@cooki.test', 'otra-cosa');
         $this->assertStringEndsWith('error.php?motivo=login', $destino);
     }
 
     public function testUsuarioGeneralVaASuCocinaYNoPuedeEntrarAAdministracion(): void
     {
         $web = new Navegador();
-        $this->assertStringEndsWith('app/index.php', $web->ingresar('maria@alacena.test', 'Usuario1234'));
+        $this->assertStringEndsWith('app/index.php', $web->ingresar('maria@cooki.test', 'Usuario1234'));
         [$estado, $html] = $web->get('app/index.php');
         $this->assertSame(200, $estado);
         $this->assertStringContainsString('Hola, María', $html);
@@ -90,7 +90,7 @@ final class PaginasTest extends TestCase
     public function testAdministradorVaAlPanel(): void
     {
         $web = new Navegador();
-        $this->assertStringEndsWith('admin/index.php', $web->ingresar('admin@alacena.test', 'Admin1234'));
+        $this->assertStringEndsWith('admin/index.php', $web->ingresar('admin@cooki.test', 'Admin1234'));
         [$estado, $html] = $web->get('admin/index.php');
         $this->assertSame(200, $estado);
         $this->assertStringContainsString('admin/recetas.php', $html);
@@ -105,7 +105,7 @@ final class PaginasTest extends TestCase
 
     public function testRegistroCreaUnUsuarioGeneralConContrasenaEncriptada(): void
     {
-        $email = 'prueba-' . uniqid() . '@alacena.test';
+        $email = 'prueba-' . uniqid() . '@cooki.test';
         $web = new Navegador();
         $web->get('registro.php');
         [, , $destino] = $web->post('registro.php', [
@@ -127,7 +127,7 @@ final class PaginasTest extends TestCase
         $web = new Navegador();
         $web->get('registro.php');
         [$estado, $html] = $web->post('registro.php', [
-            'nombre' => 'Prueba', 'email' => 'debil@alacena.test', 'contrasena' => '123', 'repetir' => '123',
+            'nombre' => 'Prueba', 'email' => 'debil@cooki.test', 'contrasena' => '123', 'repetir' => '123',
         ]);
         $this->assertSame(200, $estado);
         $this->assertStringContainsString('al menos 8 caracteres', $html);
@@ -139,7 +139,7 @@ final class PaginasTest extends TestCase
         $web = new Navegador();
         $web->get('contacto.php');
         [, , $destino] = $web->post('contacto.php', [
-            'nombre' => 'Tester', 'email' => 'tester@alacena.test', 'asunto' => $asunto,
+            'nombre' => 'Tester', 'email' => 'tester@cooki.test', 'asunto' => $asunto,
             'mensaje' => 'Mensaje de prueba de más de diez caracteres.',
         ]);
         $this->assertStringEndsWith('contacto.php', $destino);
@@ -153,7 +153,7 @@ final class PaginasTest extends TestCase
     public function testBuscadorDeRecetasEncuentraPorSinonimoDeIngrediente(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, $html] = $web->get('app/recetas.php?q=pimiento');
         $this->assertStringContainsString('Arroz con pollo', $html);
         $this->assertStringNotContainsString('Panqueques', $html);
@@ -164,7 +164,7 @@ final class PaginasTest extends TestCase
         $sql = 'SELECT id FROM despensa_item WHERE usuario_id = 4 LIMIT 1';
         $idDeJuan = (int) Db::conexion()->query($sql)->fetchColumn();
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, , $destino] = $web->get('app/despensa.php?editar=' . $idDeJuan);
         $this->assertStringEndsWith('error.php?motivo=no-encontrado', $destino);
     }
@@ -173,7 +173,7 @@ final class PaginasTest extends TestCase
     {
         $nombre = 'Ingrediente ' . uniqid();
         $web = new Navegador();
-        $web->ingresar('admin@alacena.test', 'Admin1234');
+        $web->ingresar('admin@cooki.test', 'Admin1234');
         $web->get('admin/ingredientes.php?nuevo');
         $campos = ['accion' => 'guardar', 'id' => 0, 'nombre' => $nombre, 'categoria_id' => 6,
             'unidad_default' => 'g', 'perecedero' => '1', 'vida_util_dias' => '30'];
@@ -198,7 +198,7 @@ final class PaginasTest extends TestCase
     public function testElColorYLaDisposicionSeGuardanEnLaCuenta(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         $web->get('app/index.php');
         [, , $destino] = $web->post('app/preferencias.php', ['color' => 'noche', 'volver' => '/app/recetas.php']);
         $this->assertStringEndsWith('/app/recetas.php', $destino);
@@ -219,7 +219,7 @@ final class PaginasTest extends TestCase
     public function testElVolumenSeGuardaEnLaCuenta(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, $html] = $web->get('app/index.php');
         $this->assertStringContainsString('data-volumen="50"', $html, 'Arranca en 50');
         $web->post('app/preferencias.php', ['volumen' => '80', 'volver' => '/app/index.php']);
@@ -234,7 +234,7 @@ final class PaginasTest extends TestCase
     public function testElPanelDeAdministracionTieneNotasConDibujos(): void
     {
         $web = new Navegador();
-        $web->ingresar('admin@alacena.test', 'Admin1234');
+        $web->ingresar('admin@cooki.test', 'Admin1234');
         [, $html] = $web->get('admin/index.php');
         $this->assertSame(4, substr_count($html, 'class="postit postit--'));
         [, $html] = $web->get('admin/ingredientes.php');
@@ -246,7 +246,7 @@ final class PaginasTest extends TestCase
     public function testLaDespensaGuardaLaCantidadExactaConSuUnidad(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         $web->get('app/despensa.php');
         $campos = ['accion' => 'guardar', 'id' => 0, 'ingrediente_id' => 38, 'nivel' => 0,
             'cantidad' => '3', 'ubicacion' => 'heladera', 'fecha_vencimiento' => ''];
@@ -273,7 +273,7 @@ final class PaginasTest extends TestCase
     public function testElSelectorDeMiCocinaBuscaRecetasConLosIngredientesElegidos(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         // Huevo (15) y Papa (1): la tortilla los usa a los dos; los panqueques, solo el huevo
         [, $html] = $web->get('app/index.php?ing[]=15&ing[]=1');
         $resultado = $this->seccionSelector($html);
@@ -291,7 +291,7 @@ final class PaginasTest extends TestCase
     public function testLasTarjetasDeRecetasMuestranLoQueFaltaTachado(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, $html] = $web->get('app/recetas.php?q=zapallitos');
         $this->assertStringContainsString('alt="Tapa de tarta (te falta)"', $html);
         $this->assertStringContainsString('alt="Huevo"', $html);
@@ -300,7 +300,7 @@ final class PaginasTest extends TestCase
     public function testLaDespensaMuestraElContadorYLosVencidosAlFinal(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, $html] = $web->get('app/despensa.php');
         // María tiene el tomate vencido (ayer): cuenta como vencido, va gris y al final, con "Cambiar fecha"
         $this->assertMatchesRegularExpression('/contador__item--vencidos"[^>]*>\s*<strong>1<\/strong>/', $html);
@@ -315,7 +315,7 @@ final class PaginasTest extends TestCase
     public function testLosNumerosDelContadorFiltranLaDespensa(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         $filas = function (string $html): array {
             preg_match_all('/<tr(?: class="vencido")? data-nombre="([^"]+)"/', $html, $m);
             return $m[1];
@@ -337,7 +337,7 @@ final class PaginasTest extends TestCase
     public function testElSelectorPonePrimeroLoQueVenceConElGloboYa(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, $html] = $web->get('app/index.php');
         $patron = '/<label class="selector__sticker([^"]*)">\s*<input[^>]+>\s*<img[^>]+>\s*<span>([^<]+)/';
         preg_match_all($patron, $html, $m);
@@ -350,7 +350,7 @@ final class PaginasTest extends TestCase
     public function testElDetalleTienePasosParaTildar(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, $html] = $web->get('app/receta.php?id=1');
         $this->assertSame(
             (int) Db::conexion()->query('SELECT COUNT(*) FROM paso WHERE receta_id = 1')->fetchColumn(),
@@ -376,19 +376,19 @@ final class PaginasTest extends TestCase
     public function testSinCuentaElColorSeGuardaEnUnaCookieYPasaALaCuentaNueva(): void
     {
         $web = new Navegador();
-        $web->agregarCookie('alacena_color', 'rosa');
+        $web->agregarCookie('cooki_color', 'rosa');
         [, $html] = $web->get('index.php');
         $this->assertStringContainsString('data-color="rosa"', $html);
 
         $trucho = new Navegador();
-        $trucho->agregarCookie('alacena_color', '"><script>');
+        $trucho->agregarCookie('cooki_color', '"><script>');
         [, $html] = $trucho->get('index.php');
         $this->assertStringContainsString('data-color="verde"', $html, 'Un valor inválido no se usa');
 
         [, , $destino] = $web->post('app/preferencias.php', ['color' => 'celeste', 'volver' => '/contacto.php']);
         $this->assertSame('/contacto.php', $destino, 'Sin cuenta también se puede elegir el color');
 
-        $email = 'color' . uniqid() . '@alacena.test';
+        $email = 'color' . uniqid() . '@cooki.test';
         $web->get('registro.php');
         $web->post('registro.php', [
             'nombre' => 'Con Color', 'email' => $email, 'contrasena' => 'Clave1234', 'repetir' => 'Clave1234',
@@ -403,7 +403,7 @@ final class PaginasTest extends TestCase
     public function testAlIngresarNoSeRepiteElSaludo(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, $html] = $web->get('app/index.php');
         $this->assertSame(1, substr_count($html, 'Hola, María'), 'Solo el título saluda');
     }
@@ -411,7 +411,7 @@ final class PaginasTest extends TestCase
     public function testSalirPreguntaYSoloCierraLaSesionPorPost(): void
     {
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, $html] = $web->get('app/index.php');
         $this->assertStringContainsString('¿Seguro que querés salir?', $html);
         [, , $destino] = $web->get('salir.php');
@@ -428,7 +428,7 @@ final class PaginasTest extends TestCase
         $db = Db::conexion();
         $nombre = 'Quinoa ' . substr(uniqid(), -5);
         $web = new Navegador();
-        $web->ingresar('maria@alacena.test', 'Usuario1234');
+        $web->ingresar('maria@cooki.test', 'Usuario1234');
         [, $html] = $web->get('app/despensa.php');
         $this->assertStringContainsString('¿No está en la lista? Agregalo', $html);
         $this->assertStringContainsString('“Agotado”', $html, 'Explica qué es "Agotado"');
@@ -443,14 +443,14 @@ final class PaginasTest extends TestCase
 
         // Otro usuario no lo ve; si escribe un sinónimo de la lista, se usa ese y no se crea nada
         $otro = new Navegador();
-        $otro->ingresar('juan@alacena.test', 'Usuario1234');
+        $otro->ingresar('juan@cooki.test', 'Usuario1234');
         [, $htmlOtro] = $otro->get('app/despensa.php');
         $otro->post('app/despensa.php', ['nombre_nuevo' => 'piña', 'cantidad' => ''] + $campos);
         $piña = (int) $db->query("SELECT COUNT(*) FROM ingrediente WHERE nombre = 'piña'")->fetchColumn();
 
         // El administrador lo pasa a la lista general
         $admin = new Navegador();
-        $admin->ingresar('admin@alacena.test', 'Admin1234');
+        $admin->ingresar('admin@cooki.test', 'Admin1234');
         [, $htmlAdmin] = $admin->get('admin/ingredientes.php?propios');
         $admin->post('admin/ingredientes.php', ['accion' => 'general', 'id' => $nuevo['id']]);
         $general = $db->query('SELECT usuario_id FROM ingrediente WHERE id = ' . (int) $nuevo['id'])->fetchColumn();
@@ -476,10 +476,10 @@ final class PaginasTest extends TestCase
     {
         $asunto = 'Pregunta ' . uniqid();
         $maria = new Navegador();
-        $maria->ingresar('maria@alacena.test', 'Usuario1234');
+        $maria->ingresar('maria@cooki.test', 'Usuario1234');
         $maria->get('contacto.php');
         $maria->post('contacto.php', [
-            'nombre' => 'María López', 'email' => 'maria@alacena.test', 'asunto' => $asunto,
+            'nombre' => 'María López', 'email' => 'maria@cooki.test', 'asunto' => $asunto,
             'mensaje' => '¿Se pueden agregar ingredientes que no están?',
         ]);
         $consulta = Db::conexion()->prepare('SELECT id FROM contacto WHERE asunto = ?');
@@ -487,7 +487,7 @@ final class PaginasTest extends TestCase
         $id = (int) $consulta->fetchColumn();
 
         $admin = new Navegador();
-        $admin->ingresar('admin@alacena.test', 'Admin1234');
+        $admin->ingresar('admin@cooki.test', 'Admin1234');
         [, $html] = $admin->get('admin/consultas.php');
         $this->assertStringContainsString('Volver al panel', $html);
         $this->assertStringContainsString('name="respuesta"', $html);

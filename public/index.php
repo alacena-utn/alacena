@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Página principal (pública): la pregunta, qué es Alacena, acceso al registro y al ingreso,
+ * Página principal (pública): la pregunta, qué es Cooki, acceso al registro y al ingreso,
  * una vitrina con todos los dibujos de ingredientes en movimiento y cómo funciona.
  */
 
@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/bootstrap.php';
 
-use Alacena\Sesion;
+use Cooki\Sesion;
 
 $titulo = 'Tu despensa y qué cocinar con lo que tenés';
 
@@ -53,7 +53,7 @@ require parcial('encabezado');
         <span class="solo-lectores">Cambiar el dibujo</span>
       </button>
     </h1>
-    <p class="portada__bajada"><strong>Alacena es la puerta de tu heladera:</strong> anotá lo que tenés en la heladera y la alacena, y te decimos qué podés cocinar hoy. Sin ir al súper, sin tirar comida.</p>
+    <p class="portada__bajada"><strong>Cooki es la puerta de tu heladera:</strong> anotá lo que tenés en la heladera y la alacena, y te decimos qué podés cocinar hoy. Sin ir al súper, sin tirar comida.</p>
     <p class="acciones">
       <?php if (Sesion::estaLogueado()) : ?>
         <a class="boton" href="<?= e(url('app/index.php')) ?>">Ir a mi cocina</a>
@@ -103,7 +103,7 @@ require parcial('encabezado');
   </ol>
 </section>
 
-<?php /* ¿Por qué Alacena?: con stickers a los costados, que se mecen como en Ingresar */ ?>
+<?php /* ¿Por qué Cooki?: con stickers a los costados, que se mecen como en Ingresar */ ?>
 <div class="con-stickers con-stickers--porque">
 <?php
 $stickers = ['mandarina', 'chocolate', 'ricota', 'langostinos', 'espinaca', 'merluza'];
@@ -111,8 +111,8 @@ $zona = 'porque';
 require parcial('stickers');
 ?>
 <section class="tarjeta portada__porque">
-  <h2>¿Por qué Alacena?</h2>
-  <p>En Argentina se pierden o desperdician alrededor de 16 millones de toneladas de alimentos por año, y buena parte se tira en casa porque se vence o porque nos olvidamos de que estaba. Alacena es un proyecto de estudiantes de la UTN Facultad Regional Haedo para ayudar a decidir qué cocinar con lo que ya hay.</p>
+  <h2>¿Por qué Cooki?</h2>
+  <p>En Argentina se pierden o desperdician alrededor de 16 millones de toneladas de alimentos por año, y buena parte se tira en casa porque se vence o porque nos olvidamos de que estaba. Cooki es un proyecto de estudiantes de la UTN Facultad Regional Haedo para ayudar a decidir qué cocinar con lo que ya hay.</p>
   <p><a href="<?= e(url('contacto.php')) ?>">Escribinos</a> si tenés sugerencias.</p>
 </section>
 </div>

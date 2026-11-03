@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
-use Alacena\Db;
-use Alacena\Repositorios\DespensaRepositorio;
-use Alacena\Repositorios\RecetaRepositorio;
-use Alacena\Sesion;
+use Cooki\Db;
+use Cooki\Repositorios\DespensaRepositorio;
+use Cooki\Repositorios\RecetaRepositorio;
+use Cooki\Sesion;
 
 Sesion::requiereLogin();
 

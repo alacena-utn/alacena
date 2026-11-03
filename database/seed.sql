@@ -1,19 +1,19 @@
 -- =====================================================================
---  Alacena · Datos de ejemplo del incremento 1
---  mysql -u root -p alacena < database/seed.sql
+--  Cooki · Datos de ejemplo del incremento 1
+--  mysql -u root -p cooki < database/seed.sql
 --
 --  Usuarios de prueba (las contraseñas se guardan con password_hash):
---    Administradores: admin@alacena.test  y  docente@alacena.test  → contraseña Admin1234
---    Generales:       maria@alacena.test, juan@alacena.test, sofia@alacena.test → Usuario1234
+--    Administradores: admin@cooki.test  y  docente@cooki.test  → contraseña Admin1234
+--    Generales:       maria@cooki.test, juan@cooki.test, sofia@cooki.test → Usuario1234
 -- =====================================================================
 SET NAMES utf8mb4;
 
 INSERT INTO usuario (id, email, nombre, hash_contrasena, rol) VALUES
- (1, 'admin@alacena.test',   'Administración', '$2y$10$2v72GYk760OoscGKNBR56u.cbCnpEm0kQIuLzRlN249jILhZF.Zey', 'admin'),
- (2, 'docente@alacena.test', 'Docente',        '$2y$10$2v72GYk760OoscGKNBR56u.cbCnpEm0kQIuLzRlN249jILhZF.Zey', 'admin'),
- (3, 'maria@alacena.test',   'María López',    '$2y$10$G0w1Jd6TRO4i77rN6TvymOrK75s7QTdBjPuYNn4wQcnLmXRFpHJNK',  'general'),
- (4, 'juan@alacena.test',    'Juan Pérez',     '$2y$10$G0w1Jd6TRO4i77rN6TvymOrK75s7QTdBjPuYNn4wQcnLmXRFpHJNK',  'general'),
- (5, 'sofia@alacena.test',   'Sofía Gómez',    '$2y$10$G0w1Jd6TRO4i77rN6TvymOrK75s7QTdBjPuYNn4wQcnLmXRFpHJNK',  'general');
+ (1, 'admin@cooki.test',   'Administración', '$2y$10$2v72GYk760OoscGKNBR56u.cbCnpEm0kQIuLzRlN249jILhZF.Zey', 'admin'),
+ (2, 'docente@cooki.test', 'Docente',        '$2y$10$2v72GYk760OoscGKNBR56u.cbCnpEm0kQIuLzRlN249jILhZF.Zey', 'admin'),
+ (3, 'maria@cooki.test',   'María López',    '$2y$10$G0w1Jd6TRO4i77rN6TvymOrK75s7QTdBjPuYNn4wQcnLmXRFpHJNK',  'general'),
+ (4, 'juan@cooki.test',    'Juan Pérez',     '$2y$10$G0w1Jd6TRO4i77rN6TvymOrK75s7QTdBjPuYNn4wQcnLmXRFpHJNK',  'general'),
+ (5, 'sofia@cooki.test',   'Sofía Gómez',    '$2y$10$G0w1Jd6TRO4i77rN6TvymOrK75s7QTdBjPuYNn4wQcnLmXRFpHJNK',  'general');
 
 INSERT INTO categoria (id, nombre, color_hex, orden) VALUES
  (1, 'Verduras', '#2E7D32', 1), (2, 'Frutas', '#C62828', 2), (3, 'Lácteos', '#1565C0', 3),
@@ -264,5 +264,5 @@ UPDATE despensa_item SET cantidad = 500, unidad = 'g' WHERE usuario_id = 3 AND i
 UPDATE despensa_item SET cantidad = 4, unidad = 'u' WHERE usuario_id = 3 AND ingrediente_id = 1;
 
 INSERT INTO contacto (usuario_id, nombre, email, asunto, mensaje, estado, correo_enviado, creado_en) VALUES
- (3, 'María López', 'maria@alacena.test', 'Sugerencia de receta', '¿Podrían agregar recetas sin horno? Gracias.', 'nueva', TRUE, NOW() - INTERVAL 1 DAY),
+ (3, 'María López', 'maria@cooki.test', 'Sugerencia de receta', '¿Podrían agregar recetas sin horno? Gracias.', 'nueva', TRUE, NOW() - INTERVAL 1 DAY),
  (NULL, 'Carlos Ruiz', 'carlos@ejemplo.test', 'Consulta', '¿La app es gratuita?', 'respondida', TRUE, NOW() - INTERVAL 3 DAY);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena\Tests\Integracion;
+namespace Cooki\Tests\Integracion;
 
 /**
  * Simula un navegador para probar las páginas: guarda la cookie de sesión, no sigue
@@ -10,7 +10,7 @@ namespace Alacena\Tests\Integracion;
  *
  * Uso en una prueba:
  *   $web = new Navegador();
- *   $web->ingresar('maria@alacena.test', 'Usuario1234');
+ *   $web->ingresar('maria@cooki.test', 'Usuario1234');
  *   [$estado, $html, $destino] = $web->get('app/despensa.php');
  */
 final class Navegador
@@ -70,7 +70,7 @@ final class Navegador
         preg_match('#HTTP/\S+ (\d{3})#', $lineas[0] ?? '', $codigo);
         $destino = '';
         foreach ($lineas as $linea) {
-            if (preg_match('/^Set-Cookie:\s*(alacena=[^;]+)/i', $linea, $c)) {
+            if (preg_match('/^Set-Cookie:\s*(cooki=[^;]+)/i', $linea, $c)) {
                 $this->cookie = $c[1];
             }
             if (preg_match('/^Location:\s*(.+)$/i', $linea, $l)) {

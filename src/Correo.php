@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Alacena;
+namespace Cooki;
 
 /**
  * Envío de correos con la función mail() de PHP.
@@ -14,9 +14,9 @@ final class Correo
 {
     public static function enviar(string $para, string $asunto, string $cuerpo, string $responderA = ''): bool
     {
-        $remitente = Config::get('MAIL_REMITENTE', 'no-responder@alacena.test');
+        $remitente = Config::get('MAIL_REMITENTE', 'no-responder@cooki.test');
         $encabezados = [
-            'From' => 'Alacena <' . $remitente . '>',
+            'From' => 'Cooki <' . $remitente . '>',
             'Content-Type' => 'text/plain; charset=UTF-8',
             'X-Mailer' => 'PHP/' . PHP_VERSION,
         ];
