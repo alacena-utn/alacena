@@ -1150,3 +1150,72 @@ td small { display: block; }
 .editor__dibujo--cambia { animation: cambiar-dibujo .45s cubic-bezier(.3, 1.6, .5, 1), menear .5s ease-in-out .45s 2 alternate; }
 /* En el celular no hay lugar al lado del título: alcanza con el dibujo de "elegido" */
 @media (max-width: 700px) { .editor__dibujo { display: none; } }
+
+/* ══════════ Quiénes somos (nosotros.php) ══════════ */
+/* Una hoja de cuaderno por integrante, todas del mismo tamaño: el dibujo pegado como foto instantánea,
+   el nombre en birome roja, lo que hizo en los renglones y abajo los imanes de GitHub, LinkedIn y correo.
+   En la computadora la grilla tiene 4 columnas (cada hoja ocupa 2): la quinta va centrada, con un
+   ingrediente grande a cada lado que se mece (el mate y el café). */
+.nosotros__bajada { max-width: 720px; margin: 0 0 34px; font-size: 1.05rem; }
+.nosotros { display: grid; gap: 36px 28px; margin: 0 0 20px; }
+@media (min-width: 900px) {
+  .nosotros { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 1fr; }
+  .nosotros__persona { grid-column: span 2; }
+}
+.nosotros__persona {
+  display: flex; gap: 20px; align-items: flex-start; margin: 0;
+  transform: rotate(var(--giro, 0deg));
+  transition: transform .35s cubic-bezier(.3, 1.5, .5, 1), box-shadow .35s;
+}
+.nosotros__persona:hover, .nosotros__persona:focus-within {
+  transform: translateY(-6px) rotate(calc(var(--giro, 0deg) * -1));
+  box-shadow: 0 6px 10px rgb(0 0 0 / 10%), 0 26px 36px rgb(0 0 0 / 20%);
+}
+.nosotros__foto {
+  flex: none; display: grid; place-items: center; width: 104px; height: 118px; margin-top: 4px;
+  padding: 8px 8px 24px; background: #fff; box-shadow: 0 4px 10px rgb(0 0 0 / 18%);
+  transform: rotate(-5deg); transition: transform .3s cubic-bezier(.3, 1.6, .5, 1);
+}
+.nosotros__persona:nth-of-type(even) .nosotros__foto { transform: rotate(4deg); }
+.nosotros__foto img { width: 86px; height: 86px; background: #EAF4EF; border-radius: 2px; }
+.nosotros__persona:hover .nosotros__foto { transform: rotate(-1deg) scale(1.08); }
+.nosotros__datos { min-width: 0; flex: 1; align-self: stretch; display: flex; flex-direction: column; }
+.tarjeta .nosotros__nombre { color: var(--color-marca); }
+.nosotros__nombre .texto-suave { font-size: 1.7rem; }
+.nosotros__enlaces { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; padding-top: 8px; }
+/* Imanes con el ícono de cada aplicación, como los del menú pero más chicos */
+.iman-enlace {
+  --claro: #8A949C; --base: #24292F;
+  display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: #fff;
+  background: radial-gradient(circle at 35% 30%, var(--claro), var(--base) 70%);
+  box-shadow: var(--sombra-iman); transition: transform .25s cubic-bezier(.3, 1.6, .5, 1), box-shadow .25s;
+}
+.iman-enlace svg { filter: drop-shadow(0 1px 0 rgb(0 0 0 / 30%)); }
+.iman-enlace--linkedin { --claro: #6FB3F2; --base: #0A66C2; }
+.iman-enlace--correo { --claro: #FF9C8F; --base: var(--color-marca); }
+.iman-enlace:hover, .iman-enlace:focus-visible { transform: translateY(-3px) rotate(-6deg); box-shadow: var(--sombra-iman-alto); }
+/* Los dos ingredientes a los costados de la última hoja (solo en la computadora) */
+.nosotros__adorno { display: none; }
+@media (min-width: 900px) {
+  .nosotros__adorno {
+    display: block; align-self: center; justify-self: center; width: min(150px, 80%); height: auto;
+    filter: drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 8px 8px rgb(30 50 40 / 30%));
+    --d: 0s; animation: mecer 3.6s ease-in-out var(--d) infinite alternate;
+  }
+  .nosotros__adorno--derecha { --d: -1.8s; }
+}
+.nosotros__contacto { max-width: 640px; margin: 44px auto 30px; text-align: center; background: #CFE0F2; --giro: .8deg; }
+.nosotros__contacto .postit__chinche { background: radial-gradient(circle at 35% 30%, #9FD3FF, var(--color-azul) 70%); }
+.nosotros__pregunta { margin: 0 0 14px; font: 700 1.8rem/1.1 var(--fuente-mano); }
+.nosotros__contacto .acciones { justify-content: center; }
+@media (max-width: 520px) {
+  .nosotros__persona { flex-direction: column; gap: 6px; }
+  .nosotros__foto { width: 88px; height: 100px; }
+  .nosotros__foto img { width: 70px; height: 70px; }
+}
+/* Inicio: el enlace a "Quiénes somos" dentro de "¿Por qué Cooki?" */
+.portada__equipo { font-weight: 800; }
+/* Menú sin cuenta: Inicio, Nosotros (imán naranja, el único de ese color), Contacto, Ingresar y Crear cuenta */
+.menu__invitado li:nth-child(2) a::before { --claro: #FFC48A; --base: #E8731C; }
+.menu__invitado li:nth-child(3) a::before { --claro: #FF9C8F; --base: var(--color-marca); }
+.menu__invitado li:nth-child(4) a::before { --claro: #9FD3FF; --base: var(--color-azul); }
