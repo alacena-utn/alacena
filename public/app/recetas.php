@@ -12,6 +12,7 @@ declare(strict_types=1);
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use Cooki\Db;
+use Cooki\Dominio\Paginacion;
 use Cooki\Repositorios\RecetaRepositorio;
 use Cooki\Sesion;
 
@@ -23,6 +24,7 @@ $filtros = [
     'dificultad' => (int) ($_GET['dificultad'] ?? 0),
     'etiqueta' => (int) ($_GET['etiqueta'] ?? 0),
     'puedo' => isset($_GET['puedo']),
+    'favoritas' => isset($_GET['favoritas']),
 ];
 $recetas = $repo->buscar($filtros, Sesion::idUsuario());
 $ordenes = ['az' => 'A a la Z', 'recomendadas' => 'Recomendadas para mí', 'rapidas' => 'Más rápidas primero'];
@@ -39,8 +41,12 @@ if ($orden === 'recomendadas') {
 } elseif ($orden === 'rapidas') {
     usort($recetas, fn ($a, $b) => [(int) $a['minutos'], $a['titulo']] <=> [(int) $b['minutos'], $b['titulo']]);
 }
+// De a 12 recetas por página (recetas.php?pagina=2), conservando la búsqueda y los filtros
+$paginacion = new Paginacion(count($recetas), 12, (int) ($_GET['pagina'] ?? 1));
+$enlace = fn (int $pagina): string => enlacePagina('app/recetas.php', $pagina);
 $etiquetas = $repo->etiquetas();
-$hayFiltros = $filtros['q'] !== '' || $filtros['dificultad'] || $filtros['etiqueta'] || $filtros['puedo'] || $orden !== 'az';
+$hayFiltros = $filtros['q'] !== '' || $filtros['dificultad'] || $filtros['etiqueta'] || $filtros['puedo']
+    || $filtros['favoritas'] || $orden !== 'az';
 
 $titulo = 'Recetas';
 require parcial('encabezado');
@@ -87,6 +93,7 @@ require parcial('encabezado');
   </div>
   <div class="campo casillas">
     <label><input type="checkbox" name="puedo" value="1"<?= $filtros['puedo'] ? ' checked' : '' ?>> Solo las que puedo hacer ya</label>
+    <label><input type="checkbox" name="favoritas" value="1"<?= $filtros['favoritas'] ? ' checked' : '' ?>> Solo mis favoritas ♥</label>
   </div>
   <button class="boton" type="submit">Buscar</button>
   <?php if ($hayFiltros) : ?>
@@ -106,10 +113,11 @@ require parcial('encabezado');
   <p class="vacio">No encontramos recetas con esos filtros. Probá con otra palabra o sacá algún filtro.</p>
 <?php else : ?>
   <div class="grilla">
-    <?php foreach ($recetas as $receta) : ?>
+    <?php foreach ($paginacion->cortar($recetas) as $receta) : ?>
       <?php require parcial('tarjeta-receta'); ?>
     <?php endforeach; ?>
   </div>
+  <?php require parcial('paginacion'); ?>
 <?php endif; ?>
 </div>
 </div>

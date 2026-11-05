@@ -14,6 +14,7 @@ declare(strict_types=1);
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use Cooki\Db;
+use Cooki\Dominio\Paginacion;
 use Cooki\Repositorios\IngredienteRepositorio;
 use Cooki\Sesion;
 
@@ -105,6 +106,8 @@ $busqueda = trim((string) ($_GET['q'] ?? ''));
 $categoria = (int) ($_GET['categoria'] ?? 0);
 $soloPropios = isset($_GET['propios']);
 $ingredientes = $form === null ? $repo->listar($busqueda, $categoria, $soloPropios) : [];
+$paginacion = new Paginacion(count($ingredientes), 30, (int) ($_GET['pagina'] ?? 1));
+$enlace = fn (int $pagina): string => enlacePagina('admin/ingredientes.php', $pagina);
 $error = fn (string $campo) => isset($errores[$campo]) ? '<p class="error-campo">' . e($errores[$campo]) . '</p>' : '';
 
 $titulo = 'Ingredientes · Administración';
@@ -209,7 +212,7 @@ require parcial('encabezado');
       <table>
         <thead><tr><th>Nombre</th><th>Categoría</th><th>Unidad</th><th>Se usa en</th><th><span class="solo-lectores">Acciones</span></th></tr></thead>
         <tbody>
-        <?php foreach ($ingredientes as $ing) : ?>
+        <?php foreach ($paginacion->cortar($ingredientes) as $ing) : ?>
           <tr>
             <td class="con-dibujo">
               <img class="icono-chico" src="<?= e(iconoIngrediente($ing['nombre'], $ing['usuario_id'] !== null)) ?>" alt="" width="36" height="36">
@@ -248,6 +251,7 @@ require parcial('encabezado');
         </tbody>
       </table>
     </div>
+    <?php require parcial('paginacion'); ?>
   <?php endif; ?>
 <?php endif; ?>
 <script src="<?= e(recurso('js/admin-ingrediente.js')) ?>" defer></script>

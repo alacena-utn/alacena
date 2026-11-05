@@ -15,6 +15,7 @@ require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use Cooki\Db;
 use Cooki\Dominio\Puntaje;
+use Cooki\Repositorios\CocinaRepositorio;
 use Cooki\Repositorios\DespensaRepositorio;
 use Cooki\Repositorios\RecetaRepositorio;
 use Cooki\Sesion;
@@ -29,6 +30,7 @@ $recetas = new RecetaRepositorio($db);
 $porVencer = $despensa->porVencer($usuario['id'], 7);
 $vencidos = count(array_filter($porVencer, fn ($item) => (int) $item['dias'] < 0));
 $porVencer = array_values(array_filter($porVencer, fn ($item) => (int) $item['dias'] >= 0));
+$cocinando = (new CocinaRepositorio($db))->enCurso($usuario['id']);
 // Recomendaciones por grupo (hasta 6 en cada uno, las de más puntaje primero)
 $porGrupo = array_fill_keys(array_keys(Puntaje::GRUPOS), []);
 foreach ($recetas->recomendadas($usuario['id']) as $recomendada) {
@@ -53,6 +55,15 @@ $titulo = 'Mi cocina';
 require parcial('encabezado');
 ?>
 <h1>Hola, <?= e(explode(' ', $usuario['nombre'])[0]) ?></h1>
+
+<?php if ($cocinando !== null) : ?>
+  <?php /* Modo cocina en curso: el progreso está guardado en la cuenta, se sigue desde donde quedó */ ?>
+  <p class="aviso aviso--info cocinando">
+    Estás cocinando <strong><?= e($cocinando['titulo']) ?></strong>
+    (<?= e($cocinando['hechos']) ?> de <?= e($cocinando['pasos']) ?> pasos).
+    <a href="<?= e(url('app/cocinar.php?sesion=' . $cocinando['id'])) ?>">Seguir cocinando</a>
+  </p>
+<?php endif; ?>
 
 <?php /* En la disposición panorámica (computadora), lateral y principal quedan lado a lado */ ?>
 <div class="cocina">

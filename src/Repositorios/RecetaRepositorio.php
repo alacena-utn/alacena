@@ -24,16 +24,23 @@ final class RecetaRepositorio
      *   puedo        true: solo las que se pueden hacer con lo que hay en la despensa
      *   ingredientes ids de ingredientes que la receta tiene que usar (selector de Mi cocina)
      *   modo         'todos' (usa todos los elegidos, por defecto) o 'alguno' (usa al menos uno)
-     * Si se pasa $usuarioId, cada receta trae cuántos ingredientes tiene el usuario ("tengo").
+     *   favoritas    true: solo las que el usuario marcó con ♥
+     * Si se pasa $usuarioId, cada receta trae cuántos ingredientes tiene el usuario ("tengo"), si es una de sus
+     * favoritas ("favorita") y si usa algo que no puede comer ("restringida").
      *
      * @param array{q?: string, dificultad?: int, etiqueta?: int, puedo?: bool,
-     *              ingredientes?: list<int>, modo?: string} $filtros
+     *              ingredientes?: list<int>, modo?: string, favoritas?: bool} $filtros
      * @return list<array<string, mixed>>
      */
     public function buscar(array $filtros = [], int $usuarioId = 0): array
     {
         $condiciones = [];
-        $parametros = ['usuario' => $usuarioId];
+        $parametros = self::parametrosUsuario($usuarioId);
+        if (!empty($filtros['favoritas'])) {
+            $condiciones[] = 'EXISTS (SELECT 1 FROM favorito f2
+                WHERE f2.receta_id = r.id AND f2.usuario_id = :usuarioF2)';
+            $parametros['usuarioF2'] = $usuarioId;
+        }
 
         $texto = trim($filtros['q'] ?? '');
         if ($texto !== '') {
@@ -90,8 +97,17 @@ final class RecetaRepositorio
                 ORDER BY tengo / total DESC, total - tengo, titulo
                 LIMIT ' . max(1, $limite);
         $consulta = $this->db->prepare($sql);
-        $consulta->execute(['usuario' => $usuarioId]);
+        $consulta->execute(self::parametrosUsuario($usuarioId));
         return $consulta->fetchAll();
+    }
+
+    /**
+     * Los parámetros que usa SELECT_RESUMEN (con consultas preparadas reales, cada marcador va una sola vez).
+     * @return array<string, int>
+     */
+    private static function parametrosUsuario(int $usuarioId): array
+    {
+        return ['usuario' => $usuarioId, 'usuarioB' => $usuarioId, 'usuarioF' => $usuarioId, 'usuarioR' => $usuarioId];
     }
 
     /**
@@ -215,7 +231,11 @@ final class RecetaRepositorio
         }
 
         $consulta = $this->db->prepare(
-            'SELECT ri.ingrediente_id, i.nombre, ri.cantidad, ri.unidad, ri.peso, ri.es_opcional, ri.nota, i.es_basico,
+            'SELECT ri.ingrediente_id, i.nombre, ri.cantidad, ri.unidad, ri.peso, ri.es_opcional, ri.nota,
+                    (i.es_basico = 1 OR EXISTS (SELECT 1 FROM usuario_basico ub
+                        WHERE ub.usuario_id = :usuario3 AND ub.ingrediente_id = ri.ingrediente_id)) AS es_basico,
+                    EXISTS (SELECT 1 FROM restriccion_usuario ru
+                        WHERE ru.usuario_id = :usuario4 AND ru.ingrediente_id = ri.ingrediente_id) AS restringido,
                     EXISTS (SELECT 1 FROM despensa_item d
                             WHERE d.usuario_id = :usuario AND d.ingrediente_id = ri.ingrediente_id AND d.nivel > 0
                               AND (d.fecha_vencimiento IS NULL OR d.fecha_vencimiento >= CURDATE())) AS en_despensa,
@@ -232,8 +252,16 @@ final class RecetaRepositorio
              WHERE ri.receta_id = :receta
              ORDER BY ri.es_opcional, ri.peso DESC, i.nombre'
         );
-        $consulta->execute(['usuario' => $usuarioId, 'usuario2' => $usuarioId, 'receta' => $id]);
+        $consulta->execute([
+            'usuario' => $usuarioId, 'usuario2' => $usuarioId, 'usuario3' => $usuarioId, 'usuario4' => $usuarioId,
+            'receta' => $id,
+        ]);
         $receta['ingredientes'] = $consulta->fetchAll();
+        $consulta = $this->db->prepare(
+            'SELECT COUNT(*) FROM favorito WHERE usuario_id = :usuario AND receta_id = :receta'
+        );
+        $consulta->execute(['usuario' => $usuarioId, 'receta' => $id]);
+        $receta['favorita'] = (int) $consulta->fetchColumn() > 0;
 
         $consulta = $this->db->prepare(
             'SELECT id, numero, instruccion, segundos_timer FROM paso WHERE receta_id = :id ORDER BY numero'
@@ -359,6 +387,17 @@ final class RecetaRepositorio
         }
     }
 
+    /** Guarda (o borra, con null) la ruta de la foto de la receta. Devuelve la ruta anterior, para borrar el archivo. */
+    public function cambiarImagen(int $id, ?string $ruta): ?string
+    {
+        $consulta = $this->db->prepare('SELECT imagen FROM receta WHERE id = :id');
+        $consulta->execute(['id' => $id]);
+        $anterior = $consulta->fetchColumn();
+        $this->db->prepare('UPDATE receta SET imagen = :imagen WHERE id = :id')
+            ->execute(['imagen' => $ruta, 'id' => $id]);
+        return $anterior === false ? null : $anterior;
+    }
+
     public function borrar(int $id): void
     {
         // receta_ingrediente, paso y receta_etiqueta se borran solos (ON DELETE CASCADE)
@@ -380,7 +419,8 @@ final class RecetaRepositorio
 
     /**
      * Total de ingredientes obligatorios de cada receta y cuántos tiene el usuario.
-     * Los básicos (sal, aceite, pimienta…) se cuentan como disponibles siempre.
+     * Los básicos (sal, aceite, pimienta… y los que el usuario marcó como "siempre tengo") cuentan como disponibles.
+     * "favorita": el usuario la marcó con ♥. "restringida": usa (sin ser opcional) algo que el usuario no puede comer.
      * Lo vencido o agotado (nivel 0) no cuenta.
      * "ingredientes" trae los obligatorios para dibujarlos en la tarjeta, uno por renglón y de
      * más a menos importante: un 1 o un 0 (si el usuario lo tiene) seguido del nombre.
@@ -390,12 +430,19 @@ final class RecetaRepositorio
             r.minutos_prep + r.minutos_coccion AS minutos,
             COUNT(CASE WHEN ri.es_opcional = 0 THEN 1 END) AS total,
             COUNT(CASE WHEN ri.es_opcional = 0
-                        AND (d.ingrediente_id IS NOT NULL OR i.es_basico = 1) THEN 1 END) AS tengo,
+                        AND (d.ingrediente_id IS NOT NULL OR i.es_basico = 1 OR ub.ingrediente_id IS NOT NULL)
+                       THEN 1 END) AS tengo,
+            EXISTS (SELECT 1 FROM favorito f WHERE f.receta_id = r.id AND f.usuario_id = :usuarioF) AS favorita,
+            EXISTS (SELECT 1 FROM receta_ingrediente ri4
+                      JOIN restriccion_usuario ru
+                        ON ru.ingrediente_id = ri4.ingrediente_id AND ru.usuario_id = :usuarioR
+                     WHERE ri4.receta_id = r.id AND ri4.es_opcional = 0) AS restringida,
             (SELECT GROUP_CONCAT(e.nombre ORDER BY e.nombre SEPARATOR \', \')
                FROM receta_etiqueta re JOIN etiqueta e ON e.id = re.etiqueta_id
               WHERE re.receta_id = r.id) AS etiquetas,
             GROUP_CONCAT(CASE WHEN ri.es_opcional = 0 THEN CONCAT(
-                    IF(d.ingrediente_id IS NOT NULL OR i.es_basico = 1, \'1\', \'0\'), i.nombre) END
+                    IF(d.ingrediente_id IS NOT NULL OR i.es_basico = 1 OR ub.ingrediente_id IS NOT NULL, \'1\', \'0\'),
+                    i.nombre) END
                 ORDER BY ri.peso DESC, i.nombre SEPARATOR \'\\n\') AS ingredientes
         FROM receta r
         LEFT JOIN receta_ingrediente ri ON ri.receta_id = r.id
@@ -403,5 +450,6 @@ final class RecetaRepositorio
         LEFT JOIN (SELECT DISTINCT ingrediente_id FROM despensa_item
                     WHERE usuario_id = :usuario AND nivel > 0
                       AND (fecha_vencimiento IS NULL OR fecha_vencimiento >= CURDATE())) d
-               ON d.ingrediente_id = ri.ingrediente_id';
+               ON d.ingrediente_id = ri.ingrediente_id
+        LEFT JOIN usuario_basico ub ON ub.usuario_id = :usuarioB AND ub.ingrediente_id = ri.ingrediente_id';
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use Cooki\Db;
+use Cooki\Dominio\Paginacion;
 use Cooki\Repositorios\UsuarioRepositorio;
 use Cooki\Sesion;
 
@@ -89,6 +90,8 @@ if (esPost()) {
 
 $busqueda = trim((string) ($_GET['q'] ?? ''));
 $usuarios = $form === null ? $repo->listar($busqueda) : [];
+$paginacion = new Paginacion(count($usuarios), 20, (int) ($_GET['pagina'] ?? 1));
+$enlace = fn (int $pagina): string => enlacePagina('admin/usuarios.php', $pagina);
 
 $titulo = 'Usuarios';
 require parcial('encabezado');
@@ -152,7 +155,7 @@ require parcial('encabezado');
       <table>
         <thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Alta</th><th><span class="solo-lectores">Acciones</span></th></tr></thead>
         <tbody>
-        <?php foreach ($usuarios as $u) : ?>
+        <?php foreach ($paginacion->cortar($usuarios) as $u) : ?>
           <tr>
             <td><?= e($u['nombre']) ?></td>
             <td><?= e($u['email']) ?></td>
@@ -174,6 +177,7 @@ require parcial('encabezado');
         </tbody>
       </table>
     </div>
+    <?php require parcial('paginacion'); ?>
   <?php endif; ?>
 <?php endif; ?>
 <?php require parcial('pie'); ?>

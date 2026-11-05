@@ -14,7 +14,8 @@ $dibujos = RecetaRepositorio::ingredientesDeTarjeta($receta['ingredientes'] ?? n
 $maximo = 5;
 ?>
 <article class="tarjeta tarjeta-receta">
-  <h2><a href="<?= e(url('app/receta.php?id=' . $receta['id'])) ?>"><?= e($receta['titulo']) ?></a></h2>
+  <h2><a href="<?= e(url('app/receta.php?id=' . $receta['id'])) ?>"><?= e($receta['titulo']) ?></a><?php if (!empty($receta['favorita'])) : ?>
+    <span class="tarjeta-receta__favorita" title="Una de tus favoritas">♥<span class="solo-lectores"> (favorita)</span></span><?php endif; ?></h2>
   <p class="texto-suave"><?= e($receta['descripcion']) ?></p>
   <?php if ($dibujos !== []) : ?>
     <ul class="mini-ingredientes" aria-label="Ingredientes">
@@ -45,6 +46,9 @@ $maximo = 5;
     </ul>
   <?php endif; ?>
   <p>
+    <?php if (!empty($receta['restringida'])) : ?>
+      <span class="etiqueta etiqueta--error">Tiene algo que no comés</span>
+    <?php endif; ?>
     <?php if ($faltan <= 0) : ?>
       <span class="etiqueta etiqueta--exito">Tenés todo</span>
     <?php else : ?>

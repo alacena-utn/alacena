@@ -45,3 +45,28 @@ if (listaPasos) {
   });
   actualizar();
 }
+
+// Favorita (♥): se marca sin recargar la página. Sin JavaScript, el formulario recarga y vuelve acá.
+const formFavorita = document.querySelector('.favorita');
+if (formFavorita) {
+  formFavorita.addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    const boton = formFavorita.querySelector('.favorita__boton');
+    try {
+      const respuesta = await fetch(formFavorita.action, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'fetch' },
+        body: new FormData(formFavorita),
+      });
+      if (!respuesta.ok) throw new Error(String(respuesta.status));
+      const { favorita } = await respuesta.json();
+      boton.setAttribute('aria-pressed', favorita ? 'true' : 'false');
+      boton.title = favorita ? 'Sacar de mis favoritas' : 'Guardar en mis favoritas';
+      boton.querySelector('.favorita__corazon').textContent = favorita ? '♥' : '♡';
+      boton.querySelector('.favorita__texto').textContent = favorita ? 'En mis favoritas' : 'Guardar';
+      window.sonar?.(favorita ? 'sticker-pega' : 'sticker-arranca');
+    } catch {
+      formFavorita.submit();
+    }
+  });
+}

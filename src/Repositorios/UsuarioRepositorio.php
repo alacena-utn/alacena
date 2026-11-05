@@ -175,11 +175,18 @@ final class UsuarioRepositorio
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errores['email'] = 'El email no es válido.';
         }
-        if ($contrasena !== '' || $contrasenaObligatoria) {
-            if (strlen($contrasena) < 8 || !preg_match('/[A-Za-z]/', $contrasena) || !preg_match('/\d/', $contrasena)) {
-                $errores['contrasena'] = 'La contraseña debe tener al menos 8 caracteres, con letras y números.';
-            }
+        if (($contrasena !== '' || $contrasenaObligatoria) && ($error = self::errorContrasena($contrasena)) !== null) {
+            $errores['contrasena'] = $error;
         }
         return $errores;
+    }
+
+    /** La regla de la contraseña sola (para el registro, Mi cuenta y la recuperación). null = está bien. */
+    public static function errorContrasena(string $contrasena): ?string
+    {
+        if (strlen($contrasena) < 8 || !preg_match('/[A-Za-z]/', $contrasena) || !preg_match('/\d/', $contrasena)) {
+            return 'La contraseña debe tener al menos 8 caracteres, con letras y números.';
+        }
+        return null;
     }
 }

@@ -34,6 +34,34 @@ function url(string $ruta = ''): string
     return $base . ltrim($ruta, '/');
 }
 
+/**
+ * Dirección completa (con https://dominio) de una página, para los enlaces que van en los correos.
+ * Si en .env está APP_URL (en el hosting conviene ponerla), se usa esa; si no, la del pedido actual.
+ */
+function urlAbsoluta(string $ruta): string
+{
+    $base = rtrim(\Cooki\Config::get('APP_URL'), '/');
+    if ($base !== '') {
+        return $base . '/' . ltrim($ruta, '/');
+    }
+    $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    $host = preg_replace('/[^A-Za-z0-9.:\[\]-]/', '', (string) ($_SERVER['HTTP_HOST'] ?? 'localhost'));
+    return ($https ? 'https://' : 'http://') . $host . url($ruta);
+}
+
+/**
+ * Enlace a otra página de un listado, conservando la búsqueda y los filtros de la URL actual.
+ * enlacePagina('app/recetas.php', 3) → "/app/recetas.php?q=tarta&pagina=3"
+ */
+function enlacePagina(string $ruta, int $pagina): string
+{
+    $parametros = array_merge($_GET, ['pagina' => $pagina]);
+    if ($pagina <= 1) {
+        unset($parametros['pagina']);
+    }
+    return url($ruta) . ($parametros === [] ? '' : '?' . http_build_query($parametros));
+}
+
 /** Redirige a otra página del sitio y corta la ejecución. */
 function redirigir(string $ruta): never
 {

@@ -53,6 +53,31 @@ final class Navegador
         return $this->pedir('POST', $ruta, http_build_query($campos));
     }
 
+    /**
+     * Envía un formulario con un archivo (multipart/form-data), como el de la foto de una receta.
+     * @param array<string, mixed> $campos campos comunes (los arrays de un nivel se mandan como nombre[clave])
+     * @param array{0: string, 1: string, 2: string} $archivo [nombre del campo, nombre del archivo, contenido]
+     * @return array{0: int, 1: string, 2: string}
+     */
+    public function postArchivo(string $ruta, array $campos, array $archivo): array
+    {
+        if (!array_key_exists('csrf', $campos) && preg_match('/name="csrf" value="([^"]+)"/', $this->ultimoHtml, $m)) {
+            $campos['csrf'] = $m[1];
+        }
+        $limite = 'limite' . bin2hex(random_bytes(8));
+        $cuerpo = '';
+        $parte = fn (string $nombre, string $valor) => "--{$limite}\r\nContent-Disposition: form-data; "
+            . "name=\"{$nombre}\"\r\n\r\n{$valor}\r\n";
+        foreach (explode('&', http_build_query($campos)) as $par) {
+            [$nombre, $valor] = array_map('urldecode', explode('=', $par, 2) + [1 => '']);
+            $cuerpo .= $parte($nombre, $valor);
+        }
+        [$campo, $nombreArchivo, $contenido] = $archivo;
+        $cuerpo .= "--{$limite}\r\nContent-Disposition: form-data; name=\"{$campo}\"; filename=\"{$nombreArchivo}\"\r\n"
+            . "Content-Type: application/octet-stream\r\n\r\n{$contenido}\r\n--{$limite}--\r\n";
+        return $this->pedir('POST', $ruta, $cuerpo, 'multipart/form-data; boundary=' . $limite);
+    }
+
     public function ingresar(string $email, string $contrasena): string
     {
         $this->get('login.php');
@@ -60,9 +85,13 @@ final class Navegador
     }
 
     /** @return array{0: int, 1: string, 2: string} */
-    private function pedir(string $metodo, string $ruta, string $cuerpo = ''): array
-    {
-        $encabezados = ['Content-Type: application/x-www-form-urlencoded'];
+    private function pedir(
+        string $metodo,
+        string $ruta,
+        string $cuerpo = '',
+        string $tipo = 'application/x-www-form-urlencoded'
+    ): array {
+        $encabezados = ['Content-Type: ' . $tipo];
         $cookies = ltrim($this->cookie . $this->otrasCookies, '; ');
         if ($cookies !== '') {
             $encabezados[] = 'Cookie: ' . $cookies;

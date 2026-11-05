@@ -73,11 +73,16 @@ final class RecomendacionTest extends TestCase
 
         [$estado, $html] = $web->get('app/recetas.php?orden=recomendadas');
         $this->assertSame(200, $estado);
-        $this->assertLessThan(
-            strpos($html, 'Fideos a la crema con champiñones'),
-            strpos($html, 'Revuelto de zapallitos'),
-            'ordenadas por puntaje'
-        );
+        // Ordenadas por puntaje: el revuelto (todo + lo que vence) en la primera página; los fideos a la crema
+        // (con un sustituto) más atrás
+        $this->assertStringContainsString('Revuelto de zapallitos', $html);
+        $this->assertStringNotContainsString('Fideos a la crema con champiñones', $html, 'ordenadas por puntaje');
+        $encontrada = false;
+        for ($pagina = 2; $pagina <= 6 && !$encontrada; $pagina++) {
+            [, $siguiente] = $web->get('app/recetas.php?orden=recomendadas&pagina=' . $pagina);
+            $encontrada = str_contains($siguiente, 'Fideos a la crema con champiñones');
+        }
+        $this->assertTrue($encontrada);
     }
 
     public function testElDetalleEscalaLasPorcionesYLosPasos(): void

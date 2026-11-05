@@ -1336,3 +1336,191 @@ td > .acciones { flex-wrap: nowrap; }
 .menu__invitado li:nth-child(2) a::before { --claro: #FFC48A; --base: #E8731C; }
 .menu__invitado li:nth-child(3) a::before { --claro: #FF9C8F; --base: var(--color-marca); }
 .menu__invitado li:nth-child(4) a::before { --claro: #9FD3FF; --base: var(--color-azul); }
+
+/* ══════════ Incremento 2 · Modo cocina (P4) ══════════ */
+/* Detalle de receta: el botón grande para empezar a cocinar */
+.empezar-cocina { margin: 4px 0 26px; }
+.empezar-cocina form { margin: 0; }
+.empezar-cocina .texto-suave { margin: 6px 0 0; }
+.boton--cocinar {
+  min-height: 52px; padding: 0 26px; font-size: 1.05rem; background: var(--color-marca); border-color: var(--color-marca);
+}
+.boton--cocinar small { font-weight: 600; opacity: .85; }
+.boton--cocinar:hover { background: var(--color-marca-oscuro); border-color: var(--color-marca-oscuro); }
+/* Mi cocina: aviso de la receta que está cocinando */
+.cocinando a { white-space: nowrap; }
+
+/* cocinar.php: letra grande y un paso por hoja; el paso actual se resalta y los hechos quedan más claros */
+.cocinar { max-width: 860px; margin: 0 auto; }
+.cocinar__cabeza h1 { margin-bottom: 8px; }
+.cocinar__datos { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0 0 10px; }
+.cocinar__cuenta { font: 700 1.5rem/1 var(--fuente-mano); }
+.cocinar__barra {
+  height: 14px; border-radius: 99px; background: var(--color-superficie); border: 2px solid var(--color-texto);
+  overflow: hidden; margin-bottom: 22px;
+}
+.cocinar__barra span { display: block; height: 100%; background: var(--color-exito); transition: width .4s ease; }
+.cocinar__ingredientes {
+  background: var(--color-postit); color: var(--color-texto); padding: 12px 18px; margin: 0 0 28px;
+  box-shadow: 0 8px 14px rgb(0 0 0 / 14%); transform: rotate(-.4deg);
+}
+.cocinar__ingredientes summary { cursor: pointer; font: 700 1.5rem/1.2 var(--fuente-mano); }
+.cocinar__ingredientes ul {
+  list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px 24px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+.cocinar__ingredientes li { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+.cocinar__ingredientes li .icono-chico { flex: none; filter: drop-shadow(0 1px 0 #fff) drop-shadow(0 1px 2px rgb(0 0 0 / 18%)); }
+.cocinar__pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.paso-cocina { margin: 0; scroll-margin-top: 90px; transition: opacity .3s, transform .3s; }
+.paso-cocina__numero { font: 700 1.9rem/var(--renglon) var(--fuente-mano); color: var(--color-marca); }
+.paso-cocina__texto { font-size: 1.35rem; }
+.paso-cocina__acciones { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+.paso-cocina__form { margin: 0 0 0 auto; }
+.paso-cocina__listo { min-width: 120px; }
+.paso-cocina__tilde { display: none; }
+.paso-cocina__listo[aria-pressed="true"] { background: var(--color-exito); border-color: var(--color-exito); }
+.paso-cocina__listo[aria-pressed="true"] .paso-cocina__tilde { display: inline; }
+.paso-cocina--hecho { opacity: .62; }
+.paso-cocina--hecho .paso-cocina__numero::after { content: " ✓"; color: var(--color-exito); }
+.paso-cocina--actual { box-shadow: 0 0 0 4px var(--color-postit), var(--sombra); transform: scale(1.01); }
+.paso-cocina--actual .paso-cocina__numero::after { content: " · ahora"; font-size: 1.3rem; color: var(--color-suave); }
+/* Temporizador: un imán redondeado con el reloj en letra de máquina */
+.temporizador { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.temporizador__reloj {
+  display: inline-block; min-width: 92px; padding: 2px 12px; border-radius: 10px; text-align: center;
+  background: var(--color-texto); color: #F2F2EE; font: 700 1.5rem/1.4 var(--fuente-rotulo); letter-spacing: .04em;
+}
+.temporizador--andando .temporizador__reloj { background: var(--color-azul); }
+.temporizador--sonando .temporizador__reloj { background: var(--color-marca); animation: sacudir .5s ease-in-out 6; }
+@keyframes sacudir { 0%, 100% { rotate: 0deg; } 25% { rotate: -6deg; } 75% { rotate: 6deg; } }
+.cocinar__fin { margin-top: 34px; }
+.descontar { list-style: none; padding: 0; margin: 0 0 8px; }
+.descontar label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; cursor: pointer; }
+.descontar input { width: 20px; height: 20px; }
+.cocinar__abandonar { margin-top: 4px; }
+@media (max-width: 520px) {
+  .paso-cocina__texto { font-size: 1.2rem; }
+  .paso-cocina__form { margin-left: 0; width: 100%; }
+  .paso-cocina__listo { width: 100%; }
+}
+
+/* ══════════ Incremento 2 · Preferencias y favoritas (P1 + P3) ══════════ */
+.receta-titulo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; }
+.receta-titulo h1 { margin-bottom: 8px; }
+.favorita { margin: 0 0 8px; }
+.favorita__boton {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px 0 10px; cursor: pointer;
+  border: 2px solid var(--color-texto); border-radius: 99px; background: var(--color-superficie); color: var(--color-texto);
+  font: 800 .9rem var(--fuente); box-shadow: 0 3px 0 rgb(0 0 0 / 20%);
+  transition: transform .25s cubic-bezier(.3, 1.6, .5, 1);
+}
+.favorita__corazon { font-size: 1.4rem; line-height: 1; color: var(--color-marca); }
+.favorita__boton[aria-pressed="true"] { background: #F7C9D4; }
+.favorita__boton:hover { transform: rotate(-3deg) scale(1.05); }
+.favorita__boton[aria-pressed="true"] .favorita__corazon { animation: latido .4s ease-out; }
+@keyframes latido { 50% { transform: scale(1.35); } }
+.tarjeta-receta__favorita { margin-left: 6px; color: var(--color-marca); font-size: 1.3rem; }
+.lista-ingredientes .no-como strong { text-decoration: underline wavy var(--color-error); }
+/* Menú de la cuenta como hoja de cuaderno: Mi cuenta y Mis preferencias son imanes chicos,
+   los títulos van a mano, Normal/Panorámica son papelitos de cinta y Salir es un imán rojo */
+.cuenta__panel {
+  background-color: var(--color-superficie);
+  background-image: repeating-linear-gradient(180deg, transparent 0 31px, var(--color-renglon) 31px 32px);
+  padding-left: 30px;
+}
+.cuenta__panel::after { content: ""; position: absolute; top: 0; bottom: 0; left: 16px; width: 2px; background: var(--color-margen); }
+.cuenta__enlaces { display: grid; gap: 4px; width: 100%; padding-bottom: 12px; border-bottom: 2px dashed rgb(30 43 38 / 18%); }
+.cuenta__enlace {
+  display: inline-flex; align-items: center; gap: 12px; padding: 3px 0; text-decoration: none;
+  font: 700 1.55rem/1.1 var(--fuente-mano); color: var(--color-texto);
+  transition: transform .25s cubic-bezier(.3, 1.6, .5, 1);
+}
+.cuenta__enlace::before {
+  content: ""; flex: none; width: 24px; height: 24px; border-radius: 50%; box-shadow: var(--sombra-iman); transition: box-shadow .25s;
+  background: radial-gradient(circle at 35% 30%, #FFD3A1, #E07B22 70%);
+}
+.cuenta__enlace--preferencias::before { background: radial-gradient(circle at 35% 30%, #F9C7DD, #C2457C 70%); }
+.cuenta__enlace:hover, .cuenta__enlace:focus-visible { transform: translateX(4px) rotate(-1.5deg); color: var(--color-marca); }
+.cuenta__enlace:hover::before, .cuenta__enlace:focus-visible::before { box-shadow: var(--sombra-iman-alto); }
+.cuenta__enlace[aria-current="page"]::before { outline: 2px dashed var(--color-texto); outline-offset: 2px; }
+.cuenta__panel .preferencias legend { font: 700 1.4rem/1.1 var(--fuente-mano); }
+.cuenta__panel .preferencias legend small { font: 700 1.05rem var(--fuente-mano); }
+.cuenta__panel .disposicion__boton {
+  min-height: 32px; padding: 2px 14px 4px; border: none; border-radius: 0;
+  font: 700 1.3rem/1 var(--fuente-mano); background: var(--color-cinta); color: var(--color-texto);
+  transform: rotate(-2deg); box-shadow: 0 1px 3px rgb(0 0 0 / 15%);
+  transition: transform .25s cubic-bezier(.3, 1.6, .5, 1), box-shadow .25s;
+}
+.cuenta__panel .disposicion__boton + .disposicion__boton { transform: rotate(1.5deg); }
+.cuenta__panel .disposicion__boton:hover { transform: translateY(-2px) rotate(0deg); box-shadow: 0 5px 8px rgb(0 0 0 / 18%); }
+.cuenta__panel .disposicion__boton[aria-pressed="true"] {
+  background: var(--color-postit); color: var(--color-texto); box-shadow: 0 4px 8px rgb(0 0 0 / 18%);
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px;
+}
+.cuenta__panel .salir { width: 100%; padding-top: 12px; border-top: 2px dashed rgb(30 43 38 / 18%); }
+.cuenta__panel .cuenta__salir, .cuenta__panel .salir__no {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 34px; padding: 0 4px 0 0; border: none; background: none;
+  box-shadow: none; font: 700 1.5rem/1 var(--fuente-mano); color: var(--color-texto);
+}
+.cuenta__panel .cuenta__salir::before {
+  content: ""; flex: none; width: 24px; height: 24px; border-radius: 50%; box-shadow: var(--sombra-iman);
+  background: radial-gradient(circle at 35% 30%, #FF9C8F, var(--color-marca) 70%);
+}
+.cuenta__panel .cuenta__salir:hover, .cuenta__panel .salir__no:hover { background: none; color: var(--color-marca); transform: translateX(4px); }
+.cuenta__panel .salir--preguntando .cuenta__salir { background: none; color: var(--color-marca); text-decoration: underline; text-underline-offset: 3px; }
+.cuenta__panel .salir__no { color: var(--color-suave); }
+@media (max-width: 860px) {
+  .cuenta__panel { background-image: none; padding-left: 0; }
+  .cuenta__panel::after { display: none; }
+}
+
+/* Mis preferencias: dos hojas lado a lado (en la computadora) con los ingredientes como stickers */
+.preferencias-cocina { display: grid; gap: 28px; margin: 20px 0 36px; }
+@media (min-width: 900px) { .preferencias-cocina { grid-template-columns: 1fr 1fr; } }
+.preferencia { margin: 0; }
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 4px 0 calc(var(--renglon) / 2); }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 2px 4px 2px 8px; line-height: 1.2;
+  background: #fff; border: 2px solid var(--color-texto); border-radius: 99px; box-shadow: 0 2px 0 rgb(0 0 0 / 15%);
+}
+.chip form { margin: 0; }
+.chip__quitar {
+  width: 28px; height: 28px; border: none; border-radius: 50%; background: transparent; cursor: pointer;
+  font: 800 1.2rem/1 var(--fuente); color: var(--color-suave);
+}
+.chip__quitar:hover, .chip__quitar:focus-visible { background: var(--color-error-fondo); color: var(--color-error); }
+.preferencia__agregar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.preferencia__agregar input { flex: 1 1 180px; min-height: 40px; }
+
+/* ══════════ Incremento 2 · Foto de receta (P3) y paginación (P3 + P5) ══════════ */
+/* La foto va pegada como una foto instantánea, con un pedazo de cinta */
+.foto-receta {
+  position: relative; float: right; width: min(320px, 42%); margin: -10px 0 16px 24px; padding: 10px 10px 30px;
+  background: #fff; box-shadow: 0 8px 16px rgb(0 0 0 / 20%); transform: rotate(2deg);
+}
+.foto-receta::before {
+  content: ""; position: absolute; top: -12px; left: 50%; width: 90px; height: 24px; margin-left: -45px;
+  background: var(--color-cinta); transform: rotate(-3deg);
+}
+.foto-receta img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+@media (max-width: 700px) { .foto-receta { float: none; width: auto; max-width: 360px; margin: 6px auto 20px; } }
+.campo-foto__actual { display: flex; align-items: center; gap: 14px; margin: 4px 0 10px; }
+.campo-foto__actual img { width: 160px; height: 120px; object-fit: cover; border: 6px solid #fff; box-shadow: 0 3px 8px rgb(0 0 0 / 18%); }
+.campo-foto input[type="file"] { max-width: 100%; }
+/* Paginación: los números son imanes chiquitos; la página actual está marcada */
+.paginacion { margin: 26px 0 8px; text-align: center; }
+.paginacion ul { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin: 6px 0 0; padding: 0; }
+.paginacion__numero, .paginacion__flecha {
+  display: inline-grid; place-items: center; min-width: 40px; height: 40px; padding: 0 10px; border-radius: 99px;
+  border: 2px solid var(--color-texto); background: var(--color-superficie); color: var(--color-texto);
+  font-weight: 800; text-decoration: none; box-shadow: 0 3px 0 rgb(0 0 0 / 20%);
+  transition: transform .2s cubic-bezier(.3, 1.6, .5, 1);
+}
+a.paginacion__numero:hover, .paginacion__flecha:hover { transform: translateY(-2px) rotate(-4deg); color: var(--color-azul); }
+.paginacion__numero[aria-current="page"] { background: var(--color-texto); color: #fff; }
+.paginacion__salto { color: var(--color-sobre-puerta-suave); font-weight: 800; }
+.paginacion__texto { margin: 0; }
+.campo-foto input[type="file"]::file-selector-button {
+  margin-right: 10px; min-height: 36px; padding: 0 14px; border-radius: 99px; border: 2px solid var(--color-texto);
+  background: var(--color-superficie); color: var(--color-texto); font: 800 .85rem var(--fuente); cursor: pointer;
+}

@@ -1,14 +1,14 @@
 -- =====================================================================
 --  Cooki · Esquema de base de datos (MariaDB 10.6+ / MySQL 8.0+)
---  Incremento 1 (2.º parcial de Programación): usuarios con rol, tabla de contacto
---  y autor de cada receta. Las tablas de modo cocina quedan para el incremento 2.
+--  Incremento 1 (2.º parcial de Programación): usuarios con rol, tabla de contacto y autor de cada receta.
+--  Incremento 2: modo cocina, preferencias, recuperación de contraseña e intentos de ingreso.
 --  Ejecutar sobre una base vacía:  mysql -u root -p cooki < database/schema.sql
 -- =====================================================================
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS contacto, paso_completado, sesion_cocina, favorito, receta_etiqueta, etiqueta,
+DROP TABLE IF EXISTS intento_ingreso, recuperacion, contacto, paso_completado, sesion_cocina, favorito, receta_etiqueta, etiqueta,
     paso, receta_ingrediente, receta, despensa_item, restriccion_usuario, usuario_basico,
     sustitucion, sinonimo, ingrediente, categoria, usuario;
 
@@ -224,4 +224,28 @@ CREATE TABLE contacto (
     KEY idx_contacto_estado (estado, creado_en),
     CONSTRAINT fk_contacto_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE SET NULL,
     CONSTRAINT fk_contacto_respondio FOREIGN KEY (respondida_por) REFERENCES usuario(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ─────────────────── Cuentas: recuperar la contraseña y bloqueo ───────────────────
+-- Pedidos de "Olvidé mi contraseña". Se guarda el hash SHA-256 del token, nunca el token:
+-- si alguien lee la base, no puede usar los enlaces. Cada enlace vale 1 hora y una sola vez.
+CREATE TABLE recuperacion (
+    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    usuario_id  INT UNSIGNED NOT NULL,
+    token_hash  CHAR(64)     NOT NULL UNIQUE,
+    vence_en    DATETIME     NOT NULL,
+    usado_en    DATETIME     NULL,
+    creado_en   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_recuperacion_usuario (usuario_id, creado_en),
+    CONSTRAINT fk_recuperacion_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Ingresos fallidos: 5 en 15 minutos para el mismo email bloquean ese email 15 minutos.
+-- Se guarda el email aunque no exista la cuenta (así no se puede averiguar cuáles existen).
+CREATE TABLE intento_ingreso (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email      VARCHAR(190) NOT NULL,
+    ip         VARCHAR(45)  NOT NULL,
+    creado_en  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_intento_email (email, creado_en)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

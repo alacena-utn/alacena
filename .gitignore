@@ -18,3 +18,8 @@ desktop.ini
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# ── Fotos de recetas subidas desde la administración (no van al repositorio) ──
+/public/img/recetas/*
+!/public/img/recetas/.gitkeep
+!/public/img/recetas/.htaccess
