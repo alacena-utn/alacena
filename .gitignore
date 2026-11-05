@@ -23,3 +23,6 @@ desktop.ini
 /public/img/recetas/*
 !/public/img/recetas/.gitkeep
 !/public/img/recetas/.htaccess
+
+# Paquete para subir al hosting (scripts/empaquetar.php)
+/cooki-hosting.zip
