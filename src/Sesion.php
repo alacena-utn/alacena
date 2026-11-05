@@ -28,7 +28,7 @@ final class Sesion
         session_set_cookie_params([
             'httponly' => true,      // JavaScript no puede leer la cookie de sesión
             'samesite' => 'Lax',     // otro sitio no puede enviar formularios con nuestra sesión
-            'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+            'secure' => esHttps(),
         ]);
         session_start();
         if (empty($_SESSION['csrf'])) {
@@ -114,7 +114,7 @@ final class Sesion
                 'expires' => time() + 365 * 24 * 3600,
                 'path' => '/',
                 'samesite' => 'Lax',
-                'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+                'secure' => esHttps(),
             ]);
         }
         $_COOKIE[self::COOKIE_COLOR] = $color;

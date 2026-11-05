@@ -44,7 +44,7 @@ function urlAbsoluta(string $ruta): string
     if ($base !== '') {
         return $base . '/' . ltrim($ruta, '/');
     }
-    $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    $https = esHttps();
     $host = preg_replace('/[^A-Za-z0-9.:\[\]-]/', '', (string) ($_SERVER['HTTP_HOST'] ?? 'localhost'));
     return ($https ? 'https://' : 'http://') . $host . url($ruta);
 }
@@ -60,6 +60,13 @@ function enlacePagina(string $ruta, int $pagina): string
         unset($parametros['pagina']);
     }
     return url($ruta) . ($parametros === [] ? '' : '?' . http_build_query($parametros));
+}
+
+/** true si la página llegó por https (también detrás del proxy de un hosting, que avisa con X-Forwarded-Proto). */
+function esHttps(): bool
+{
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
 }
 
 /** Redirige a otra página del sitio y corta la ejecución. */

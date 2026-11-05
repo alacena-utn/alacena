@@ -36,12 +36,19 @@ erDiagram
 
 - **Entrega A (hecha):**
   - Se usan `receta_ingrediente.peso`, `nota`, `paso.segundos_timer` y la tabla `sustitucion`.
-  - La recomendación ya consulta `usuario_basico` y `restriccion_usuario`, aunque todavía no hay pantalla para cargarlas.
-- **Entrega B:**
-  - Pantallas de preferencias (`usuario_basico`, `restriccion_usuario`, `favorito`).
-  - Modo cocina (`sesion_cocina`, `paso_completado`).
-  - Recuperar contraseña.
-  - Bloqueo por intentos.
+- **Entrega B (hecha):**
+
+| Tabla | Para qué | Se usa en |
+|---|---|---|
+| `usuario_basico` | "Siempre tengo": cuenta como disponible y no se descuenta al cocinar (DEC-012) | Mis preferencias, recomendación, catálogo, modo cocina |
+| `restriccion_usuario` | "No puedo comer": esas recetas no se recomiendan (DEC-012) | Mis preferencias, recomendación, catálogo |
+| `favorito` | Recetas marcadas con ♥ (DEC-012) | Detalle, catálogo, Mis preferencias, API |
+| `sesion_cocina` · `paso_completado` | La receta que se está cocinando y los pasos hechos; `stock_descontado` evita descontar dos veces (DEC-011) | Modo cocina, Mi cocina, puntaje (−8 si se cocinó hace poco) |
+| `recuperacion` (nueva) | Enlaces de "Olvidé mi contraseña": hash del token, vence en 1 hora, un solo uso (DEC-013) | `olvide.php`, `restablecer.php` |
+| `intento_ingreso` (nueva) | Ingresos fallidos por email, para el bloqueo de 15 minutos (DEC-014) | Ingreso (página y API) |
+| `receta.imagen` | Ruta de la foto de la receta, dentro de `public/img/recetas/` (DEC-015) | Editor y detalle de la receta, API |
+
+Migración para bases existentes: `database/migraciones/006-incremento-2-b.sql`.
 
 ## Reglas importantes
 

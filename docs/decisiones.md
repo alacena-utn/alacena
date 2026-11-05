@@ -6,12 +6,142 @@ Formato: decisiones tipo ADR (ver la guía de metodología del equipo, sección 
 
 ---
 
-## DEC-011 · AAAA-MM-DD · (título)
+## DEC-018 · AAAA-MM-DD · (título)
 - **Contexto:** 
 - **Decisión:** 
 - **Alternativas descartadas:** 
 - **Consecuencias:** 
 - **Participaron:** 
+
+---
+
+## DEC-017 · 2026-11-04 · Flecha de volver a la página anterior, vencidos aparte e ingredientes "a gusto"
+- **Contexto:** la flecha de una receta siempre llevaba al catálogo, aunque se hubiera llegado desde Mi cocina o desde las favoritas. En "Usalo pronto" aparecía lo vencido, que ya no se puede usar. Y un ingrediente de receta sin cantidad se mostraba solo con el nombre.
+- **Decisión:**
+  - **Volver:** `enlaceVolver()` vuelve a la página de la que se vino (con sus filtros y su página), tomada de la dirección anterior del navegador. Solo se aceptan páginas de este sitio que están en `PAGINAS_PARA_VOLVER`. Se recuerda en la sesión por página, así se mantiene aunque la página se recargue (porciones, favorito). Si no se sabe de dónde vino, va a la página de siempre. Al lado puede llevar atajos a otras secciones, y no se repite el destino de la flecha. Los formularios dentro de un listado (editar un usuario o un ingrediente) vuelven siempre al listado.
+  - **Vencidos:** Mi cocina los cuenta en un papelito al lado de "Usalo pronto", con un enlace a la despensa filtrada por vencidos.
+  - **"A gusto":** sin cantidad ni unidad, la receta dice "a gusto" (la pizca sigue siendo "una pizca"). Con unidad y sin cantidad, el editor avisa del error.
+- **Alternativas descartadas:** `history.back()` con JavaScript (no funciona si se entró directo con un enlace, y no se puede mostrar adónde vuelve); pasar el origen en cada enlace con `?desde=` (hay que tocar todos los enlaces del sitio).
+- **Consecuencias:** depende de que el navegador mande la dirección anterior, lo que asegura `Referrer-Policy: same-origin` (DEC-016). Sin ella, la flecha va a la página de siempre.
+- **Participaron:** P3
+
+---
+
+## DEC-016 · 2026-11-03 · API ampliada y preparación para el hosting
+- **Contexto:** el contrato de la API (docs/api.md) dejaba para el incremento 2 el registro, el ingreso y los datos de cada usuario. Además, el sistema tiene que publicarse en un hosting gratuito.
+- **Decisión:**
+  - **API:** `POST /usuarios`, `POST /sesion` y `DELETE /sesion`, `GET /yo`, `GET /recetas` (paginado), `GET /recetas/{id}?porciones=N`, `GET /recomendaciones`, `GET /despensa` y `POST`/`DELETE /favoritos/{id}`. Usan la misma sesión que las páginas. Las que modifican datos solo aceptan JSON, lo que también protege contra CSRF. El ingreso por la API tiene el mismo bloqueo por intentos que la página.
+  - **Producción** (`APP_ENV=produccion`): los errores no se muestran, quedan en el log, y la persona ve la página de error común.
+  - **Encabezados de seguridad** en todas las respuestas: `nosniff`, `SAMEORIGIN`, `Referrer-Policy: same-origin` y `Permissions-Policy`.
+  - **HTTPS:** `FORZAR_HTTPS=1` manda todo a https, y la cookie de sesión es `secure` cuando la página llega por https (también detrás del proxy del hosting).
+  - **Paquete:** `scripts/empaquetar.php` arma el zip para subir, y `docs/publicar.md` tiene el paso a paso.
+- **Alternativas descartadas:**
+  - Tokens (JWT) para la API: la app móvil todavía no existe y la cookie de sesión alcanza.
+  - Política de contenido (CSP): queda pendiente, porque el mapa de Contacto y los estilos en línea necesitan excepciones que hay que probar en el hosting.
+- **Consecuencias:** pruebas nuevas en `ApiTest`. El hosting necesita PHP 8.2 o más nuevo, `pdo_mysql` y `fileinfo`.
+- **Participaron:** P3 (API), P1 (hosting y seguridad)
+
+---
+
+## DEC-015 · 2026-11-03 · Foto de receta y paginación
+- **Contexto:** el plan del incremento 2 pide que las recetas puedan tener foto y que los listados largos se paginen. Con 62 recetas y 107 ingredientes, las listas ya eran largas.
+- **Decisión:**
+  - **Foto:** se sube desde el editor de recetas. Puede ser JPG, PNG o WebP, pesar hasta 2 MB y medir entre 200 y 6000 px.
+    - El tipo se comprueba por el contenido (`finfo` y `getimagesize`), no por la extensión.
+    - El nombre del archivo lo arma el sistema (`receta-ID-azar.ext`).
+    - Se guarda en `public/img/recetas/`, que no va al repositorio y tiene un `.htaccess` que impide ejecutar código.
+    - Al reemplazar o quitar la foto, y al borrar la receta, se borra el archivo.
+  - **Paginación:** `Dominio\Paginacion` y la vista `paginacion.php`. Se usa en el catálogo (12 por página), en las recetas y los usuarios de administración (20) y en los ingredientes (30). Los enlaces conservan la búsqueda y los filtros, y funcionan sin JavaScript.
+- **Alternativas descartadas:**
+  - Guardar la foto en la base (BLOB): agranda los volcados y complica el hosting.
+  - Achicar las fotos con GD: no todos los hostings gratuitos la tienen; el límite de 2 MB alcanza.
+  - Paginar en SQL con `LIMIT`: el orden "recomendadas" se calcula en PHP (el puntaje), así que se corta la lista ya ordenada.
+- **Consecuencias:**
+  - La carpeta `public/img/recetas/` tiene que tener permiso de escritura en el hosting.
+  - Pruebas `FotoRecetaTest`, `PaginacionTest` y `ListadosTest`.
+- **Participaron:** P3 (foto y catálogo), P5 (listados de administración)
+
+---
+
+## DEC-014 · 2026-11-03 · Bloqueo por intentos de ingreso
+- **Contexto:** sin límite, alguien puede probar miles de contraseñas contra una cuenta.
+- **Decisión:**
+  - **Regla:** 5 contraseñas mal en 15 minutos para el mismo email bloquean ese email 15 minutos. Está en `Dominio\Bloqueo`, que se prueba sin base de datos.
+  - **Mientras dura** no se prueba ninguna contraseña, ni siquiera la correcta, y se ve "Demasiados intentos" (código 429).
+  - **Cuándo se borran los fallos:** al ingresar bien y al cambiar la contraseña con el enlace del correo.
+  - **El registro de fallos:** tabla `intento_ingreso` (email, IP, momento). Se guarda aunque la cuenta no exista, para no revelar qué emails están registrados, y se limpia sola después de un día.
+- **Alternativas descartadas:**
+  - Bloquear por IP: en una facultad o un hogar muchas personas comparten la misma.
+  - Un captcha: depende de un servicio externo.
+  - Bloquear la cuenta hasta que la desbloquee un administrador: cualquiera podría bloquear la cuenta de otro.
+- **Consecuencias:** migración `006-incremento-2-b.sql`. Pruebas `BloqueoTest` y `RecuperarTest`.
+- **Participaron:** P1
+
+---
+
+## DEC-013 · 2026-11-03 · Recuperar la contraseña por correo, con un cliente SMTP propio
+- **Contexto:** quien se olvida la contraseña no tenía cómo entrar. Para mandar el enlace hace falta un correo que funcione también en el hosting, y el proyecto no usa Composer en producción.
+- **Decisión:**
+  - **Cliente SMTP propio** (`src/Smtp.php`). Habla con el servidor de correo por un socket: EHLO, STARTTLS o SSL, AUTH LOGIN, MAIL FROM, RCPT TO, DATA y QUIT.
+    - Se configura en `.env` (`MAIL_HOST`, `MAIL_PORT`, `MAIL_SEGURIDAD`, `MAIL_USUARIO` y `MAIL_CONTRASENA`).
+    - Con Docker va a Mailpit.
+    - Si `MAIL_HOST` está vacío, `Correo` usa `mail()` como antes.
+    - `Correo::armar()` arma el mensaje: asunto codificado y cuerpo en base64.
+  - **"¿Olvidaste tu contraseña?"** (`olvide.php`) manda un enlace a `restablecer.php` con un token de 64 caracteres.
+    - En la base se guarda solo su hash SHA-256 (tabla `recuperacion`).
+    - El enlace vale 1 hora y una sola vez; al usarlo se anulan los demás.
+    - Como mucho se mandan 3 por hora por cuenta.
+    - La respuesta es la misma exista o no la cuenta.
+- **Alternativas descartadas:**
+  - PHPMailer: es la opción más usada, pero suma una dependencia de Composer, y escribir el cliente sirve para entender el protocolo.
+  - Mandar una contraseña nueva por correo: viaja en texto y queda en la casilla.
+  - Preguntas secretas: son fáciles de adivinar.
+- **Consecuencias:**
+  - Migración `006-incremento-2-b.sql`.
+  - Pruebas `SmtpTest`, con un servidor SMTP de mentira en otro proceso, y `RecuperarTest`.
+  - En el hosting hay que configurar un servidor de correo (ver `docs/publicar.md`).
+- **Participaron:** P1
+
+---
+
+## DEC-012 · 2026-11-03 · Preferencias: siempre tengo, no puedo comer y favoritas
+- **Contexto:** las tablas `usuario_basico`, `restriccion_usuario` y `favorito` estaban desde el incremento 1, y la recomendación ya las consultaba, pero no había pantalla para cargarlas.
+- **Decisión:**
+  - Página `app/mis-preferencias.php`, a la que se llega desde el menú de la cuenta. Tiene dos hojas con los ingredientes como stickers (se agregan eligiendo de la lista y se quitan con ×) y las recetas favoritas.
+  - **"Siempre tengo":** cuenta como disponible en todas las recetas (también en el "Tenés X de Y" del catálogo) y no se descuenta al cocinar.
+  - **"No puedo comer":** esas recetas no se recomiendan; en el catálogo llevan "Tiene algo que no comés" y en el detalle el ingrediente dice "No lo comés".
+  - **Favoritas:** botón ♡ en el detalle de la receta (sin recargar, con JavaScript), ♥ en las tarjetas y "Solo mis favoritas" en el buscador.
+- **Alternativas descartadas:**
+  - Ocultar del catálogo las recetas con algo que no come: es mejor mostrarlas con el aviso, porque a veces se puede reemplazar.
+  - Favoritas solo en el navegador: no siguen al usuario.
+- **Consecuencias:**
+  - Sin cambios en la base. María (seed) trae ajo en "Siempre tengo" y dos favoritas.
+  - Pruebas en `PreferenciasTest`.
+- **Participaron:** P1 (página y cuenta), P3 (consultas y recomendación)
+
+---
+
+## DEC-011 · 2026-11-03 · Modo cocina con el progreso en la cuenta y descuento de la despensa
+- **Contexto:** el detalle de la receta solo recordaba los pasos tildados en el navegador. El plan pide un modo cocina que sobreviva a recargar la página y que, al terminar, descuente de la despensa lo que se usó una sola vez.
+- **Decisión:**
+  - **Página `app/cocinar.php`:** se empieza con "Cocinar paso a paso" desde la receta (con las porciones elegidas).
+    - Un paso por hoja, con letra grande y el paso actual resaltado; "Listo" lo marca sin recargar la página.
+    - Temporizadores que suenan, vibran y avisan a los lectores de pantalla.
+    - Pide no apagar la pantalla.
+  - **El progreso** queda en `sesion_cocina` y `paso_completado`: se sigue desde Mi cocina, desde la receta o desde otro dispositivo. Cada usuario cocina una receta a la vez.
+  - **Al terminar** se muestra cómo queda la despensa ("Papa: 1 kg → 0,4 kg") y se puede destildar lo que no se usó.
+    - El descuento (`Dominio\Descuento`) resta la cantidad cuando las unidades se pueden comparar: g y kg, ml y l, y unidades con gramos si se sabe cuánto pesa una. Si no, baja un nivel.
+    - No se descuentan los básicos ni lo que el usuario marcó como "Siempre tengo".
+    - `stock_descontado` y una transacción evitan descontar dos veces.
+- **Alternativas descartadas:**
+  - Guardar el progreso solo en el navegador: se pierde al cambiar de dispositivo.
+  - Descontar sin preguntar: el usuario puede haber usado otra cosa.
+  - Pedir la cantidad usada de cada ingrediente: es lento mientras se cocina.
+- **Consecuencias:**
+  - Las recetas terminadas pesan en el puntaje ("−8 si la cocinó en la última semana", DEC-008).
+  - El tiempo de los temporizadores se guarda en el navegador.
+  - Pruebas `DescuentoTest` y `CocinaTest`.
+- **Participaron:** P4 (modo cocina), P3 (descuento)
 
 ---
 

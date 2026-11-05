@@ -50,6 +50,7 @@ mysql -u cooki -p cooki < database/migraciones/002-tanda-heladera-2.sql   # siem
 mysql -u cooki -p cooki < database/migraciones/003-tanda-heladera-3.sql
 mysql -u cooki -p cooki < database/migraciones/004-tanda-heladera-4.sql
 mysql -u cooki -p cooki < database/migraciones/005-incremento-2-a.sql
+mysql -u cooki -p cooki < database/migraciones/006-incremento-2-b.sql
 mysql -u cooki -p cooki < database/recetas.sql                           # el recetario nuevo
 ```
 

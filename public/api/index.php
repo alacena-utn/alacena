@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 use Cooki\Config;
 use Cooki\Controladores\IngredientesControlador;
+use Cooki\Controladores\RecetasControlador;
 use Cooki\Controladores\SaludControlador;
+use Cooki\Controladores\SesionControlador;
 use Cooki\Http\ErrorHttp;
 use Cooki\Http\Respuesta;
 use Cooki\Http\Router;
@@ -20,7 +22,17 @@ $router = new Router();
 
 $router->get('/salud', fn () => SaludControlador::ver());
 $router->get('/ingredientes', fn () => IngredientesControlador::buscar());
-// P1: $router->post('/sesion', ...)  P2: $router->get('/despensa', ...)  P3: $router->get('/recomendaciones', ...)
+// Incremento 2 (ver docs/api.md)
+$router->post('/usuarios', fn () => SesionControlador::registrar());
+$router->post('/sesion', fn () => SesionControlador::ingresar());
+$router->delete('/sesion', fn () => SesionControlador::salir());
+$router->get('/yo', fn () => SesionControlador::yo());
+$router->get('/recetas', fn () => RecetasControlador::listar());
+$router->get('/recetas/{id}', fn (array $p) => RecetasControlador::ver($p));
+$router->get('/recomendaciones', fn () => RecetasControlador::recomendaciones());
+$router->get('/despensa', fn () => RecetasControlador::despensa());
+$router->post('/favoritos/{id}', fn (array $p) => RecetasControlador::marcarFavorita($p));
+$router->delete('/favoritos/{id}', fn (array $p) => RecetasControlador::desmarcarFavorita($p));
 
 $metodo = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 

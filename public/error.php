@@ -17,6 +17,8 @@ $mensajes = [
     'sin-permiso' => ['Acceso restringido', 'Esa sección es solo para administradores.'],
     'formulario-vencido' => ['El formulario venció', 'Por seguridad no pudimos procesar el envío. Volvé a la página e intentá otra vez.'],
     'no-encontrado' => ['No encontramos lo que buscabas', 'Puede que se haya borrado o que el enlace esté mal.'],
+    'interno' => ['Algo salió mal', 'Tuvimos un problema al mostrar esa página. Probá de nuevo en un rato; '
+        . 'si sigue pasando, avisanos desde Contacto.'],
     'bloqueado' => ['Demasiados intentos', 'Por seguridad bloqueamos el ingreso con ese email durante 15 minutos, '
         . 'porque la contraseña se escribió mal varias veces seguidas. Esperá un rato o recuperá tu contraseña.'],
 ];
@@ -26,6 +28,7 @@ $motivo = (string) ($_GET['motivo'] ?? '');
 http_response_code(match ($motivo) {
     'login', 'sin-sesion' => 401,
     'bloqueado' => 429,
+    'interno' => 500,
     'sin-permiso', 'formulario-vencido' => 403,
     'no-encontrado' => 404,
     default => 400,
