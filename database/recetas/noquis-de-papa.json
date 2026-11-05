@@ -1,0 +1,72 @@
+{
+  "titulo": "Ñoquis de papa",
+  "descripcion": "Para el 29, o cualquier día.",
+  "porciones": 4,
+  "minutos_prep": 40,
+  "minutos_coccion": 10,
+  "dificultad": 3,
+  "etiquetas": [
+    "vegetariana",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Papa",
+      "cantidad": 1000,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Nuez moscada",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "nota": "para servir"
+    },
+    {
+      "nombre": "Queso rallado",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Hervir las papas con cáscara hasta que estén tiernas.",
+      "minutos": 25
+    },
+    "Pelarlas en caliente y hacer un puré sin grumos.",
+    "Mezclar el puré tibio con el huevo, la sal, la nuez moscada y la harina de a poco, hasta que no se pegue.",
+    "Hacer cilindros, cortarlos en trocitos y marcarlos con un tenedor.",
+    {
+      "texto": "Cocinarlos en agua hirviendo con sal: están listos cuando suben a la superficie.",
+      "minutos": 3
+    },
+    "Servir con manteca derretida y queso, o con la salsa que prefieras."
+  ]
+}

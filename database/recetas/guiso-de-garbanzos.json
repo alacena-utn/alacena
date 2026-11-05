@@ -1,0 +1,94 @@
+{
+  "titulo": "Guiso de garbanzos",
+  "descripcion": "Con chorizo colorado y pimentón, para el invierno.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 40,
+  "dificultad": 2,
+  "etiquetas": [
+    "sin_tacc"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Garbanzo",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "remojados de la noche anterior"
+    },
+    {
+      "nombre": "Chorizo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Panceta",
+      "cantidad": 100,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Morrón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Puré de tomate",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Pimentón",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1
+    },
+    {
+      "nombre": "Laurel",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Hervir los garbanzos remojados en agua sin sal hasta que estén tiernos.",
+      "minutos": 40
+    },
+    {
+      "texto": "Dorar el chorizo en rodajas y la panceta en el aceite.",
+      "minutos": 5
+    },
+    {
+      "texto": "Agregar la cebolla y el morrón picados y rehogar.",
+      "minutos": 8
+    },
+    "Sumar el pimentón, el puré de tomate, el laurel y un cucharón del agua de los garbanzos.",
+    {
+      "texto": "Incorporar los garbanzos escurridos y cocinar a fuego bajo para que tome sabor.",
+      "minutos": 15
+    }
+  ]
+}

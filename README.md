@@ -7,17 +7,17 @@ Proyecto integrador · Tecnicatura Universitaria en Programación · UTN Faculta
 
 **Stack:** HTML + CSS + JavaScript (sin frameworks) · PHP 8 · MariaDB / MySQL
 
-- 📋 Tablero: *(link al GitHub Project)*
+- 📋 Tablero: _(link al GitHub Project)_
 - 🎯 Versión actual: **incremento 1** (2.º parcial de Programación 4). Qué cumple cada requisito: [docs/requisitos-parcial.md](docs/requisitos-parcial.md)
 
 ## Usuarios de prueba
 
-| Rol | Email | Contraseña |
-|---|---|---|
-| Administrador | `admin@cooki.test` | `Admin1234` |
-| Administrador | `docente@cooki.test` | `Admin1234` |
-| General | `maria@cooki.test` (con despensa cargada) | `Usuario1234` |
-| General | `juan@cooki.test` · `sofia@cooki.test` (despensa vacía) | `Usuario1234` |
+| Rol           | Email                                                   | Contraseña    |
+| ------------- | ------------------------------------------------------- | ------------- |
+| Administrador | `admin@cooki.test`                                      | `Admin1234`   |
+| Administrador | `docente@cooki.test`                                    | `Admin1234`   |
+| General       | `maria@cooki.test` (con despensa cargada)               | `Usuario1234` |
+| General       | `juan@cooki.test` · `sofia@cooki.test` (despensa vacía) | `Usuario1234` |
 
 Las contraseñas se guardan encriptadas con `password_hash()`; las de arriba son solo de prueba.
 
@@ -55,19 +55,22 @@ cp .env.example .env
 ```
 
 **Con Docker (recomendado)**
+
 ```bash
 docker compose up -d --build
 docker compose exec web composer install
 ```
-| Qué | Dónde |
-|---|---|
-| Aplicación | http://localhost:8080 |
-| phpMyAdmin | http://localhost:8081 |
+
+| Qué                        | Dónde                 |
+| -------------------------- | --------------------- |
+| Aplicación                 | http://localhost:8080 |
+| phpMyAdmin                 | http://localhost:8081 |
 | Correos enviados (Mailpit) | http://localhost:8025 |
 
 **Con XAMPP o Laragon**
+
 1. Copiá la carpeta del proyecto dentro de `htdocs`.
-2. En phpMyAdmin creá la base `cooki` (cotejamiento `utf8mb4_unicode_ci`) e importá `database/schema.sql` y después `database/seed.sql`.
+2. En phpMyAdmin creá la base `cooki` (cotejamiento `utf8mb4_unicode_ci`) e importá `database/schema.sql`, después `database/seed.sql` y por último `database/recetas.sql`.
 3. En `.env`: `DB_HOST=127.0.0.1`, `DB_USER=root`, `DB_PASS=` (vacío). Sin `.env` también funciona: esos son los valores por defecto.
 4. Abrí `http://localhost/cooki/public/`.
 
@@ -75,31 +78,31 @@ docker compose exec web composer install
 
 ## Comandos
 
-| Comando | Qué hace | Con Docker |
-|---|---|---|
-| `composer lint` | Sintaxis de todos los .php + estilo PSR-12 | `docker compose exec web composer lint` |
-| `composer test` | Pruebas (unitarias y de páginas) | `docker compose exec web composer test` |
-| `composer servidor` | Servidor PHP en http://localhost:8080 (sin Docker) | — |
-| `docker compose down -v` | Apagar y **borrar** la base local (se recrea al levantar) | |
+| Comando                  | Qué hace                                                  | Con Docker                              |
+| ------------------------ | --------------------------------------------------------- | --------------------------------------- |
+| `composer lint`          | Sintaxis de todos los .php + estilo PSR-12                | `docker compose exec web composer lint` |
+| `composer test`          | Pruebas (unitarias y de páginas)                          | `docker compose exec web composer test` |
+| `composer servidor`      | Servidor PHP en http://localhost:8080 (sin Docker)        | —                                       |
+| `docker compose down -v` | Apagar y **borrar** la base local (se recrea al levantar) |                                         |
 
 ## Equipo
 
-| | Módulo | Nombre | GitHub |
-|---|---|---|---|
-| P1 | Cuentas + Infraestructura | Daiana | Daiana1411 |
-| P2 | Despensa + Diseño | Julian | julianmartinez093-tech |
-| P3 | Recetas + Base de datos (coordinación) | Pablo | pablito2032 |
-| P4 | Contacto + Calidad | Ariana | |
-| P5 | Administración: ABM de usuarios e ingredientes | Susana | |
+|     | Módulo                                         | Nombre | GitHub                 |
+| --- | ---------------------------------------------- | ------ | ---------------------- |
+| P1  | Cuentas + Infraestructura                      | Daiana | Daiana1411             |
+| P2  | Despensa + Diseño                              | Julian | julianmartinez093-tech |
+| P3  | Recetas + Base de datos (coordinación)         | Pablo  | pablito2032            |
+| P4  | Contacto + Calidad                             | Ariana | arianapajon            |
+| P5  | Administración: ABM de usuarios e ingredientes | Susana | Susana2030             |
 
 División de tareas: [docs/tareas-incremento-1.md](docs/tareas-incremento-1.md) · Cómo trabajamos: [CONTRIBUTING.md](CONTRIBUTING.md) · Decisiones: [docs/decisiones.md](docs/decisiones.md) · Modelo de datos: [docs/modelo-datos.md](docs/modelo-datos.md)
 
 ## Problemas comunes
 
-| Qué pasa | Solución |
-|---|---|
-| Error de conexión a la base con Docker | Esperá 30 s la primera vez (MariaDB se inicializa) y recargá. Revisá que `.env` diga `DB_HOST=db` |
-| Error de conexión con XAMPP | Iniciá MySQL en el panel de XAMPP. En `.env`: `DB_HOST=127.0.0.1`, `DB_USER=root`, `DB_PASS=` |
-| Cambió `schema.sql` o `seed.sql` y no se ve | La base solo se crea la primera vez: `docker compose down -v` y `docker compose up -d` |
-| No llegan los correos a Mailpit | Reconstruí la imagen: `docker compose up -d --build` |
-| El puerto 8080, 8081, 8025 o 3306 está ocupado | Cerrá XAMPP si usás Docker (o al revés) |
+| Qué pasa                                       | Solución                                                                                          |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Error de conexión a la base con Docker         | Esperá 30 s la primera vez (MariaDB se inicializa) y recargá. Revisá que `.env` diga `DB_HOST=db` |
+| Error de conexión con XAMPP                    | Iniciá MySQL en el panel de XAMPP. En `.env`: `DB_HOST=127.0.0.1`, `DB_USER=root`, `DB_PASS=`     |
+| Cambió `schema.sql` o `seed.sql` y no se ve    | La base solo se crea la primera vez: `docker compose down -v` y `docker compose up -d`            |
+| No llegan los correos a Mailpit                | Reconstruí la imagen: `docker compose up -d --build`                                              |
+| El puerto 8080, 8081, 8025 o 3306 está ocupado | Cerrá XAMPP si usás Docker (o al revés)                                                           |

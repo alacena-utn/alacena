@@ -1,0 +1,91 @@
+{
+  "titulo": "Alfajores de maicena",
+  "descripcion": "Tiernos, con dulce de leche y coco.",
+  "porciones": 12,
+  "minutos_prep": 40,
+  "minutos_coccion": 12,
+  "dificultad": 3,
+  "etiquetas": [
+    "vegetariana",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Maicena",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 2,
+      "nota": "solo las yemas"
+    },
+    {
+      "nombre": "Polvo de hornear",
+      "cantidad": 2,
+      "unidad": "cdita",
+      "peso": 2
+    },
+    {
+      "nombre": "Dulce de leche",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Coco rallado",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1
+    },
+    {
+      "nombre": "Esencia de vainilla",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Limón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1,
+      "opcional": true,
+      "nota": "la ralladura"
+    }
+  ],
+  "pasos": [
+    "Batir la manteca blanda con el azúcar hasta que esté cremosa. Sumar las yemas, la esencia y la ralladura.",
+    "Agregar la maicena, la harina y el polvo de hornear tamizados y unir sin amasar.",
+    {
+      "texto": "Envolver la masa y dejarla en la heladera.",
+      "minutos": 30
+    },
+    "Estirar de medio centímetro y cortar tapitas.",
+    {
+      "texto": "Hornear a 170 °C: tienen que quedar blancas, no doradas.",
+      "minutos": 12
+    },
+    "Ya frías, unir de a dos con dulce de leche y pasar el borde por coco rallado."
+  ]
+}

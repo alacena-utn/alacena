@@ -1,0 +1,60 @@
+{
+  "titulo": "Pan casero",
+  "descripcion": "Una hogaza simple, con corteza crocante.",
+  "porciones": 8,
+  "minutos_prep": 20,
+  "minutos_coccion": 35,
+  "dificultad": 2,
+  "etiquetas": [
+    "vegetariana",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 500,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Levadura",
+      "cantidad": 15,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 2,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Disolver la levadura y el azúcar en 300 ml de agua tibia.",
+    "Sumar la harina, la sal y el aceite y amasar 10 minutos.",
+    {
+      "texto": "Dejar levar tapado hasta que duplique.",
+      "minutos": 60
+    },
+    {
+      "texto": "Formar el pan, hacerle unos cortes arriba y dejarlo levar de nuevo.",
+      "minutos": 20
+    },
+    {
+      "texto": "Hornear a 200 °C con un recipiente con agua en el horno (así queda crocante).",
+      "minutos": 35
+    }
+  ]
+}

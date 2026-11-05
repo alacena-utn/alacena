@@ -1,0 +1,78 @@
+{
+  "titulo": "Bondiola al horno con batatas",
+  "descripcion": "Con un glaseado de mostaza y miel.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 70,
+  "dificultad": 2,
+  "etiquetas": [
+    "sin_tacc"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Cerdo",
+      "cantidad": 1000,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "bondiola en una pieza"
+    },
+    {
+      "nombre": "Batata",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Mostaza",
+      "cantidad": 2,
+      "unidad": "cda",
+      "peso": 2
+    },
+    {
+      "nombre": "Miel",
+      "cantidad": 2,
+      "unidad": "cda",
+      "peso": 2
+    },
+    {
+      "nombre": "Ajo",
+      "cantidad": 2,
+      "unidad": "diente",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Pimienta",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Mezclar la mostaza, la miel, el ajo picado, sal y pimienta. Untar la carne.",
+    "Cortar las batatas en gajos y acomodarlas alrededor con un chorrito de aceite.",
+    {
+      "texto": "Hornear a 180 °C tapado con papel aluminio.",
+      "minutos": 50
+    },
+    {
+      "texto": "Destapar, pintar con lo que quedó del glaseado y hornear hasta que se dore.",
+      "minutos": 20
+    },
+    {
+      "texto": "Dejar reposar antes de cortar.",
+      "minutos": 5
+    }
+  ]
+}

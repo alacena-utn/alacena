@@ -1,7 +1,8 @@
 <?php
 /**
  * Tarjeta de una receta para los listados. Espera la variable $receta
- * (una fila de RecetaRepositorio::buscar() o ::sugeridas()).
+ * (una fila de RecetaRepositorio::buscar(), ::sugeridas() o ::recomendadas()).
+ * Si viene de recomendadas() también muestra qué usa de lo que vence y con qué se puede reemplazar lo que falta.
  * Toda la tarjeta es clickeable: el enlace del título se estira con CSS (.tarjeta-receta h2 a::before).
  * Muestra los dibujos de hasta 5 ingredientes (y "+N" con el resto); los que faltan van en gris y tachados.
  */
@@ -33,6 +34,16 @@ $maximo = 5;
     <span><?= e(RecetaRepositorio::DIFICULTADES[(int) $receta['dificultad']] ?? '') ?></span> ·
     <span><?= e($receta['porciones_base']) ?> porciones</span>
   </p>
+  <?php if (!empty($receta['usa_lo_que_vence']) || !empty($receta['sustituciones'])) : ?>
+    <ul class="tarjeta-receta__avisos">
+      <?php if (!empty($receta['usa_lo_que_vence'])) : ?>
+        <li class="tarjeta-receta__vence">Usa lo que vence: <?= e(mb_strtolower(implode(', ', $receta['usa_lo_que_vence']))) ?></li>
+      <?php endif; ?>
+      <?php foreach ($receta['sustituciones'] ?? [] as $cambio) : ?>
+        <li class="tarjeta-receta__cambio">Sin <?= e(mb_strtolower($cambio['falta'])) ?>: podés usar <?= e(mb_strtolower($cambio['usar'])) ?></li>
+      <?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
   <p>
     <?php if ($faltan <= 0) : ?>
       <span class="etiqueta etiqueta--exito">Tenés todo</span>

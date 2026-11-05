@@ -1,0 +1,80 @@
+{
+  "titulo": "Salteado de pollo con verduras",
+  "descripcion": "Al wok, con salsa de soja y jengibre.",
+  "porciones": 3,
+  "minutos_prep": 20,
+  "minutos_coccion": 15,
+  "dificultad": 2,
+  "etiquetas": [],
+  "ingredientes": [
+    {
+      "nombre": "Pollo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 3,
+      "nota": "pechugas en tiras"
+    },
+    {
+      "nombre": "Morrón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Zanahoria",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2,
+      "nota": "en bastones"
+    },
+    {
+      "nombre": "Cebolla de verdeo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Salsa de soja",
+      "cantidad": 50,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Jengibre",
+      "cantidad": 10,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true,
+      "nota": "rallado"
+    },
+    {
+      "nombre": "Arroz",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 2,
+      "nota": "para acompañar"
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Hervir el arroz.",
+      "minutos": 15
+    },
+    "Cortar todas las verduras antes de prender el fuego: el salteado es rápido.",
+    {
+      "texto": "Saltear el pollo en el aceite bien caliente hasta dorar.",
+      "minutos": 5
+    },
+    {
+      "texto": "Sumar las verduras y el jengibre y saltear sin dejar de mover.",
+      "minutos": 4
+    },
+    "Agregar la salsa de soja, mezclar y servir sobre el arroz."
+  ]
+}

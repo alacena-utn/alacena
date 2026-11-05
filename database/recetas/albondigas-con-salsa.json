@@ -1,0 +1,84 @@
+{
+  "titulo": "Albóndigas con salsa",
+  "descripcion": "Tiernas, en salsa de tomate.",
+  "porciones": 4,
+  "minutos_prep": 25,
+  "minutos_coccion": 30,
+  "dificultad": 2,
+  "etiquetas": [],
+  "ingredientes": [
+    {
+      "nombre": "Carne picada",
+      "cantidad": 500,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Pan rallado",
+      "cantidad": 4,
+      "unidad": "cda",
+      "peso": 2
+    },
+    {
+      "nombre": "Queso rallado",
+      "cantidad": 30,
+      "unidad": "g",
+      "peso": 1
+    },
+    {
+      "nombre": "Puré de tomate",
+      "cantidad": 500,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Ajo",
+      "cantidad": 2,
+      "unidad": "diente",
+      "peso": 1
+    },
+    {
+      "nombre": "Perejil",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Mezclar la carne, el huevo, el pan rallado, el queso, el perejil, un diente de ajo picado y sal.",
+    "Formar bolitas del tamaño de una nuez.",
+    {
+      "texto": "Dorarlas en el aceite y retirarlas.",
+      "minutos": 8
+    },
+    {
+      "texto": "En la misma olla, rehogar la cebolla y el otro ajo, sumar el puré de tomate y volver a poner las albóndigas. Cocinar tapado a fuego bajo.",
+      "minutos": 20
+    }
+  ]
+}

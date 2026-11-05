@@ -68,7 +68,7 @@ $abierta = (int) ($_GET['responder'] ?? 0);   // si la respuesta vino vacía, es
 $titulo = 'Consultas · Administración';
 require parcial('encabezado');
 ?>
-<?= enlaceVolver('admin/index.php', 'Volver al panel') ?>
+<?= enlaceVolver('admin/index.php', 'Volver al panel', [['admin/index.php', 'Panel']]) ?>
 <h1>Consultas recibidas</h1>
 
 <form class="buscador" method="get" role="search">

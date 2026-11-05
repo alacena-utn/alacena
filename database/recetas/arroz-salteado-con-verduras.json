@@ -1,0 +1,75 @@
+{
+  "titulo": "Arroz salteado con verduras",
+  "descripcion": "Ideal para usar arroz del día anterior.",
+  "porciones": 3,
+  "minutos_prep": 15,
+  "minutos_coccion": 10,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Arroz",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "ya cocido y frío"
+    },
+    {
+      "nombre": "Zanahoria",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Arveja",
+      "cantidad": 100,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Choclo",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Cebolla de verdeo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Salsa de soja",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Picar la zanahoria chiquita y desgranar el choclo.",
+    {
+      "texto": "Saltear las verduras en el aceite bien caliente.",
+      "minutos": 5
+    },
+    "Correr las verduras a un costado, romper los huevos y revolverlos hasta que cuajen.",
+    {
+      "texto": "Sumar {ing:arroz} y la salsa de soja y saltear todo junto.",
+      "minutos": 4
+    }
+  ]
+}

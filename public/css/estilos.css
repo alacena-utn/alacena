@@ -146,7 +146,7 @@ img { max-width: 100%; }
 .marca:hover .marca__rotulo { background: var(--color-azul); }
 /* Al pasar el mouse por el nombre: las letras saltan de a una (como una ola) y los fideos echan vapor */
 .marca__letra { display: inline-block; }
-.marca:hover .marca__letra, .marca:focus-visible .marca__letra { animation: letra-salta .55s cubic-bezier(.3, 1.6, .5, 1) calc(var(--i) * 55ms) both; }
+.marca:hover .marca__letra, .marca:focus-visible .marca__letra, .marca--ola .marca__letra { animation: letra-salta .55s cubic-bezier(.3, 1.6, .5, 1) calc(var(--i) * 55ms) both; }
 @keyframes letra-salta {
   0%, 100% { transform: none; }
   40% { transform: translateY(-7px) rotate(-8deg); }
@@ -404,6 +404,15 @@ input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--color-ma
 .tarjeta.buscador { gap: 0 16px; }
 .tarjeta.buscador > .campo { margin-bottom: 0; }
 .tarjeta.buscador > .casillas { margin-bottom: 20px; }
+/* Recetas: lo que sobra al lado de "Buscar" se llena con dibujos sueltos (no en la columna panorámica) */
+.buscador__relleno { position: relative; flex: 1 1 220px; align-self: stretch; min-height: 64px; margin-bottom: 20px; }
+@media (min-width: 1100px) { [data-disposicion="panoramica"] .catalogo .buscador__relleno { display: none; } }
+/* …y en cambio van a la derecha del título, en la franja que queda arriba de las recetas */
+.titulo-con-sueltos.titulo-con-sueltos--panoramica { min-height: 0; }
+.titulo-con-sueltos--panoramica .sueltos { display: none; }
+@media (min-width: 1100px) { [data-disposicion="panoramica"] .titulo-con-sueltos--panoramica .sueltos { display: block; } }
+/* Administración: la casilla queda centrada con los campos y el botón (el formulario no es una hoja) */
+.buscador:not(.tarjeta) > .casillas { margin-bottom: 0; }
 
 /* ─────────────── Tablas (hoja de cuaderno) ─────────────── */
 .tabla-contenedor { position: relative; overflow-x: auto; background: var(--color-superficie); box-shadow: var(--sombra); }
@@ -606,6 +615,22 @@ body { transition: background-color .5s; }
   box-shadow: var(--sombra-chinche);
 }
 .postit h2 { margin: 0 0 6px; font: 700 2.1rem/1 var(--fuente-mano); }
+/* Lo vencido no va en la lista: al lado del título, un papelito rosa con cinta que lleva a la despensa */
+.postit__titulo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-bottom: 6px; }
+.postit__titulo h2 { margin: 0; }
+.aviso-vencidos {
+  position: relative; display: inline-flex; flex-direction: column; padding: 8px 14px 6px; max-width: 340px;
+  background: var(--color-error-fondo); color: var(--color-error); text-decoration: none;
+  font: 700 1.2rem/1.1 var(--fuente-mano); transform: rotate(2deg); box-shadow: 0 3px 6px rgb(0 0 0 / 16%);
+  transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), box-shadow .3s;
+}
+.aviso-vencidos::before {   /* el pedacito de cinta que lo pega al post-it */
+  content: ""; position: absolute; top: -8px; left: 50%; width: 46px; height: 14px; margin-left: -23px;
+  background: rgb(255 255 255 / 60%); transform: rotate(-5deg); box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+}
+.aviso-vencidos strong { font-size: 1.5rem; }
+.aviso-vencidos span { text-decoration: underline; text-underline-offset: 3px; }
+.aviso-vencidos:hover, .aviso-vencidos:focus-visible { transform: rotate(-1deg) scale(1.04); box-shadow: 0 8px 14px rgb(0 0 0 / 20%); }
 .lista-vencimientos { list-style: none; padding: 0; margin: 0; }
 .lista-vencimientos li { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; padding: 6px 0; border-bottom: 1px dashed rgb(30 43 38 / 25%); }
 .lista-vencimientos li:last-child { border-bottom: none; }
@@ -944,6 +969,9 @@ td small { display: block; }
 .con-dibujo .icono-chico { width: 36px; height: 36px; }
 .dibujos-fila { display: inline-flex; align-items: center; gap: 4px; }
 .dibujos-fila small { font: 700 1.1rem var(--fuente-mano); color: var(--color-suave); }
+/* En las tablas, Editar y Borrar siempre uno al lado del otro (no apilados: la fila quedaría muy alta) */
+td > .acciones { flex-wrap: nowrap; }
+
 /* Editar ingrediente: el campo del nombre y, al lado, la vista previa del dibujo */
 .campo-con-dibujo { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 16px; align-items: start; }
 .vista-dibujo { margin: 0; display: grid; justify-items: center; width: 96px; text-align: center; }
@@ -955,12 +983,12 @@ td small { display: block; }
 .vista-dibujo img { width: 56px; height: 56px; }
 .vista-dibujo figcaption { font: 700 1.05rem/1.1 var(--fuente-mano); color: var(--color-suave); white-space: nowrap; }
 /* Editar receta: el dibujo del ingrediente elegido al principio de cada fila */
-.fila-ingrediente { grid-template-columns: 44px minmax(160px, 3fr) minmax(80px, 1fr) minmax(80px, 1fr) auto auto; }
+.fila-ingrediente { grid-template-columns: 44px minmax(160px, 3fr) minmax(70px, 1fr) minmax(70px, 1fr) minmax(120px, 1.3fr) auto auto; }
 .fila-ingrediente__dibujo {
   width: 44px; height: 44px; align-self: end; margin-bottom: 20px;
   filter: drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 3px 3px rgb(30 50 40 / 25%));
 }
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .fila-ingrediente { grid-template-columns: 44px 1fr 1fr; }
   .fila-ingrediente .campo:nth-of-type(1) { grid-column: 2 / -1; }
   .fila-ingrediente__dibujo { grid-row: 1; }
@@ -997,15 +1025,39 @@ td small { display: block; }
 }
 .ojo:hover { background: rgb(30 43 38 / 8%); }
 
-/* Volver al panel (administración): flecha a mano que se corre a la izquierda al pasar el mouse */
+/* Flecha de volver (enlaceVolver en src/ayudas.php): una flecha curva hecha con birome y el texto a mano.
+   Al pasar el mouse la flecha se corre a la izquierda y el texto se subraya como con resaltador.
+   Al lado, "o ir a" con otros lugares como papelitos de cinta (los atajos). */
+.volver-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin: 0 0 10px; }
 .volver {
-  display: inline-flex; align-items: center; gap: 6px; margin: 0 0 6px; text-decoration: none;
-  font: 700 1.4rem/1 var(--fuente-mano); color: var(--color-sobre-puerta);
+  display: inline-flex; align-items: center; gap: 8px; padding: 2px 6px 2px 0; text-decoration: none;
+  font: 700 1.5rem/1 var(--fuente-mano); color: var(--color-sobre-puerta);
 }
-.volver__flecha { display: inline-block; transition: transform .25s cubic-bezier(.3, 1.6, .5, 1); }
-.volver:hover .volver__flecha { transform: translateX(-6px); }
-.volver:hover { color: var(--color-marca); }
-:root[data-color="noche"] .volver:hover { color: #FF9C8F; }
+.volver__flecha {
+  flex: none; width: 36px; height: 24px; background: currentColor; rotate: -4deg;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 26' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M37 19c-6-9-17-12-31-7'/%3E%3Cpath d='M13 4.5 5.5 12.3l9.2 4.4'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 26' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M37 19c-6-9-17-12-31-7'/%3E%3Cpath d='M13 4.5 5.5 12.3l9.2 4.4'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform .25s cubic-bezier(.3, 1.6, .5, 1);
+}
+.volver__texto {
+  background: linear-gradient(transparent 58%, rgb(255 242 122 / 0%) 58%) no-repeat 0 0 / 100% 100%;
+  transition: background-color .2s;
+}
+.volver:hover .volver__flecha, .volver:focus-visible .volver__flecha { transform: translateX(-7px); }
+.volver:hover, .volver:focus-visible { color: var(--color-marca); }
+.volver:hover .volver__texto, .volver:focus-visible .volver__texto { background-image: linear-gradient(transparent 58%, rgb(255 242 122 / 85%) 58%); }
+:root[data-color="noche"] .volver:hover, :root[data-color="noche"] .volver:focus-visible { color: #FF9C8F; }
+:root[data-color="noche"] .volver:hover .volver__texto { background-image: linear-gradient(transparent 58%, rgb(255 156 143 / 30%) 58%); }
+.volver-barra__atajos { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.volver-barra__ir { font: 700 1.2rem/1 var(--fuente-mano); color: var(--color-sobre-puerta-suave); }
+.atajo {
+  display: inline-block; padding: 3px 12px 5px; text-decoration: none;
+  font: 700 1.2rem/1.1 var(--fuente-mano); color: var(--color-texto);
+  background: var(--color-cinta); transform: rotate(-2deg); box-shadow: 0 1px 3px rgb(0 0 0 / 15%);
+  transition: transform .25s cubic-bezier(.3, 1.6, .5, 1), box-shadow .25s;
+}
+.atajo:nth-child(odd) { transform: rotate(1.5deg); background: #CFE8F3; }
+.atajo:hover, .atajo:focus-visible { transform: translateY(-2px) rotate(0deg); box-shadow: 0 5px 8px rgb(0 0 0 / 18%); }
 
 /* Lista vacía: el frasco (el dibujo de "no hay nada") arriba del texto */
 .vacio::before {
@@ -1044,6 +1096,21 @@ td small { display: block; }
   .stickers-deco--porque { display: none; }   /* entre 1100 y 1260 px no queda lugar al lado de la hoja */
 }
 @keyframes mecer { from { translate: 0 0; rotate: -3deg; } to { translate: 0 -8px; rotate: 4deg; } }
+
+/* Dibujos sueltos (src/Vistas/dibujos-sueltos.php): stickers al azar en los espacios vacíos,
+   con el borde blanco de los stickers; se mecen solos y se acercan al pasar el mouse */
+.sueltos { display: none; }
+@media (min-width: 900px) {
+  .sueltos { display: block; position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+  .sueltos__dibujo {
+    position: absolute; left: var(--x); top: var(--y); width: var(--t); height: auto; pointer-events: auto;
+    transform: rotate(var(--r));
+    filter: drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 5px 6px rgb(30 50 40 / 28%));
+    animation: mecer 4s ease-in-out var(--d) infinite alternate;
+    transition: scale .3s cubic-bezier(.3, 1.6, .5, 1);
+  }
+  .sueltos__dibujo:hover { scale: 1.2; animation: menear .5s ease-in-out infinite alternate; }
+}
 
 /* Dibujo pegado en la esquina de una hoja (error, "Dónde estamos") */
 .tarjeta__dibujo {
@@ -1126,8 +1193,13 @@ td small { display: block; }
 /* Contacto · Mis consultas: una nota por consulta; verde si ya tiene respuesta */
 .mis-consultas { margin-top: 40px; }
 .mis-consultas > article { max-width: none; }
-.mis-consultas { display: grid; gap: 30px 26px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-.mis-consultas > h2 { grid-column: 1 / -1; margin-bottom: 0; }
+.mis-consultas { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 30px 26px; }
+.mis-consultas > h2 { flex-basis: 100%; margin-bottom: 0; }
+.mis-consultas > article { flex: 0 1 calc((100% - 52px) / 3); min-width: 280px; }
+@media (max-width: 899px) { .mis-consultas > article { flex-basis: 100%; } }
+/* El relleno ocupa lo que sobra de la última fila (si no entra, va solo en una fila más abajo) */
+.mis-consultas__relleno { position: relative; flex: 1 1 260px; align-self: stretch; min-height: 170px; }
+@media (max-width: 899px) { .mis-consultas__relleno { display: none; } }
 .mis-consultas__nota { margin: 0; }
 .mis-consultas__nota h3 { margin: 0; font: 700 1.6rem/1.15 var(--fuente-mano); }
 .mis-consultas__nota p { margin: 4px 0; }
@@ -1150,6 +1222,51 @@ td small { display: block; }
 .editor__dibujo--cambia { animation: cambiar-dibujo .45s cubic-bezier(.3, 1.6, .5, 1), menear .5s ease-in-out .45s 2 alternate; }
 /* En el celular no hay lugar al lado del título: alcanza con el dibujo de "elegido" */
 @media (max-width: 700px) { .editor__dibujo { display: none; } }
+
+/* ══════════ Incremento 2 · Recomendación (P3) ══════════ */
+/* Mi cocina: las recomendaciones en tres grupos ("Podés hacerla ahora", "Te falta 1", "Casi") */
+.grupo-recetas { margin-bottom: 28px; }
+.grupo-recetas__titulo {
+  display: inline-flex; align-items: center; gap: 10px; margin: 6px 0 14px;
+  font: 700 1.75rem/1.1 var(--fuente-mano); color: var(--color-sobre-puerta);
+}
+.grupo-recetas__titulo::before {   /* imán de color según el grupo */
+  content: ""; width: 22px; height: 22px; border-radius: 50%; box-shadow: var(--sombra-iman);
+  background: radial-gradient(circle at 35% 30%, #A8E6B8, var(--color-exito) 70%);
+}
+.grupo-recetas--falta1 .grupo-recetas__titulo::before { background: radial-gradient(circle at 35% 30%, #FFE08A, #F2B705 70%); }
+.grupo-recetas--casi .grupo-recetas__titulo::before { background: radial-gradient(circle at 35% 30%, #FF9C8F, var(--color-marca) 70%); }
+/* Avisos de la tarjeta: lo que vence que usa y con qué se reemplaza lo que falta */
+.tarjeta-receta__avisos { list-style: none; margin: 0; padding: 0; font-size: .9rem; line-height: var(--renglon); }
+.tarjeta-receta__avisos li { display: flex; gap: 6px; align-items: baseline; }
+.tarjeta-receta__vence::before { content: "¡ya!"; font: 700 .95rem var(--fuente-mano); color: var(--color-marca); }
+.tarjeta-receta__cambio::before { content: "⇄"; font-weight: 800; color: var(--color-azul); }
+/* Detalle de receta: porciones (− 4 porciones +) y el reemplazo de lo que falta */
+.porciones { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 var(--renglon); line-height: var(--renglon); }
+.porciones__boton {
+  display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; text-decoration: none;
+  font: 800 1.2rem/1 var(--fuente); color: #fff; background: radial-gradient(circle at 35% 30%, #9FD3FF, var(--color-azul) 70%);
+  box-shadow: var(--sombra-iman); transition: transform .2s cubic-bezier(.3, 1.6, .5, 1);
+}
+.porciones__boton:hover { transform: translateY(-2px) scale(1.08); color: #fff; }
+.porciones__boton--tope { opacity: .35; pointer-events: none; }
+.porciones__numero { font: 700 1.5rem/1 var(--fuente-mano); }
+.porciones__volver { font-size: .9rem; }
+.cambio-ingrediente { display: inline-block; margin-left: 4px; font-size: .9rem; color: var(--color-azul); font-weight: 700; }
+
+/* ── Incremento 2 · Mi cuenta (P1) ─────────────────────────────── */
+.cuenta__perfil { display: block; margin: .25rem 0 .75rem; font-weight: 600; }
+.perfil { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); align-items: start; }
+.perfil .tarjeta { margin: 0; }
+/* Cada hoja con lo que queda abajo (hasta la más alta, y un poco más) lleno de dibujos sueltos */
+.perfil { align-items: stretch; }
+.perfil__columna { display: flex; flex-direction: column; }
+.perfil__relleno { position: relative; flex: 1; min-height: 230px; }
+@media (max-width: 899px) { .perfil__relleno { display: none; } }
+/* Título con dibujos sueltos a la derecha (Mi cuenta, Mis preferencias) */
+.titulo-con-sueltos { position: relative; min-height: 76px; }
+.titulo-con-sueltos > h1 { position: relative; z-index: 2; display: inline-block; }
+.perfil .casilla { display: flex; gap: .5rem; align-items: center; margin: .5rem 0 1rem; }
 
 /* ══════════ Quiénes somos (nosotros.php) ══════════ */
 /* Una hoja de cuaderno por integrante, todas del mismo tamaño: el dibujo pegado como foto instantánea,

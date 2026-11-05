@@ -1,0 +1,31 @@
+{
+  "titulo": "Postre vigilante",
+  "descripcion": "Queso y dulce: el postre más rápido de la casa.",
+  "porciones": 2,
+  "minutos_prep": 5,
+  "minutos_coccion": 0,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Queso cremoso",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Dulce de membrillo",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 3
+    }
+  ],
+  "pasos": [
+    "Cortar el queso y el dulce en porciones del mismo tamaño.",
+    "Servir una sobre la otra."
+  ]
+}

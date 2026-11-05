@@ -1,0 +1,70 @@
+{
+  "titulo": "Torta de chocolate",
+  "descripcion": "Húmeda, de una sola mezcla.",
+  "porciones": 10,
+  "minutos_prep": 15,
+  "minutos_coccion": 40,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Cacao",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 250,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 120,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Polvo de hornear",
+      "cantidad": 2,
+      "unidad": "cdita",
+      "peso": 2
+    },
+    {
+      "nombre": "Esencia de vainilla",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Mezclar los secos: harina, cacao, azúcar y polvo de hornear.",
+    "Sumar los huevos, la leche, el aceite y la esencia, y batir hasta que no queden grumos.",
+    {
+      "texto": "Volcar en un molde aceitado y hornear a 180 °C.",
+      "minutos": 40
+    }
+  ]
+}

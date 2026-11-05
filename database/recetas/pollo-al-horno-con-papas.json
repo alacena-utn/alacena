@@ -1,0 +1,65 @@
+{
+  "titulo": "Pollo al horno con papas",
+  "descripcion": "El clásico del domingo, con limón y ajo.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 60,
+  "dificultad": 1,
+  "etiquetas": [
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Pollo",
+      "cantidad": 4,
+      "unidad": "u",
+      "peso": 3,
+      "nota": "presas"
+    },
+    {
+      "nombre": "Papa",
+      "cantidad": 5,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Limón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Ajo",
+      "cantidad": 3,
+      "unidad": "diente",
+      "peso": 1
+    },
+    {
+      "nombre": "Orégano",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 50,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Condimentar el pollo con el jugo de limón, el ajo picado, orégano, sal y aceite.",
+    "Cortar las papas en cubos grandes y repartirlas en la fuente junto con el pollo.",
+    {
+      "texto": "Hornear a 200 °C, dando vuelta todo a la mitad.",
+      "minutos": 60
+    }
+  ]
+}

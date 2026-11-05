@@ -94,7 +94,7 @@ $titulo = 'Usuarios';
 require parcial('encabezado');
 ?>
 <?php if ($form !== null) : ?>
-  <?= enlaceVolver('admin/usuarios.php', 'Volver a usuarios') ?>
+  <?= enlaceVolver('admin/usuarios.php', 'Volver a Usuarios', [], true) ?>
   <section class="tarjeta tarjeta--angosta">
     <h1><?= $form['id'] ? 'Editar usuario' : 'Nuevo usuario' ?></h1>
     <form class="formulario" method="post">
@@ -133,7 +133,7 @@ require parcial('encabezado');
     </form>
   </section>
 <?php else : ?>
-  <?= enlaceVolver('admin/index.php', 'Volver al panel') ?>
+  <?= enlaceVolver('admin/index.php', 'Volver al panel', [['admin/index.php', 'Panel']]) ?>
   <div class="encabezado-pagina">
     <h1>Usuarios</h1>
     <a class="boton" href="<?= e(url('admin/usuarios.php?nuevo')) ?>">+ Nuevo usuario</a>

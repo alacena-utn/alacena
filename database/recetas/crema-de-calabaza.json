@@ -1,0 +1,75 @@
+{
+  "titulo": "Crema de calabaza",
+  "descripcion": "Suave y anaranjada, lista en media hora.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 25,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Calabaza",
+      "cantidad": 800,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Caldo de verduras",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Papa",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Crema de leche",
+      "cantidad": 100,
+      "unidad": "ml",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Nuez moscada",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 15,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Rehogar la cebolla en el aceite.",
+      "minutos": 5
+    },
+    {
+      "texto": "Sumar {ing:calabaza} y la papa en cubos, el caldo y agua hasta cubrir. Cocinar hasta que estén tiernas.",
+      "minutos": 20
+    },
+    "Licuar o pisar hasta que quede lisa. Agregar la crema, la nuez moscada y la sal."
+  ]
+}

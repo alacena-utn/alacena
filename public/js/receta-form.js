@@ -22,7 +22,8 @@ botonAgregar.addEventListener('click', () => {
   const fila = modelo.cloneNode(true);
   renumerar(fila, siguiente++);
   fila.querySelector('select').value = '0';
-  fila.querySelectorAll('input[type="text"]').forEach((input) => { input.value = ''; });
+  fila.querySelector('[data-campo="peso"]').value = '2';
+  fila.querySelectorAll('input[type="text"], input[type="hidden"]').forEach((input) => { input.value = ''; });
   fila.querySelector('input[type="checkbox"]').checked = false;
   fila.querySelector('.fila-ingrediente__dibujo').src = contenedor.dataset.frasco;
   contenedor.append(fila);

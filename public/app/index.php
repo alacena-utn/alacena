@@ -3,7 +3,8 @@
 /**
  * Mi cocina: la página a la que llega el usuario al ingresar.
  * Muestra lo que está por vencer, un selector con los ingredientes que tiene
- * (tocás algunos y aparecen las recetas que los usan) y las recetas que puede hacer.
+ * (tocás algunos y aparecen las recetas que los usan) y las recomendaciones, ordenadas por puntaje
+ * (Dominio\Puntaje) y agrupadas en "Podés hacerla ahora", "Te falta 1" y "Casi".
  *   index.php?ing[]=15&ing[]=1&modo=todos|alguno → recetas con esos ingredientes
  * Con JavaScript (cocina.js) el resultado del selector cambia sin recargar la página.
  */
@@ -13,6 +14,7 @@ declare(strict_types=1);
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use Cooki\Db;
+use Cooki\Dominio\Puntaje;
 use Cooki\Repositorios\DespensaRepositorio;
 use Cooki\Repositorios\RecetaRepositorio;
 use Cooki\Sesion;
@@ -23,8 +25,18 @@ $db = Db::conexion();
 $usuario = Sesion::usuario();
 $despensa = new DespensaRepositorio($db);
 $recetas = new RecetaRepositorio($db);
+// Lo vencido no va en "Usalo pronto" (ya no se puede usar): se cuenta aparte, con un enlace a la despensa
 $porVencer = $despensa->porVencer($usuario['id'], 7);
-$sugeridas = $recetas->sugeridas($usuario['id'], 6);
+$vencidos = count(array_filter($porVencer, fn ($item) => (int) $item['dias'] < 0));
+$porVencer = array_values(array_filter($porVencer, fn ($item) => (int) $item['dias'] >= 0));
+// Recomendaciones por grupo (hasta 6 en cada uno, las de más puntaje primero)
+$porGrupo = array_fill_keys(array_keys(Puntaje::GRUPOS), []);
+foreach ($recetas->recomendadas($usuario['id']) as $recomendada) {
+    if (count($porGrupo[$recomendada['grupo']]) < 6) {
+        $porGrupo[$recomendada['grupo']][] = $recomendada;
+    }
+}
+$hayRecomendaciones = array_filter($porGrupo) !== [];
 
 // Selector de ingredientes: solo se aceptan ingredientes que el usuario tiene
 $disponibles = $despensa->disponibles($usuario['id']);
@@ -48,7 +60,15 @@ require parcial('encabezado');
 
 <section class="postit">
   <span class="postit__chinche" aria-hidden="true"></span>
-  <h2>Usalo pronto</h2>
+  <div class="postit__titulo">
+    <h2>Usalo pronto</h2>
+    <?php if ($vencidos > 0) : ?>
+      <a class="aviso-vencidos" href="<?= e(url('app/despensa.php?estado=vencidos')) ?>">
+        <strong><?= $vencidos ?> vencido<?= $vencidos === 1 ? '' : 's' ?></strong>
+        <span>Quitalo<?= $vencidos === 1 ? '' : 's' ?> o cambiá la fecha en tu&nbsp;despensa&nbsp;→</span>
+      </a>
+    <?php endif; ?>
+  </div>
   <?php if ($porVencer === []) : ?>
     <p class="texto-suave">Nada vence en los próximos 7 días. <a href="<?= e(url('app/despensa.php')) ?>">Ver mi despensa</a></p>
   <?php else : ?>
@@ -121,16 +141,24 @@ require parcial('encabezado');
 
   <div class="encabezado-pagina">
     <h2>Podés cocinar</h2>
-    <a href="<?= e(url('app/recetas.php')) ?>">Ver todas las recetas →</a>
+    <a href="<?= e(url('app/recetas.php?orden=recomendadas')) ?>">Ver todas las recetas →</a>
   </div>
-  <?php if ($sugeridas === []) : ?>
+  <?php if (!$hayRecomendaciones) : ?>
     <p class="vacio">Todavía no hay sugerencias. <a href="<?= e(url('app/despensa.php')) ?>">Cargá lo que tenés en tu despensa</a> y te mostramos qué cocinar.</p>
   <?php else : ?>
-    <div class="grilla">
-      <?php foreach ($sugeridas as $receta) : ?>
-        <?php require parcial('tarjeta-receta'); ?>
-      <?php endforeach; ?>
-    </div>
+    <?php /* Primero lo que se puede hacer ya; después lo que está a uno o pocos ingredientes */ ?>
+    <?php foreach (Puntaje::GRUPOS as $clave => $nombreGrupo) : ?>
+      <?php if ($porGrupo[$clave] !== []) : ?>
+        <section class="grupo-recetas grupo-recetas--<?= e($clave) ?>" aria-labelledby="grupo-<?= e($clave) ?>">
+          <h3 class="grupo-recetas__titulo" id="grupo-<?= e($clave) ?>"><?= e($nombreGrupo) ?></h3>
+          <div class="grilla">
+            <?php foreach ($porGrupo[$clave] as $receta) : ?>
+              <?php require parcial('tarjeta-receta'); ?>
+            <?php endforeach; ?>
+          </div>
+        </section>
+      <?php endif; ?>
+    <?php endforeach; ?>
   <?php endif; ?>
 </div>
 </div>

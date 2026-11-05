@@ -1,0 +1,63 @@
+{
+  "titulo": "Fideos con brócoli y ajo",
+  "descripcion": "Verde, rápido y con lo que hay.",
+  "porciones": 4,
+  "minutos_prep": 10,
+  "minutos_coccion": 15,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Fideos",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Brócoli",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Ajo",
+      "cantidad": 3,
+      "unidad": "diente",
+      "peso": 2
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 50,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Queso rallado",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Separar el brócoli en ramitos chicos.",
+    {
+      "texto": "Hervir los fideos y, 4 minutos antes de que estén, sumar el brócoli a la misma olla.",
+      "minutos": 12
+    },
+    {
+      "texto": "Mientras, dorar apenas el ajo en láminas en el aceite (si se quema, amarga).",
+      "minutos": 2
+    },
+    "Escurrir, mezclar con el aceite de ajo y servir con queso."
+  ]
+}

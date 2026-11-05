@@ -1,0 +1,96 @@
+{
+  "titulo": "Guiso de arroz",
+  "descripcion": "Con carne y verduras, en una sola olla.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 35,
+  "dificultad": 1,
+  "etiquetas": [
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Arroz",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Carne para guiso",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Morrón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Zanahoria",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Puré de tomate",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Caldo de verduras",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Pimentón",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Laurel",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Dorar la carne en cubos en el aceite.",
+      "minutos": 8
+    },
+    {
+      "texto": "Sumar la cebolla, el morrón y la zanahoria picados y rehogar.",
+      "minutos": 6
+    },
+    "Agregar el puré de tomate, el pimentón, el laurel y el caldo disuelto en 1 litro de agua caliente.",
+    {
+      "texto": "Cuando hierva, sumar {ing:arroz} y cocinar a fuego bajo, revolviendo de vez en cuando.",
+      "minutos": 18
+    },
+    "Apagar y dejar reposar 5 minutos tapado."
+  ]
+}

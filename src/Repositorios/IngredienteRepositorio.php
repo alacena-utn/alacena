@@ -205,4 +205,55 @@ final class IngredienteRepositorio
             throw $e;
         }
     }
+
+    /**
+     * Otros nombres del ingrediente como se escriben en el formulario: "muzzarella (AR), mozarela".
+     * (incremento 2 · P3)
+     */
+    public function sinonimosComoTexto(int $id): string
+    {
+        $consulta = $this->db->prepare(
+            'SELECT texto, region FROM sinonimo WHERE ingrediente_id = :id ORDER BY texto'
+        );
+        $consulta->execute(['id' => $id]);
+        return implode(', ', array_map(
+            fn ($s) => $s['texto'] . ($s['region'] ? ' (' . $s['region'] . ')' : ''),
+            $consulta->fetchAll()
+        ));
+    }
+
+    /**
+     * "muzzarella (AR), mozarela" → [['texto' => 'muzzarella', 'region' => 'AR'], ['texto' => 'mozarela', ...]]
+     * @return list<array{texto: string, region: ?string}>
+     */
+    public static function leerSinonimos(string $texto): array
+    {
+        $lista = [];
+        foreach (explode(',', $texto) as $parte) {
+            $parte = trim($parte);
+            $region = null;
+            if (preg_match('/^(.+?)\s*\(([A-Za-z]{2})\)$/u', $parte, $m) === 1) {
+                [$parte, $region] = [trim($m[1]), strtoupper($m[2])];
+            }
+            $parte = mb_substr($parte, 0, 80);
+            $yaEstan = array_map('mb_strtolower', array_column($lista, 'texto'));
+            $repetido = in_array(mb_strtolower($parte), $yaEstan, true);
+            if ($parte !== '' && !$repetido) {
+                $lista[] = ['texto' => $parte, 'region' => $region];
+            }
+        }
+        return $lista;
+    }
+
+    /** Reemplaza los otros nombres de un ingrediente por los de la lista. */
+    public function guardarSinonimos(int $id, array $sinonimos): void
+    {
+        $this->db->prepare('DELETE FROM sinonimo WHERE ingrediente_id = :id')->execute(['id' => $id]);
+        $insertar = $this->db->prepare(
+            'INSERT INTO sinonimo (ingrediente_id, texto, region) VALUES (:id, :texto, :region)'
+        );
+        foreach ($sinonimos as $sinonimo) {
+            $insertar->execute(['id' => $id] + $sinonimo);
+        }
+    }
 }

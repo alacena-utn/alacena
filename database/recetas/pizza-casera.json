@@ -1,0 +1,86 @@
+{
+  "titulo": "Pizza casera",
+  "descripcion": "Masa de un leudado, salsa y mozzarella.",
+  "porciones": 4,
+  "minutos_prep": 20,
+  "minutos_coccion": 20,
+  "dificultad": 2,
+  "etiquetas": [
+    "vegetariana"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 500,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Levadura",
+      "cantidad": 25,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "fresca"
+    },
+    {
+      "nombre": "Puré de tomate",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Mozzarella",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Orégano",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceitunas",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    "Disolver la levadura y el azúcar en 300 ml de agua tibia.",
+    "Mezclar con la harina, la sal y el aceite. Amasar hasta que quede lisa.",
+    {
+      "texto": "Dejar levar tapada en un lugar tibio, hasta que duplique su tamaño.",
+      "minutos": 40
+    },
+    "Estirar en dos pizzeras aceitadas y cubrir con el puré de tomate condimentado con orégano.",
+    {
+      "texto": "Hornear la prepizza a 220 °C.",
+      "minutos": 10
+    },
+    {
+      "texto": "Sumar la mozzarella y las aceitunas y hornear hasta que se derrita.",
+      "minutos": 8
+    }
+  ]
+}

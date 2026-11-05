@@ -6,12 +6,73 @@ Formato: decisiones tipo ADR (ver la guía de metodología del equipo, sección 
 
 ---
 
-## DEC-008 · AAAA-MM-DD · (título)
+## DEC-011 · AAAA-MM-DD · (título)
 - **Contexto:** 
 - **Decisión:** 
 - **Alternativas descartadas:** 
 - **Consecuencias:** 
 - **Participaron:** 
+
+---
+
+## DEC-010 · 2026-10-31 · Perfil: cambiar datos y contraseña, y dar de baja la cuenta
+- **Contexto:** el incremento 1 no dejaba al usuario cambiar su nombre, su email ni su contraseña, ni borrar su cuenta. Lo pide el bloque 2.4 del plan.
+- **Decisión:**
+  - Página `app/perfil.php` con tres formularios. Para cambiar la contraseña o borrar la cuenta pide la contraseña actual.
+  - La baja pide además una casilla de confirmación.
+  - Al borrar la cuenta, la despensa, los ingredientes propios y las preferencias se van con ella (`ON DELETE CASCADE`). Las consultas de contacto quedan sin usuario.
+  - La última cuenta de administración no se puede borrar.
+  - Se entra desde el menú de la cuenta.
+- **Alternativas descartadas:**
+  - Una baja lógica (marcar la cuenta como inactiva): conserva datos personales que ya no hacen falta.
+  - Pedir la confirmación por mail: queda para cuando esté el correo real (entrega B).
+- **Consecuencias:** sin cambios en la base. Pruebas en `tests/Integracion/PerfilTest.php`.
+- **Participaron:** P1
+
+---
+
+## DEC-009 · 2026-10-31 · Recetario en JSON con importador y validador
+- **Contexto:** cargar decenas de recetas desde el ABM, de a una, es lento y no deja revisarlas entre todos en un PR.
+- **Decisión:**
+  - Cada receta es un archivo en `database/recetas/*.json` (formato en `docs/guia-recetas.md`).
+  - `scripts/importar-recetas.php` las valida contra el catálogo y las carga en la base. Si la receta ya existe (mismo título), la actualiza.
+  - Con `--sql` genera `database/recetas.sql`, que Docker carga al crear la base y que sirve para el hosting.
+  - El validador revisa ingredientes, números, unidades y marcadores `{ing:...}`, y que las etiquetas `vegetariana` y `sin_tacc` sean ciertas.
+  - Se suman la etiqueta `dulce`, 31 ingredientes (con dibujo y otros nombres) y **50 recetas originales del equipo**: 62 en total.
+  - Los otros nombres de cada ingrediente se editan en el ABM de ingredientes.
+  - Los pasos con temporizador se escriben `[⏱ 15 min]` en el ABM de recetas.
+- **Alternativas descartadas:**
+  - Planilla CSV: no representa bien la lista de ingredientes y los pasos de cada receta.
+  - Copiar recetas de sitios web: tienen derechos de autor.
+- **Consecuencias:**
+  - Migración `005-incremento-2-a.sql` (ingredientes, otros nombres, etiqueta y sustituciones).
+  - La prueba `RecetarioTest` falla si alguien cambia un .json y no regenera `recetas.sql`.
+- **Participaron:** P3 (importador y recetas), P2 (dibujos)
+
+---
+
+## DEC-008 · 2026-10-31 · Recomendación con puntaje, sustituciones y porciones
+- **Contexto:** en el incremento 1, "Podés cocinar" ordenaba solo por cuántos ingredientes tenía el usuario. El informe del proyecto (sección 10) define un puntaje con pesos, prioridad a lo que vence y sustituciones.
+- **Decisión:**
+  - `Dominio\Puntaje::calcular()` aplica la fórmula del informe:
+    - disponibilidad 1, ½ (con sustituto) o 0;
+    - cobertura ponderada con pesos 3, 2 y 1 (los opcionales no cuentan);
+    - +5 por cada ingrediente que vence en 3 días o menos (hasta +15);
+    - −6 por cada principal que falta;
+    - −8 si la cocinó en la última semana.
+  - Agrupa en "Podés hacerla ahora", "Te falta 1" y "Casi". No muestra las que no tienen ni la mitad de lo principal ni las que chocan con una restricción del usuario.
+  - El peso se elige en el ABM de recetas ("Importancia").
+  - Las sustituciones se cargan en la tabla `sustitucion`.
+  - `Dominio\Porciones` escala cantidades y pasos (`{ing:papa}` → "papa (600 g)") de 1 a 12 porciones, con redondeo de cocina.
+- **Alternativas descartadas:**
+  - Calcular el puntaje en SQL: difícil de leer y de probar.
+  - Mostrar una sola lista ordenada: no responde "¿qué puedo hacer ya?".
+- **Consecuencias:**
+  - Mi cocina muestra los tres grupos.
+  - El listado de recetas suma "Ordenar: recomendadas".
+  - Las tarjetas avisan qué usan de lo que vence y con qué reemplazar lo que falta.
+  - Pruebas unitarias (`PuntajeTest`, `PorcionesTest`) y de integración (`RecomendacionTest`).
+- **Participaron:** P3
 
 ---
 

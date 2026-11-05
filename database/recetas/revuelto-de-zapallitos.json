@@ -1,0 +1,60 @@
+{
+  "titulo": "Revuelto de zapallitos",
+  "descripcion": "Cena liviana en 20 minutos.",
+  "porciones": 2,
+  "minutos_prep": 10,
+  "minutos_coccion": 12,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Zapallito",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Queso rallado",
+      "cantidad": 30,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 15,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Cortar los zapallitos en cubos y la cebolla en pluma.",
+    {
+      "texto": "Rehogar la cebolla y los zapallitos en el aceite hasta que estén tiernos.",
+      "minutos": 10
+    },
+    "Sumar los huevos batidos con sal y revolver hasta que cuajen. Servir con queso."
+  ]
+}

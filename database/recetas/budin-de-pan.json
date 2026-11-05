@@ -1,0 +1,66 @@
+{
+  "titulo": "Budín de pan",
+  "descripcion": "Para aprovechar el pan duro.",
+  "porciones": 8,
+  "minutos_prep": 15,
+  "minutos_coccion": 50,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "economica",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Pan",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "del día anterior"
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 750,
+      "unidad": "ml",
+      "peso": 3
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 4,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Esencia de vainilla",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Pasas de uva",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    "Remojar el pan en la leche hasta que se ablande y pisarlo.",
+    "Sumar los huevos, la mitad del azúcar, la esencia y las pasas.",
+    {
+      "texto": "Con el resto del azúcar, hacer caramelo en el molde a fuego bajo.",
+      "minutos": 6
+    },
+    {
+      "texto": "Volcar la mezcla y hornear a baño María a 180 °C.",
+      "minutos": 50
+    },
+    "Dejar enfriar en la heladera antes de desmoldar."
+  ]
+}

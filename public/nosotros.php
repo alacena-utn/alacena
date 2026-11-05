@@ -106,5 +106,5 @@ require parcial('encabezado');
     <a class="boton boton--secundario" href="mailto:<?= e($correoEquipo) ?>">Enviar un correo</a>
   </p>
 </aside>
-<p><a class="volver" href="<?= e(url('index.php')) ?>">← Volver al inicio</a></p>
+<?= enlaceVolver('index.php', 'Volver al inicio') ?>
 <?php require parcial('pie'); ?>

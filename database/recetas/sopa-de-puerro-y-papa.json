@@ -1,0 +1,70 @@
+{
+  "titulo": "Sopa de puerro y papa",
+  "descripcion": "Reconfortante y muy económica.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 30,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Puerro",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Papa",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Caldo de verduras",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 20,
+      "unidad": "g",
+      "peso": 1
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 200,
+      "unidad": "ml",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Lavar bien los puerros (la tierra se esconde entre las hojas) y cortarlos en rodajas.",
+    {
+      "texto": "Rehogar el puerro y la cebolla en la manteca.",
+      "minutos": 8
+    },
+    {
+      "texto": "Sumar las papas en cubos, el caldo y 1 litro de agua. Cocinar hasta que la papa se deshaga.",
+      "minutos": 25
+    },
+    "Licuar, sumar la leche si se quiere más cremosa y ajustar la sal."
+  ]
+}

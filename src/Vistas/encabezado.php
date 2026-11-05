@@ -94,6 +94,7 @@ $imanesColor = function (): void {
                 <strong><?= e($usuario['nombre']) ?></strong>
                 <small><?= e($usuario['email']) ?><?= $usuario['rol'] === Sesion::ROL_ADMIN ? ' · administración' : '' ?></small>
               </p>
+              <a class="cuenta__perfil" href="<?= e(url('app/perfil.php')) ?>">Mi cuenta: datos y contraseña</a>
               <form class="preferencias" id="form-preferencias" method="post" action="<?= e(url('app/preferencias.php')) ?>">
                 <?= Sesion::campoCsrf() ?>
                 <input type="hidden" name="volver" value="<?= e((string) ($_SERVER['REQUEST_URI'] ?? '')) ?>">

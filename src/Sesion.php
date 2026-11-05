@@ -133,6 +133,16 @@ final class Sesion
         }
     }
 
+    /** Después de editar el perfil: el menú de la cuenta muestra el nombre y el email nuevos. */
+    public static function actualizarDatos(string $nombre, string $email): void
+    {
+        self::iniciar();
+        if (isset($_SESSION['usuario'])) {
+            $_SESSION['usuario']['nombre'] = $nombre;
+            $_SESSION['usuario']['email'] = $email;
+        }
+    }
+
     public static function salir(): void
     {
         self::iniciar();

@@ -1,0 +1,60 @@
+{
+  "titulo": "Ensalada de frutas",
+  "descripcion": "Con la fruta de estación que haya en casa.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 0,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Manzana",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Banana",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Naranja",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 3,
+      "nota": "2 en gajos, 1 para el jugo"
+    },
+    {
+      "nombre": "Frutilla",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 2,
+      "opcional": true
+    },
+    {
+      "nombre": "Durazno",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2,
+      "opcional": true
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 2,
+      "unidad": "cda",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    "Lavar y cortar toda la fruta en cubos parecidos.",
+    "Exprimir una naranja y mezclar el jugo con la fruta (evita que la banana y la manzana se pongan negras).",
+    "Endulzar si hace falta y enfriar antes de servir."
+  ]
+}

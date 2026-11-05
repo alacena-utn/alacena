@@ -1,0 +1,68 @@
+{
+  "titulo": "Pastafrola",
+  "descripcion": "Con dulce de membrillo y enrejado.",
+  "porciones": 8,
+  "minutos_prep": 30,
+  "minutos_coccion": 40,
+  "dificultad": 2,
+  "etiquetas": [
+    "vegetariana",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 120,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Polvo de hornear",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 2
+    },
+    {
+      "nombre": "Dulce de membrillo",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Limón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1,
+      "opcional": true,
+      "nota": "la ralladura"
+    }
+  ],
+  "pasos": [
+    "Batir la manteca con el azúcar, sumar los huevos y la ralladura.",
+    "Agregar la harina con el polvo de hornear y unir sin amasar. Reservar un tercio para el enrejado.",
+    "Ablandar el dulce de membrillo con un poco de agua caliente, pisándolo con un tenedor.",
+    "Forrar un molde con la masa, cubrir con el dulce y armar las tiras cruzadas encima.",
+    {
+      "texto": "Hornear a 180 °C hasta que la masa esté dorada.",
+      "minutos": 40
+    }
+  ]
+}

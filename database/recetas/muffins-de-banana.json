@@ -1,0 +1,67 @@
+{
+  "titulo": "Muffins de banana",
+  "descripcion": "Usan las bananas demasiado maduras.",
+  "porciones": 12,
+  "minutos_prep": 15,
+  "minutos_coccion": 25,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Banana",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 3,
+      "nota": "bien maduras"
+    },
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 120,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 80,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Polvo de hornear",
+      "cantidad": 2,
+      "unidad": "cdita",
+      "peso": 2
+    },
+    {
+      "nombre": "Nueces",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    "Pisar las bananas con un tenedor.",
+    "Mezclar con los huevos, el azúcar y el aceite.",
+    "Sumar la harina con el polvo de hornear y las nueces, sin batir de más.",
+    {
+      "texto": "Repartir en pirotines y hornear a 180 °C.",
+      "minutos": 25
+    }
+  ]
+}

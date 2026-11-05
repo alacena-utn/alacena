@@ -1,0 +1,78 @@
+{
+  "titulo": "Polenta con salsa y queso",
+  "descripcion": "Polenta firme gratinada con tuco.",
+  "porciones": 4,
+  "minutos_prep": 10,
+  "minutos_coccion": 25,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Polenta",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 500,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Puré de tomate",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Queso cremoso",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Orégano",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 15,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Hacer una salsa rápida: rehogar la cebolla, sumar el puré de tomate, orégano y sal.",
+      "minutos": 10
+    },
+    {
+      "texto": "Hervir la leche con 500 ml de agua y sal, y echar la polenta en lluvia revolviendo.",
+      "minutos": 5
+    },
+    "Volcar la polenta en una fuente, cubrir con la salsa y el queso en fetas.",
+    {
+      "texto": "Gratinar en el horno a 200 °C.",
+      "minutos": 10
+    }
+  ]
+}

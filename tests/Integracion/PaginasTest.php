@@ -218,9 +218,21 @@ final class PaginasTest extends TestCase
         $this->assertGreaterThan(0, $id, 'No se creó el ingrediente');
 
         $web->get('admin/ingredientes.php?editar=' . $id);
-        $web->post('admin/ingredientes.php', ['id' => $id, 'nombre' => $nombre . ' editado'] + $campos);
+        $web->post('admin/ingredientes.php', ['id' => $id, 'nombre' => $nombre . ' editado',
+            'sinonimos' => 'otro nombre (ar), Otro Nombre, segundo'] + $campos);
         $consulta->execute([$nombre . ' editado']);
         $this->assertSame($id, (int) $consulta->fetchColumn());
+        // Incremento 2: los otros nombres se cargan en el mismo formulario (sin repetidos, región en mayúscula)
+        $sinonimos = Db::conexion()->prepare(
+            'SELECT texto, region FROM sinonimo WHERE ingrediente_id = ? ORDER BY texto'
+        );
+        $sinonimos->execute([$id]);
+        $this->assertSame(
+            [['texto' => 'otro nombre', 'region' => 'AR'], ['texto' => 'segundo', 'region' => null]],
+            $sinonimos->fetchAll(\PDO::FETCH_ASSOC)
+        );
+        [, $html] = $web->get('admin/ingredientes.php?editar=' . $id);
+        $this->assertStringContainsString('value="otro nombre (AR), segundo"', $html);
 
         $web->get('admin/ingredientes.php');
         $web->post('admin/ingredientes.php', ['accion' => 'borrar', 'id' => $id]);

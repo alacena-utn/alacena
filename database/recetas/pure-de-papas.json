@@ -1,0 +1,53 @@
+{
+  "titulo": "Puré de papas",
+  "descripcion": "El acompañamiento que combina con todo.",
+  "porciones": 4,
+  "minutos_prep": 10,
+  "minutos_coccion": 25,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Papa",
+      "cantidad": 1000,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 150,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 40,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Nuez moscada",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Hervir las papas peladas en cubos en agua con sal hasta que estén bien tiernas.",
+      "minutos": 20
+    },
+    "Escurrir y pisar en caliente.",
+    "Sumar la manteca y la leche caliente de a poco, batiendo. Condimentar con nuez moscada."
+  ]
+}
