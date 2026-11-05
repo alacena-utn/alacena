@@ -55,7 +55,11 @@ final class PerfilTest extends TestCase
         $web = $this->cuentaNueva();
         [$estado, $html] = $web->get('app/perfil.php');
         $this->assertSame(200, $estado);
-        $this->assertStringContainsString('Mi cuenta: datos y contraseña', $html, 'enlace en el menú de la cuenta');
+        $this->assertMatchesRegularExpression(
+            '#class="cuenta__enlace[^"]*"[^>]*>Mi cuenta</a>#',
+            $html,
+            'enlace en el menú de la cuenta'
+        );
 
         // Un email que ya usa otra cuenta no se acepta
         [, $html] = $web->post('app/perfil.php', [

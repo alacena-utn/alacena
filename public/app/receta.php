@@ -12,6 +12,7 @@ require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use Cooki\Db;
 use Cooki\Dominio\Porciones;
+use Cooki\Repositorios\CocinaRepositorio;
 use Cooki\Repositorios\RecetaRepositorio;
 use Cooki\Sesion;
 
@@ -39,6 +40,9 @@ foreach ($receta['ingredientes'] as $ing) {
         'unidad' => $ing['unidad'],
     ];
 }
+// Modo cocina: si ya la está cocinando, el botón dice "Seguir cocinando"
+$cocinando = (new CocinaRepositorio(Db::conexion()))->enCurso(Sesion::idUsuario());
+$sigue = $cocinando !== null && (int) $cocinando['receta_id'] === (int) $receta['id'] ? $cocinando : null;
 $enlacePorciones = fn (int $n): string => url('app/receta.php?id=' . $receta['id'] . '&porciones=' . $n) . '#ingredientes';
 
 $titulo = $receta['titulo'];
@@ -46,7 +50,27 @@ require parcial('encabezado');
 ?>
 <?= enlaceVolver('app/recetas.php', 'Volver a Recetas', [['app/recetas.php', 'Recetas']]) ?>
 <article>
-  <h1><?= e($receta['titulo']) ?></h1>
+  <div class="receta-titulo">
+    <h1><?= e($receta['titulo']) ?></h1>
+    <?php /* Favorita: sin JavaScript recarga la página; con JavaScript (receta.js) cambia sin recargar */ ?>
+    <form class="favorita" method="post" action="<?= e(url('app/mis-preferencias.php')) ?>">
+      <?= Sesion::campoCsrf() ?>
+      <input type="hidden" name="accion" value="favorita">
+      <input type="hidden" name="receta" value="<?= e($receta['id']) ?>">
+      <input type="hidden" name="volver" value="<?= e((string) ($_SERVER['REQUEST_URI'] ?? '')) ?>">
+      <button class="favorita__boton" type="submit" aria-pressed="<?= $receta['favorita'] ? 'true' : 'false' ?>"
+              title="<?= $receta['favorita'] ? 'Sacar de mis favoritas' : 'Guardar en mis favoritas' ?>">
+        <span class="favorita__corazon" aria-hidden="true"><?= $receta['favorita'] ? '♥' : '♡' ?></span>
+        <span class="favorita__texto"><?= $receta['favorita'] ? 'En mis favoritas' : 'Guardar' ?></span>
+      </button>
+    </form>
+  </div>
+  <?php if (!empty($receta['imagen'])) : ?>
+    <?php /* La foto (si la cargó la administración) va pegada como una foto instantánea */ ?>
+    <figure class="foto-receta">
+      <img src="<?= e(url($receta['imagen'])) ?>" alt="Foto de <?= e($receta['titulo']) ?>" loading="lazy">
+    </figure>
+  <?php endif; ?>
   <p class="texto-suave"><?= e($receta['descripcion']) ?></p>
   <p class="acciones">
     <span class="etiqueta">Preparación: <?= e($receta['minutos_prep']) ?> min</span>
@@ -56,6 +80,24 @@ require parcial('encabezado');
       <span class="etiqueta"><?= e(str_replace('_', ' ', $etiqueta['nombre'])) ?></span>
     <?php endforeach; ?>
   </p>
+
+  <?php /* Modo cocina: paso a paso con letra grande, temporizadores y descuento de la despensa al terminar */ ?>
+  <div class="empezar-cocina">
+    <?php if ($sigue !== null) : ?>
+      <a class="boton boton--cocinar" href="<?= e(url('app/cocinar.php?sesion=' . $sigue['id'])) ?>">
+        Seguir cocinando <small>(<?= e($sigue['hechos']) ?> de <?= e($sigue['pasos']) ?> pasos)</small>
+      </a>
+    <?php else : ?>
+      <form method="post" action="<?= e(url('app/cocinar.php')) ?>">
+        <?= Sesion::campoCsrf() ?>
+        <input type="hidden" name="accion" value="iniciar">
+        <input type="hidden" name="receta" value="<?= e($receta['id']) ?>">
+        <input type="hidden" name="porciones" value="<?= $porciones ?>">
+        <button class="boton boton--cocinar" type="submit">Cocinar paso a paso <small>(<?= $porciones ?> porci<?= $porciones === 1 ? 'ón' : 'ones' ?>)</small></button>
+      </form>
+    <?php endif; ?>
+    <p class="texto-suave"><small>Letra grande, temporizadores y, al terminar, se descuenta de tu despensa lo que usaste.</small></p>
+  </div>
 
   <div class="detalle-receta">
     <section class="tarjeta" id="ingredientes">
@@ -74,7 +116,7 @@ require parcial('encabezado');
       <ul class="lista-ingredientes">
         <?php foreach ($receta['ingredientes'] as $ing) : ?>
           <?php $tiene = $ing['en_despensa'] || $ing['es_basico']; ?>
-          <li class="<?= $tiene ? 'tengo' : 'falta' ?>">
+          <li class="<?= $tiene ? 'tengo' : 'falta' ?><?= $ing['restringido'] ? ' no-como' : '' ?>">
             <span aria-hidden="true"><?= $tiene ? '✓' : '✗' ?></span>
             <span class="solo-lectores"><?= $tiene ? 'Lo tenés:' : 'Te falta:' ?></span>
             <img class="icono-chico" src="<?= e(iconoIngrediente($ing['nombre'])) ?>" alt="" width="28" height="28">
@@ -82,13 +124,14 @@ require parcial('encabezado');
             <?= e($cantidad($ing)) ?>
             <?php if ($ing['nota']) : ?><span class="texto-suave">(<?= e($ing['nota']) ?>)</span><?php endif; ?>
             <?php if ($ing['es_opcional']) : ?><span class="etiqueta">opcional</span><?php endif; ?>
+            <?php if ($ing['restringido']) : ?><span class="etiqueta etiqueta--error">No lo comés</span><?php endif; ?>
             <?php if (!$tiene && $ing['sustituto'] !== null) : ?>
               <span class="cambio-ingrediente">⇄ Podés usar <?= e(mb_strtolower($ing['sustituto'])) ?></span>
             <?php endif; ?>
           </li>
         <?php endforeach; ?>
       </ul>
-      <p class="texto-suave"><small>✓ = está en tu despensa (o es un básico como sal o aceite).</small></p>
+      <p class="texto-suave"><small>✓ = está en tu despensa, es un básico como sal o aceite, o lo marcaste en <a href="<?= e(url('app/mis-preferencias.php')) ?>">"Siempre tengo"</a>.</small></p>
     </section>
 
     <section class="tarjeta">

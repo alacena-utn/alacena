@@ -1,0 +1,5 @@
+# Las fotos de las recetas las suben los administradores: acá nunca se ejecuta código.
+<FilesMatch "\.(php|phtml|phar|php\d)$">
+    Require all denied
+</FilesMatch>
+Options -Indexes

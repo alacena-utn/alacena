@@ -10,6 +10,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/src/bootstrap.php';
 
 use Cooki\Db;
+use Cooki\Repositorios\IngresoRepositorio;
 use Cooki\Repositorios\UsuarioRepositorio;
 use Cooki\Sesion;
 
@@ -22,14 +23,24 @@ if (esPost()) {
     $email = mb_strtolower(campo('email'));
     $contrasena = (string) ($_POST['contrasena'] ?? '');
 
+    // Bloqueo por intentos: con 5 errores en 15 minutos ese email queda bloqueado 15 minutos
+    $intentos = new IngresoRepositorio(Db::conexion());
+    $bloqueo = $intentos->minutosDeBloqueo($email);
+    if ($bloqueo > 0) {
+        redirigir('error.php?motivo=bloqueado&minutos=' . $bloqueo);
+    }
+
     $repo = new UsuarioRepositorio(Db::conexion());
     $usuario = $repo->verificarCredenciales($email, $contrasena);
 
     if ($usuario === null) {
         // Mismo mensaje si el email no existe o si la contraseña está mal:
         // así nadie puede averiguar qué emails están registrados.
-        redirigir('error.php?motivo=login');
+        $intentos->registrarFallo($email, (string) ($_SERVER['REMOTE_ADDR'] ?? ''));
+        $bloqueo = $intentos->minutosDeBloqueo($email);
+        redirigir($bloqueo > 0 ? 'error.php?motivo=bloqueado&minutos=' . $bloqueo : 'error.php?motivo=login');
     }
+    $intentos->limpiar($email);
 
     Sesion::ingresar($usuario);
     // Mi cocina ya saluda con "Hola, …"; el panel de administración no, así que ahí va el aviso
@@ -62,6 +73,7 @@ require parcial('stickers');
     </div>
     <button class="boton" type="submit">Ingresar</button>
   </form>
+  <p><a href="<?= e(url('olvide.php')) ?>">¿Olvidaste tu contraseña?</a></p>
   <p class="texto-suave">¿No tenés cuenta? <a href="<?= e(url('registro.php')) ?>">Creá una gratis</a>.</p>
 </section>
 <div class="stickers-abajo">

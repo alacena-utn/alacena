@@ -282,7 +282,7 @@ final class PaginasTest extends TestCase
         $web->ingresar('admin@cooki.test', 'Admin1234');
         [, $html] = $web->get('admin/index.php');
         $this->assertSame(4, substr_count($html, 'class="postit postit--'));
-        [, $html] = $web->get('admin/ingredientes.php');
+        [, $html] = $web->get('admin/ingredientes.php?q=manzana');
         $this->assertStringContainsString('img/ingredientes/manzana.svg', $html);
         [, $html] = $web->get('admin/ingredientes.php?editar=1');
         $this->assertStringContainsString('class="vista-dibujo"', $html);

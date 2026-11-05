@@ -17,12 +17,15 @@ $mensajes = [
     'sin-permiso' => ['Acceso restringido', 'Esa sección es solo para administradores.'],
     'formulario-vencido' => ['El formulario venció', 'Por seguridad no pudimos procesar el envío. Volvé a la página e intentá otra vez.'],
     'no-encontrado' => ['No encontramos lo que buscabas', 'Puede que se haya borrado o que el enlace esté mal.'],
+    'bloqueado' => ['Demasiados intentos', 'Por seguridad bloqueamos el ingreso con ese email durante 15 minutos, '
+        . 'porque la contraseña se escribió mal varias veces seguidas. Esperá un rato o recuperá tu contraseña.'],
 ];
 $motivo = (string) ($_GET['motivo'] ?? '');
 [$tituloError, $detalle] = $mensajes[$motivo] ?? ['Algo salió mal', 'Ocurrió un error inesperado.'];
 
 http_response_code(match ($motivo) {
     'login', 'sin-sesion' => 401,
+    'bloqueado' => 429,
     'sin-permiso', 'formulario-vencido' => 403,
     'no-encontrado' => 404,
     default => 400,
@@ -41,6 +44,12 @@ require parcial('stickers');
   <img class="tarjeta__dibujo" src="<?= e(url('img/ingredientes/frasco.svg')) ?>" alt="" width="88" height="88">
   <h1><?= e($tituloError) ?></h1>
   <p><?= e($detalle) ?></p>
+  <?php if ($motivo === 'bloqueado' && (int) ($_GET['minutos'] ?? 0) > 0) : ?>
+    <p><strong>Podés volver a intentar en <?= min(15, (int) $_GET['minutos']) ?> minuto<?= (int) $_GET['minutos'] === 1 ? '' : 's' ?>.</strong></p>
+  <?php endif; ?>
+  <?php if (in_array($motivo, ['login', 'bloqueado'], true)) : ?>
+    <p><a href="<?= e(url('olvide.php')) ?>">¿Olvidaste tu contraseña?</a></p>
+  <?php endif; ?>
   <p class="acciones">
     <?php if (Sesion::estaLogueado()) : ?>
       <a class="boton" href="<?= e(url(Sesion::esAdmin() ? 'admin/index.php' : 'app/index.php')) ?>">Ir a mi inicio</a>

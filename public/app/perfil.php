@@ -82,7 +82,7 @@ $error = fn (string $campo) => isset($errores[$campo]) ? '<p class="error-campo"
 $titulo = 'Mi cuenta';
 require parcial('encabezado');
 ?>
-<?= enlaceVolver('app/index.php', 'Volver a Mi cocina') ?>
+<?= enlaceVolver('app/index.php', 'Volver a Mi cocina', [['app/mis-preferencias.php', 'Mis preferencias']]) ?>
 <?php /* Los espacios vacíos (al lado del título y abajo de cada hoja) se llenan con dibujos sueltos */ ?>
 <div class="titulo-con-sueltos">
   <h1>Mi cuenta</h1>

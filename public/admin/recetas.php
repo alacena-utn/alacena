@@ -9,6 +9,8 @@ declare(strict_types=1);
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use Cooki\Db;
+use Cooki\Dominio\FotoReceta;
+use Cooki\Dominio\Paginacion;
 use Cooki\Repositorios\RecetaRepositorio;
 use Cooki\Sesion;
 
@@ -23,6 +25,10 @@ if (esPost() && campo('accion') === 'borrar') {
         Sesion::avisar('error', 'Esa receta ya no existe.');
     } else {
         $repo->borrar((int) $receta['id']);
+        $foto = dirname(__DIR__) . '/' . $receta['imagen'];
+        if (FotoReceta::esFotoNuestra($receta['imagen']) && is_file($foto)) {
+            unlink($foto);
+        }
         Sesion::avisar('exito', 'Se borró “' . $receta['titulo'] . '”.');
     }
     redirigir('admin/recetas.php');
@@ -30,6 +36,8 @@ if (esPost() && campo('accion') === 'borrar') {
 
 $busqueda = trim((string) ($_GET['q'] ?? ''));
 $recetas = $repo->buscar(['q' => $busqueda]);
+$paginacion = new Paginacion(count($recetas), 20, (int) ($_GET['pagina'] ?? 1));
+$enlace = fn (int $pagina): string => enlacePagina('admin/recetas.php', $pagina);
 
 $titulo = 'Recetas · Administración';
 require parcial('encabezado');
@@ -57,7 +65,7 @@ require parcial('encabezado');
         <tr><th>Receta</th><th>Dificultad</th><th>Minutos</th><th>Ingredientes</th><th>Etiquetas</th><th><span class="solo-lectores">Acciones</span></th></tr>
       </thead>
       <tbody>
-      <?php foreach ($recetas as $r) : ?>
+      <?php foreach ($paginacion->cortar($recetas) as $r) : ?>
         <tr>
           <td><a href="<?= e(url('app/receta.php?id=' . $r['id'])) ?>"><?= e($r['titulo']) ?></a></td>
           <td><?= e(RecetaRepositorio::DIFICULTADES[(int) $r['dificultad']]) ?></td>
@@ -88,5 +96,6 @@ require parcial('encabezado');
       </tbody>
     </table>
   </div>
+  <?php require parcial('paginacion'); ?>
 <?php endif; ?>
 <?php require parcial('pie'); ?>

@@ -2,7 +2,8 @@
 
 /**
  * ABM de recetas · alta (receta-editar.php) y modificación (receta-editar.php?id=5).
- * Una receta tiene datos generales, una lista de ingredientes, pasos y etiquetas.
+ * Una receta tiene datos generales, una lista de ingredientes, pasos, etiquetas y una foto opcional
+ * (JPG, PNG o WebP de hasta 2 MB; se valida en Dominio\FotoReceta y se guarda en public/img/recetas).
  */
 
 declare(strict_types=1);
@@ -10,6 +11,7 @@ declare(strict_types=1);
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use Cooki\Db;
+use Cooki\Dominio\FotoReceta;
 use Cooki\Dominio\Pasos;
 use Cooki\Dominio\Puntaje;
 use Cooki\Repositorios\IngredienteRepositorio;
@@ -28,7 +30,7 @@ $errores = [];
 $id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 $receta = [
     'titulo' => '', 'descripcion' => '', 'porciones_base' => 4, 'minutos_prep' => 15,
-    'minutos_coccion' => 0, 'dificultad' => 1,
+    'minutos_coccion' => 0, 'dificultad' => 1, 'imagen' => null,
 ];
 $ingredientes = [['id' => 0, 'cantidad' => null, 'unidad' => '', 'peso' => 2, 'opcional' => false]];
 $pasos = [];
@@ -54,7 +56,9 @@ if ($id > 0 && !esPost()) {
 
 if (esPost()) {
     Sesion::verificarCsrf();
+    $imagenActual = $id > 0 ? ($repo->obtener($id)['imagen'] ?? null) : null;
     $receta = [
+        'imagen' => $imagenActual,
         'titulo' => campo('titulo'),
         'descripcion' => campo('descripcion'),
         'porciones_base' => (int) ($_POST['porciones_base'] ?? 0),
@@ -123,9 +127,29 @@ if (esPost()) {
     if ($pasos === []) {
         $errores['pasos'] = 'Escribí al menos un paso.';
     }
+    $foto = FotoReceta::validar($_FILES['foto'] ?? []);
+    if ($foto['error'] !== '') {
+        $errores['foto'] = $foto['error'];
+    }
 
     if ($errores === []) {
-        $repo->guardar($receta, $ingredientes, $pasos, $etiquetasElegidas, Sesion::idUsuario(), $id);
+        $id = $repo->guardar($receta, $ingredientes, $pasos, $etiquetasElegidas, Sesion::idUsuario(), $id);
+        // La foto se guarda después de la receta (hace falta su id para el nombre del archivo)
+        $publico = dirname(__DIR__) . '/';
+        $anterior = null;
+        if ($foto['ok']) {
+            $ruta = FotoReceta::nombre($id, $foto['extension']);
+            if (move_uploaded_file($_FILES['foto']['tmp_name'], $publico . $ruta)) {
+                $anterior = $repo->cambiarImagen($id, $ruta);
+            } else {
+                Sesion::avisar('error', 'La receta se guardó, pero la foto no se pudo copiar al servidor.');
+            }
+        } elseif (!empty($_POST['quitar_foto'])) {
+            $anterior = $repo->cambiarImagen($id, null);
+        }
+        if (FotoReceta::esFotoNuestra($anterior) && is_file($publico . $anterior)) {
+            unlink($publico . $anterior);
+        }
         Sesion::avisar('exito', 'Se guardó “' . $receta['titulo'] . '”.');
         redirigir('admin/recetas.php?q=' . urlencode($receta['titulo']));
     }
@@ -160,7 +184,7 @@ require parcial('encabezado');
   <p class="aviso aviso--error" role="alert">Revisá los campos marcados.</p>
 <?php endif; ?>
 
-<form class="formulario formulario--ancho" method="post" id="form-receta">
+<form class="formulario formulario--ancho" method="post" id="form-receta" enctype="multipart/form-data">
   <?= Sesion::campoCsrf() ?>
   <input type="hidden" name="id" value="<?= e($id) ?>">
 
@@ -200,6 +224,18 @@ require parcial('encabezado');
       </div>
     </div>
     <?= $error('minutos') ?>
+    <div class="campo campo-foto">
+      <label for="foto">Foto <small>(opcional · JPG, PNG o WebP de hasta 2 MB)</small></label>
+      <?php if (!empty($receta['imagen'])) : ?>
+        <figure class="campo-foto__actual">
+          <img src="<?= e(url($receta['imagen'])) ?>" alt="Foto actual de la receta" width="160" height="120">
+          <figcaption><label><input type="checkbox" name="quitar_foto" value="1"> Quitar la foto</label></figcaption>
+        </figure>
+      <?php endif; ?>
+      <input type="hidden" name="MAX_FILE_SIZE" value="<?= FotoReceta::MAXIMO_BYTES ?>">
+      <input id="foto" name="foto" type="file" accept="image/jpeg,image/png,image/webp">
+      <?= $error('foto') ?>
+    </div>
     <fieldset class="campo">
       <legend>Etiquetas</legend>
       <div class="casillas">

@@ -317,3 +317,8 @@ INSERT INTO sustitucion (id, ingrediente_id, reemplazo_id, ratio, nota, calidad)
  (18, 4, 43, 0.70, 'Para salsas y guisos.', 3),
  (19, 30, 21, 1.00, NULL, 4),
  (20, 21, 30, 1.00, NULL, 4);
+
+-- Incremento 2 · entrega B: preferencias de ejemplo de María (usuario 3).
+-- "Siempre tengo" ajo; dos recetas favoritas. No tiene restricciones (se prueban desde "Mis preferencias").
+INSERT INTO usuario_basico (usuario_id, ingrediente_id) VALUES (3, 29);
+INSERT INTO favorito (usuario_id, receta_id) VALUES (3, 1), (3, 6);

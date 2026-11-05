@@ -94,7 +94,11 @@ $imanesColor = function (): void {
                 <strong><?= e($usuario['nombre']) ?></strong>
                 <small><?= e($usuario['email']) ?><?= $usuario['rol'] === Sesion::ROL_ADMIN ? ' · administración' : '' ?></small>
               </p>
-              <a class="cuenta__perfil" href="<?= e(url('app/perfil.php')) ?>">Mi cuenta: datos y contraseña</a>
+              <?php /* Mi cuenta y Mis preferencias: dos imanes chicos con el texto a mano */ ?>
+              <div class="cuenta__enlaces">
+                <a class="cuenta__enlace cuenta__enlace--cuenta" href="<?= e(url('app/perfil.php')) ?>"<?= $carpeta === 'app' && $actual === 'perfil.php' ? ' aria-current="page"' : '' ?>>Mi cuenta</a>
+                <a class="cuenta__enlace cuenta__enlace--preferencias" href="<?= e(url('app/mis-preferencias.php')) ?>"<?= $carpeta === 'app' && $actual === 'mis-preferencias.php' ? ' aria-current="page"' : '' ?>>Mis preferencias</a>
+              </div>
               <form class="preferencias" id="form-preferencias" method="post" action="<?= e(url('app/preferencias.php')) ?>">
                 <?= Sesion::campoCsrf() ?>
                 <input type="hidden" name="volver" value="<?= e((string) ($_SERVER['REQUEST_URI'] ?? '')) ?>">
