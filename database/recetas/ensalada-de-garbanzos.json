@@ -1,0 +1,77 @@
+{
+  "titulo": "Ensalada de garbanzos",
+  "descripcion": "Fresca y con proteína, sin horno.",
+  "porciones": 3,
+  "minutos_prep": 15,
+  "minutos_coccion": 0,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Garbanzo",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "cocidos"
+    },
+    {
+      "nombre": "Tomate",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1,
+      "nota": "morada si hay"
+    },
+    {
+      "nombre": "Morrón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Perejil",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1
+    },
+    {
+      "nombre": "Limón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    },
+    {
+      "nombre": "Comino",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    "Picar el tomate, la cebolla y el morrón en cubitos.",
+    "Mezclar con los garbanzos y el perejil.",
+    "Condimentar con limón, aceite, sal y comino. Dejar reposar 10 minutos antes de servir."
+  ]
+}

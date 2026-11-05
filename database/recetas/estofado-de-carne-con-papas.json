@@ -1,0 +1,91 @@
+{
+  "titulo": "Estofado de carne con papas",
+  "descripcion": "Carne tierna en salsa, para mojar el pan.",
+  "porciones": 4,
+  "minutos_prep": 20,
+  "minutos_coccion": 90,
+  "dificultad": 2,
+  "etiquetas": [
+    "sin_tacc"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Carne para guiso",
+      "cantidad": 700,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Papa",
+      "cantidad": 4,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Zanahoria",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Morrón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Puré de tomate",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Laurel",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Orégano",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Dorar la carne en cubos en el aceite, de a poco para que no hierva.",
+      "minutos": 10
+    },
+    {
+      "texto": "Agregar la cebolla, la zanahoria y el morrón picados y rehogar.",
+      "minutos": 8
+    },
+    {
+      "texto": "Sumar el puré de tomate, el laurel, el orégano y un vaso de agua. Tapar y cocinar a fuego bajo.",
+      "minutos": 60
+    },
+    {
+      "texto": "Agregar {ing:papa} en cubos y cocinar hasta que estén tiernas.",
+      "minutos": 25
+    }
+  ]
+}

@@ -10,6 +10,8 @@ declare(strict_types=1);
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use Cooki\Db;
+use Cooki\Dominio\Pasos;
+use Cooki\Dominio\Puntaje;
 use Cooki\Repositorios\IngredienteRepositorio;
 use Cooki\Repositorios\RecetaRepositorio;
 use Cooki\Sesion;
@@ -28,7 +30,7 @@ $receta = [
     'titulo' => '', 'descripcion' => '', 'porciones_base' => 4, 'minutos_prep' => 15,
     'minutos_coccion' => 0, 'dificultad' => 1,
 ];
-$ingredientes = [['id' => 0, 'cantidad' => null, 'unidad' => '', 'opcional' => false]];
+$ingredientes = [['id' => 0, 'cantidad' => null, 'unidad' => '', 'peso' => 2, 'opcional' => false]];
 $pasos = [];
 $etiquetasElegidas = [];
 
@@ -42,9 +44,11 @@ if ($id > 0 && !esPost()) {
         'id' => (int) $i['ingrediente_id'],
         'cantidad' => $i['cantidad'] === null ? null : (float) $i['cantidad'],
         'unidad' => (string) $i['unidad'],
+        'peso' => (int) $i['peso'],
         'opcional' => (bool) $i['es_opcional'],
+        'nota' => (string) ($i['nota'] ?? ''),
     ], $guardada['ingredientes']);
-    $pasos = array_column($guardada['pasos'], 'instruccion');
+    $pasos = Pasos::desdeTexto(Pasos::aTexto($guardada['pasos']));
     $etiquetasElegidas = array_map('intval', array_column($guardada['etiquetas'], 'id'));
 }
 
@@ -70,11 +74,14 @@ if (esPost()) {
             'id' => $idIngrediente,
             'cantidad' => $cantidad === '' ? null : (float) $cantidad,
             'unidad' => mb_substr(trim((string) ($fila['unidad'] ?? '')), 0, 10),
+            // Peso en la receta (para el puntaje): 3 principal, 2 secundario, 1 accesorio
+            'peso' => isset(Puntaje::PESOS[(int) ($fila['peso'] ?? 2)]) ? (int) $fila['peso'] : 2,
             'opcional' => !empty($fila['opcional']),
+            'nota' => mb_substr(trim((string) ($fila['nota'] ?? '')), 0, 100),
         ];
     }
-    // Un paso por renglón
-    $pasos = array_values(array_filter(array_map('trim', preg_split('/\R/', campo('pasos')) ?: [])));
+    // Un paso por renglón; "[⏱ 15 min]" al final le pone temporizador (lo usa el modo cocina)
+    $pasos = Pasos::desdeTexto(campo('pasos'));
     $etiquetasElegidas = array_values(array_intersect(
         array_map('intval', (array) ($_POST['etiquetas'] ?? [])),
         array_map('intval', array_column($etiquetas, 'id'))
@@ -107,6 +114,9 @@ if (esPost()) {
         foreach ($ingredientes as $ing) {
             if ($ing['cantidad'] !== null && ($ing['cantidad'] <= 0 || $ing['cantidad'] > 100000)) {
                 $errores['ingredientes'] = 'Las cantidades tienen que ser mayores que cero.';
+            } elseif ($ing['cantidad'] === null && !in_array($ing['unidad'], ['', 'pizca'], true)) {
+                // Sin cantidad, el ingrediente va "a gusto": la unidad sola (por ejemplo "g") no dice cuánto
+                $errores['ingredientes'] = 'Hay un ingrediente con unidad pero sin cantidad. Si va a gusto, dejá vacías la cantidad y la unidad.';
             }
         }
     }
@@ -120,7 +130,7 @@ if (esPost()) {
         redirigir('admin/recetas.php?q=' . urlencode($receta['titulo']));
     }
     if ($ingredientes === []) {
-        $ingredientes = [['id' => 0, 'cantidad' => null, 'unidad' => '', 'opcional' => false]];
+        $ingredientes = [['id' => 0, 'cantidad' => null, 'unidad' => '', 'peso' => 2, 'opcional' => false]];
     }
 }
 
@@ -144,7 +154,7 @@ $error = fn (string $campo) => isset($errores[$campo]) ? '<p class="error-campo"
 $titulo = $id ? 'Editar receta' : 'Nueva receta';
 require parcial('encabezado');
 ?>
-<?= enlaceVolver('admin/recetas.php', 'Volver a recetas') ?>
+<?= enlaceVolver('admin/recetas.php', 'Volver a Recetas', $id ? [['admin/recetas.php', 'Recetas'], ['app/receta.php?id=' . $id, 'Ver cómo se ve']] : [['admin/recetas.php', 'Recetas']]) ?>
 <h1><?= e($titulo) ?></h1>
 <?php if ($errores !== []) : ?>
   <p class="aviso aviso--error" role="alert">Revisá los campos marcados.</p>
@@ -202,6 +212,7 @@ require parcial('encabezado');
 
   <section class="tarjeta">
     <h2>Ingredientes</h2>
+    <p class="texto-suave"><small>Si un ingrediente no lleva cantidad (la sal, el perejil para servir), dejá vacías la cantidad y la unidad: en la receta dice «a gusto».</small></p>
     <?= $error('ingredientes') ?>
     <div id="filas-ingredientes" data-frasco="<?= e(url('img/ingredientes/frasco.svg')) ?>">
       <?php foreach ($ingredientes as $i => $ing) : ?>
@@ -214,12 +225,21 @@ require parcial('encabezado');
           </div>
           <div class="campo">
             <label for="ing-<?= $i ?>-cantidad">Cantidad</label>
-            <input id="ing-<?= $i ?>-cantidad" name="ingredientes[<?= $i ?>][cantidad]" data-campo="cantidad" type="text" inputmode="decimal" value="<?= e($ing['cantidad'] === null ? '' : rtrim(rtrim(number_format($ing['cantidad'], 2, '.', ''), '0'), '.')) ?>">
+            <input id="ing-<?= $i ?>-cantidad" name="ingredientes[<?= $i ?>][cantidad]" data-campo="cantidad" type="text" inputmode="decimal" placeholder="a gusto" value="<?= e($ing['cantidad'] === null ? '' : rtrim(rtrim(number_format($ing['cantidad'], 2, '.', ''), '0'), '.')) ?>">
           </div>
           <div class="campo">
             <label for="ing-<?= $i ?>-unidad">Unidad</label>
             <input id="ing-<?= $i ?>-unidad" name="ingredientes[<?= $i ?>][unidad]" data-campo="unidad" type="text" maxlength="10" list="unidades" value="<?= e($ing['unidad']) ?>">
           </div>
+          <div class="campo">
+            <label for="ing-<?= $i ?>-peso">Importancia</label>
+            <select id="ing-<?= $i ?>-peso" name="ingredientes[<?= $i ?>][peso]" data-campo="peso">
+              <?php foreach (Puntaje::PESOS as $valor => $texto) : ?>
+                <option value="<?= $valor ?>"<?= (int) ($ing['peso'] ?? 2) === $valor ? ' selected' : '' ?>><?= e($texto) ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <input type="hidden" name="ingredientes[<?= $i ?>][nota]" data-campo="nota" value="<?= e($ing['nota'] ?? '') ?>">
           <label class="fila-ingrediente__opcional"><input type="checkbox" name="ingredientes[<?= $i ?>][opcional]" data-campo="opcional" value="1"<?= $ing['opcional'] ? ' checked' : '' ?>> Opcional</label>
           <button class="boton boton--peligro boton--chico" type="button" data-quitar>Quitar</button>
         </div>
@@ -237,7 +257,11 @@ require parcial('encabezado');
     <h2>Pasos</h2>
     <div class="campo">
       <label for="pasos">Un paso por renglón</label>
-      <textarea id="pasos" name="pasos" rows="8" required><?= e(implode("\n", $pasos)) ?></textarea>
+      <textarea id="pasos" name="pasos" rows="8" required aria-describedby="pasos-ayuda"><?= e(implode("\n", array_map(
+          fn ($p) => $p['texto'] . ($p['segundos'] ? ' [⏱ ' . intdiv($p['segundos'], 60) . ' min]' : ''),
+          $pasos
+      ))) ?></textarea>
+      <p class="texto-suave" id="pasos-ayuda"><small>Para que un paso tenga temporizador, terminalo con <code>[⏱ 15 min]</code>. Para que la cantidad cambie con las porciones, escribí el ingrediente así: <code>{ing:papa}</code>.</small></p>
       <?= $error('pasos') ?>
     </div>
   </section>

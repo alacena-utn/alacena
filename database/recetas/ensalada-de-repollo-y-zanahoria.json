@@ -1,0 +1,63 @@
+{
+  "titulo": "Ensalada de repollo y zanahoria",
+  "descripcion": "Crocante, para acompañar carnes y hamburguesas.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 0,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Repollo",
+      "cantidad": 0.5,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Zanahoria",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Mayonesa",
+      "cantidad": 3,
+      "unidad": "cda",
+      "peso": 2
+    },
+    {
+      "nombre": "Vinagre",
+      "cantidad": 15,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Limón",
+      "cantidad": 0.5,
+      "unidad": "u",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Cortar el repollo en tiras muy finas y rallar la zanahoria.",
+    "Mezclar la mayonesa con el vinagre, el azúcar, la sal y el jugo de limón.",
+    "Unir todo y dejar en la heladera 20 minutos antes de servir."
+  ]
+}

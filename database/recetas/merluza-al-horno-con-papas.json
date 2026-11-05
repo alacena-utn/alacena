@@ -1,0 +1,67 @@
+{
+  "titulo": "Merluza al horno con papas",
+  "descripcion": "Pescado sin olor en la cocina.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 35,
+  "dificultad": 1,
+  "etiquetas": [
+    "sin_tacc"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Merluza",
+      "cantidad": 4,
+      "unidad": "u",
+      "peso": 3,
+      "nota": "filetes"
+    },
+    {
+      "nombre": "Papa",
+      "cantidad": 4,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Limón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Ajo",
+      "cantidad": 2,
+      "unidad": "diente",
+      "peso": 1
+    },
+    {
+      "nombre": "Perejil",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 40,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Cortar las papas en rodajas finas y hornearlas con aceite y sal a 200 °C.",
+      "minutos": 20
+    },
+    "Acomodar los filetes encima, con limón, ajo y perejil picados.",
+    {
+      "texto": "Seguir horneando hasta que el pescado se separe en láminas.",
+      "minutos": 15
+    }
+  ]
+}

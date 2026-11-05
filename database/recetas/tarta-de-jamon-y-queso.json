@@ -1,0 +1,50 @@
+{
+  "titulo": "Tarta de jamón y queso",
+  "descripcion": "Rápida, sin cocinar el relleno antes.",
+  "porciones": 6,
+  "minutos_prep": 15,
+  "minutos_coccion": 30,
+  "dificultad": 1,
+  "etiquetas": [],
+  "ingredientes": [
+    {
+      "nombre": "Tapa de tarta",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Jamón cocido",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Queso cremoso",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 100,
+      "unidad": "ml",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Batir los huevos con la leche.",
+    "Forrar el molde con una tapa, acomodar el jamón y el queso en capas y volcar el batido.",
+    "Tapar con la otra masa, cerrar los bordes y hacer un corte en el centro.",
+    {
+      "texto": "Hornear a 180 °C.",
+      "minutos": 30
+    }
+  ]
+}

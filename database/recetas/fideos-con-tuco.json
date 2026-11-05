@@ -1,0 +1,88 @@
+{
+  "titulo": "Fideos con tuco",
+  "descripcion": "La salsa de tomate de siempre, con zanahoria para que no quede ácida.",
+  "porciones": 4,
+  "minutos_prep": 10,
+  "minutos_coccion": 30,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Fideos",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Puré de tomate",
+      "cantidad": 500,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Ajo",
+      "cantidad": 2,
+      "unidad": "diente",
+      "peso": 1
+    },
+    {
+      "nombre": "Zanahoria",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1,
+      "nota": "rallada"
+    },
+    {
+      "nombre": "Laurel",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Orégano",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Queso rallado",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Rehogar la cebolla, el ajo y la zanahoria en el aceite.",
+      "minutos": 8
+    },
+    {
+      "texto": "Agregar el puré de tomate, el laurel, el orégano y la sal. Cocinar a fuego bajo tapado.",
+      "minutos": 20
+    },
+    "Hervir {ing:fideos} en abundante agua con sal el tiempo que indique el paquete.",
+    "Servir con el tuco y queso rallado."
+  ]
+}

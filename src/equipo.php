@@ -26,7 +26,7 @@ return [
             . 'entornos con Docker e integración continua con GitHub Actions.',
         'imagen' => 'daiana',
         'github' => 'https://github.com/Daiana1411',
-        'linkedin' => '',
+        'linkedin' => 'https://www.linkedin.com/in/daiana-antonella-martin-598118136',
         'correo' => '',
     ],
     // P2
@@ -49,7 +49,7 @@ return [
         'imagen' => 'pablo',
         'github' => 'https://github.com/pablito2032',
         'linkedin' => '',
-        'correo' => '',
+        'correo' => 'pablofaraone905@gmail.com',
     ],
     // P4
     [
@@ -58,8 +58,8 @@ return [
         'descripcion' => 'Formularios con validación en JavaScript y PHP, envío de correos, '
             . 'pruebas automáticas con PHPUnit y accesibilidad web.',
         'imagen' => 'ariana',
-        'github' => '',
-        'linkedin' => '',
+        'github' => 'https://github.com/arianapajon',
+        'linkedin' => 'https://www.linkedin.com/in/arianapajon',
         'correo' => '',
     ],
     // P5
@@ -69,7 +69,7 @@ return [
         'descripcion' => 'Paneles de gestión en PHP y MariaDB, altas, bajas y modificaciones (CRUD) '
             . 'y control de roles y permisos.',
         'imagen' => 'susana',
-        'github' => '',
+        'github' => 'https://github.com/Susana2030',
         'linkedin' => '',
         'correo' => '',
     ],

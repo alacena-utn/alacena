@@ -1,0 +1,70 @@
+{
+  "titulo": "Brownies",
+  "descripcion": "Húmedos por dentro, con costra arriba.",
+  "porciones": 12,
+  "minutos_prep": 15,
+  "minutos_coccion": 25,
+  "dificultad": 2,
+  "etiquetas": [
+    "vegetariana",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Chocolate",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 100,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Nueces",
+      "cantidad": 80,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Esencia de vainilla",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Derretir el chocolate con la manteca a baño María.",
+      "minutos": 5
+    },
+    "Batir los huevos con el azúcar y la esencia y sumar el chocolate tibio.",
+    "Agregar la harina y las nueces y mezclar apenas.",
+    {
+      "texto": "Hornear a 180 °C en un molde cuadrado: el centro tiene que quedar un poco húmedo.",
+      "minutos": 25
+    },
+    "Dejar enfriar antes de cortar."
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "titulo": "Tostadas francesas",
+  "descripcion": "Pan mojado en huevo y leche, dorado en manteca.",
+  "porciones": 2,
+  "minutos_prep": 5,
+  "minutos_coccion": 10,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "economica",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Pan",
+      "cantidad": 4,
+      "unidad": "u",
+      "peso": 3,
+      "nota": "rodajas"
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 100,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1
+    },
+    {
+      "nombre": "Esencia de vainilla",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 20,
+      "unidad": "g",
+      "peso": 1
+    },
+    {
+      "nombre": "Miel",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    "Batir los huevos con la leche, el azúcar y la esencia.",
+    "Pasar las rodajas de pan por la mezcla de los dos lados.",
+    {
+      "texto": "Dorarlas en la manteca a fuego medio, unos 2 minutos de cada lado.",
+      "minutos": 5
+    },
+    "Servir con miel."
+  ]
+}

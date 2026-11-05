@@ -125,6 +125,28 @@ final class UsuarioRepositorio
         return true;
     }
 
+    /** Perfil (incremento 2 · P1): el usuario cambia su nombre y su email. */
+    public function actualizarDatos(int $id, string $nombre, string $email): void
+    {
+        $this->db->prepare('UPDATE usuario SET nombre = :nombre, email = :email WHERE id = :id')
+            ->execute(['nombre' => $nombre, 'email' => $email, 'id' => $id]);
+    }
+
+    public function cambiarContrasena(int $id, string $nueva): void
+    {
+        $this->db->prepare('UPDATE usuario SET hash_contrasena = :hash WHERE id = :id')
+            ->execute(['hash' => password_hash($nueva, PASSWORD_DEFAULT), 'id' => $id]);
+    }
+
+    /** ¿Es la contraseña actual de ese usuario? (para cambiarla o dar de baja la cuenta) */
+    public function contrasenaCorrecta(int $id, string $contrasena): bool
+    {
+        $consulta = $this->db->prepare('SELECT hash_contrasena FROM usuario WHERE id = :id');
+        $consulta->execute(['id' => $id]);
+        $hash = $consulta->fetchColumn();
+        return is_string($hash) && password_verify($contrasena, $hash);
+    }
+
     public function borrar(int $id): void
     {
         $this->db->prepare('DELETE FROM usuario WHERE id = :id')->execute(['id' => $id]);

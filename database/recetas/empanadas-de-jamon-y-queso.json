@@ -1,0 +1,45 @@
+{
+  "titulo": "Empanadas de jamón y queso",
+  "descripcion": "Las más pedidas por los chicos, listas en media hora.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 15,
+  "dificultad": 1,
+  "etiquetas": [],
+  "ingredientes": [
+    {
+      "nombre": "Tapas de empanada",
+      "cantidad": 12,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Jamón cocido",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Queso cremoso",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "en cubos"
+    },
+    {
+      "nombre": "Orégano",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    "Cortar el jamón en tiras y el queso en cubos chicos.",
+    "Poner un poco de jamón y queso en cada tapa, espolvorear orégano y cerrar bien para que no se escape el queso.",
+    {
+      "texto": "Hornear a 200 °C en una placa aceitada.",
+      "minutos": 15
+    }
+  ]
+}

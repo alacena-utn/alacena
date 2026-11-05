@@ -1,0 +1,64 @@
+{
+  "titulo": "Bizcochuelo de vainilla",
+  "descripcion": "La base para cualquier torta de cumpleaños.",
+  "porciones": 8,
+  "minutos_prep": 20,
+  "minutos_coccion": 40,
+  "dificultad": 2,
+  "etiquetas": [
+    "vegetariana",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Huevo",
+      "cantidad": 4,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Polvo de hornear",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 2
+    },
+    {
+      "nombre": "Esencia de vainilla",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 10,
+      "unidad": "g",
+      "peso": 1,
+      "nota": "para el molde"
+    }
+  ],
+  "pasos": [
+    "Enmantecar y enharinar un molde de 24 cm.",
+    {
+      "texto": "Batir los huevos con el azúcar hasta que dupliquen su volumen y queden claros.",
+      "minutos": 8
+    },
+    "Sumar la esencia y, con movimientos envolventes, la harina tamizada con el polvo de hornear.",
+    {
+      "texto": "Hornear a 180 °C sin abrir la puerta los primeros 30 minutos.",
+      "minutos": 40
+    },
+    "Está listo cuando un palillo sale seco. Desmoldar frío."
+  ]
+}

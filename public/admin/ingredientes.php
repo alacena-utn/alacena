@@ -60,6 +60,7 @@ if (esPost()) {
         'es_basico' => isset($_POST['es_basico']),
         'perecedero' => isset($_POST['perecedero']),
         'vida_util_dias' => $vida === '' ? null : (int) $vida,
+        'sinonimos' => campo('sinonimos'),
     ];
     if (mb_strlen($form['nombre']) < 2 || mb_strlen($form['nombre']) > 80) {
         $errores['nombre'] = 'El nombre debe tener entre 2 y 80 caracteres.';
@@ -79,19 +80,25 @@ if (esPost()) {
         redirigir('error.php?motivo=no-encontrado');
     }
 
+    if (mb_strlen($form['sinonimos']) > 500) {
+        $errores['sinonimos'] = 'Hasta 500 caracteres.';
+    }
+
     if ($errores === []) {
-        $repo->guardar($form, $id);
+        $id = $repo->guardar($form, $id);
+        $repo->guardarSinonimos($id, IngredienteRepositorio::leerSinonimos($form['sinonimos']));
         Sesion::avisar('exito', 'Se guardó “' . $form['nombre'] . '”.');
         redirigir('admin/ingredientes.php?q=' . urlencode($form['nombre']));
     }
 } elseif (isset($_GET['nuevo'])) {
     $form = ['id' => 0, 'nombre' => '', 'categoria_id' => 0, 'unidad_default' => 'g',
-        'es_basico' => false, 'perecedero' => true, 'vida_util_dias' => null];
+        'es_basico' => false, 'perecedero' => true, 'vida_util_dias' => null, 'sinonimos' => ''];
 } elseif (isset($_GET['editar'])) {
     $form = $repo->obtener((int) $_GET['editar']);
     if ($form === null) {
         redirigir('error.php?motivo=no-encontrado');
     }
+    $form['sinonimos'] = $repo->sinonimosComoTexto((int) $form['id']);
 }
 
 $busqueda = trim((string) ($_GET['q'] ?? ''));
@@ -107,7 +114,7 @@ $dibujos = array_map(fn (string $a) => basename($a, '.svg'), glob(dirname(__DIR_
 require parcial('encabezado');
 ?>
 <?php if ($form !== null) : ?>
-  <?= enlaceVolver('admin/ingredientes.php', 'Volver a ingredientes') ?>
+  <?= enlaceVolver('admin/ingredientes.php', 'Volver a Ingredientes', [], true) ?>
   <section class="tarjeta tarjeta--angosta">
     <h1><?= $form['id'] ? 'Editar ingrediente' : 'Nuevo ingrediente' ?></h1>
     <form class="formulario" method="post">
@@ -154,6 +161,12 @@ require parcial('encabezado');
           <?= $error('vida_util_dias') ?>
         </div>
       </div>
+      <div class="campo">
+        <label for="sinonimos">Otros nombres</label>
+        <input id="sinonimos" name="sinonimos" type="text" maxlength="500" aria-describedby="sinonimos-ayuda" value="<?= e($form['sinonimos'] ?? '') ?>">
+        <p class="texto-suave" id="sinonimos-ayuda"><small>Separados por coma; la región va entre paréntesis. Ej.: <code>muzzarella (AR), mozarela</code>. El buscador también los encuentra.</small></p>
+        <?= $error('sinonimos') ?>
+      </div>
       <div class="casillas">
         <label><input type="checkbox" name="perecedero" value="1"<?= $form['perecedero'] ? ' checked' : '' ?>> Se echa a perder</label>
         <label><input type="checkbox" name="es_basico" value="1"<?= $form['es_basico'] ? ' checked' : '' ?>> Es un básico (sal, aceite…): se considera que siempre hay</label>
@@ -165,7 +178,7 @@ require parcial('encabezado');
     </form>
   </section>
 <?php else : ?>
-  <?= enlaceVolver('admin/index.php', 'Volver al panel') ?>
+  <?= enlaceVolver('admin/index.php', 'Volver al panel', [['admin/index.php', 'Panel']]) ?>
   <div class="encabezado-pagina">
     <h1>Ingredientes</h1>
     <a class="boton" href="<?= e(url('admin/ingredientes.php?nuevo')) ?>">+ Nuevo ingrediente</a>

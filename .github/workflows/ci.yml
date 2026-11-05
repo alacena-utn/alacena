@@ -49,6 +49,7 @@ jobs:
         run: |
           mysql -h 127.0.0.1 -u cooki -pcooki cooki < database/schema.sql
           mysql -h 127.0.0.1 -u cooki -pcooki cooki < database/seed.sql
+          mysql -h 127.0.0.1 -u cooki -pcooki cooki < database/recetas.sql
 
       - name: Pruebas (unitarias + integración)
         run: composer test

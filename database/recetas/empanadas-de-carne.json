@@ -1,0 +1,85 @@
+{
+  "titulo": "Empanadas de carne",
+  "descripcion": "Jugosas, con cebolla y huevo duro. Rinden 12.",
+  "porciones": 4,
+  "minutos_prep": 40,
+  "minutos_coccion": 20,
+  "dificultad": 2,
+  "etiquetas": [],
+  "ingredientes": [
+    {
+      "nombre": "Tapas de empanada",
+      "cantidad": 12,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Carne picada",
+      "cantidad": 500,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2,
+      "nota": "picada"
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2,
+      "nota": "duros"
+    },
+    {
+      "nombre": "Aceitunas",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Comino",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Pimentón",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Hervir los huevos 10 minutos, enfriarlos y picarlos.",
+    {
+      "texto": "Rehogar la cebolla en el aceite hasta que esté transparente.",
+      "minutos": 8
+    },
+    {
+      "texto": "Sumar {ing:carne-picada}, el pimentón, el comino y la sal. Cocinar hasta que pierda el color rosado.",
+      "minutos": 10
+    },
+    "Dejar enfriar el relleno (si está caliente, rompe las tapas) y mezclar con el huevo y las aceitunas.",
+    "Rellenar cada tapa, cerrar con repulgue o apretando el borde con un tenedor.",
+    {
+      "texto": "Hornear a 200 °C hasta que estén doradas.",
+      "minutos": 20
+    }
+  ]
+}

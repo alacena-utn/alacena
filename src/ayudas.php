@@ -82,11 +82,107 @@ function iconoIngrediente(string $nombre, bool $propio = false): string
     return url('img/ingredientes/frasco.svg');
 }
 
-/** Enlace "← Volver a …" (flecha a mano) que va arriba de las páginas de administración. */
-function enlaceVolver(string $ruta, string $texto): string
+/**
+ * Páginas a las que se puede "volver", con el nombre que se lee en la flecha.
+ * Las que empiezan con "el" se leen "Volver al …".
+ */
+const PAGINAS_PARA_VOLVER = [
+    'index.php' => 'el inicio',
+    'nosotros.php' => 'Nosotros',
+    'contacto.php' => 'Contacto',
+    'app/index.php' => 'Mi cocina',
+    'app/despensa.php' => 'Mi despensa',
+    'app/recetas.php' => 'Recetas',
+    'app/receta.php' => 'la receta',
+    'app/perfil.php' => 'Mi cuenta',
+    'app/mis-preferencias.php' => 'Mis preferencias',
+    'admin/index.php' => 'el panel',
+    'admin/recetas.php' => 'Recetas',
+    'admin/ingredientes.php' => 'Ingredientes',
+    'admin/usuarios.php' => 'Usuarios',
+    'admin/consultas.php' => 'Consultas',
+];
+
+/** "Volver a Recetas", "Volver al panel"… */
+function textoVolver(string $nombre): string
 {
-    return '<p><a class="volver" href="' . e(url($ruta)) . '"><span class="volver__flecha" aria-hidden="true">←</span> '
-        . e($texto) . '</a></p>';
+    return str_starts_with($nombre, 'el ') ? 'Volver al ' . substr($nombre, 3) : 'Volver a ' . $nombre;
+}
+
+/** Ruta de una dirección de este sitio sin la base: "/cooki/public/app/receta.php" → "app/receta.php". */
+function rutaDelSitio(string $camino): ?string
+{
+    $base = url();
+    return str_starts_with($camino, $base) ? substr($camino, strlen($base)) : null;
+}
+
+/**
+ * La página de la que vino quien está mirando esta (la dirección anterior del navegador),
+ * si es una página de este sitio a la que se puede volver. Se recuerda en la sesión por página,
+ * así se mantiene aunque la página se recargue a sí misma (cambiar porciones, guardar un favorito…).
+ * Los enlaces de volver llevan ?atras=1: al volver no se pisa lo recordado (si no, A → B → volver a A
+ * haría que A "vuelva" a B).
+ * @return array{url: string, ruta: string, nombre: string}|null
+ */
+function paginaAnterior(): ?array
+{
+    $actual = rutaDelSitio((string) parse_url((string) ($_SERVER['SCRIPT_NAME'] ?? ''), PHP_URL_PATH));
+    if ($actual === null || session_status() !== PHP_SESSION_ACTIVE) {
+        return null;
+    }
+    $previa = parse_url((string) ($_SERVER['HTTP_REFERER'] ?? ''));
+    $hostPrevio = is_array($previa) ? ($previa['host'] ?? '') : '';
+    if ($hostPrevio !== '' && isset($previa['port'])) {
+        $hostPrevio .= ':' . $previa['port'];
+    }
+    $mismoSitio = $hostPrevio !== '' && strcasecmp($hostPrevio, (string) ($_SERVER['HTTP_HOST'] ?? '')) === 0;
+    $ruta = $mismoSitio ? rutaDelSitio((string) ($previa['path'] ?? '')) : null;
+    if ($ruta === '') {
+        $ruta = 'index.php';
+    }
+    if ($ruta !== null && $ruta !== $actual && isset(PAGINAS_PARA_VOLVER[$ruta]) && !isset($_GET['atras'])) {
+        parse_str((string) ($previa['query'] ?? ''), $parametros);
+        unset($parametros['atras']);
+        $_SESSION['volver'][$actual] = ['ruta' => $ruta, 'parametros' => $parametros];
+    }
+    $recordada = $_SESSION['volver'][$actual] ?? null;
+    if (!is_array($recordada) || !isset(PAGINAS_PARA_VOLVER[$recordada['ruta'] ?? ''])) {
+        return null;
+    }
+    $parametros = (array) $recordada['parametros'] + ['atras' => 1];
+    return [
+        'url' => url($recordada['ruta']) . '?' . http_build_query($parametros),
+        'ruta' => $recordada['ruta'],
+        'nombre' => PAGINAS_PARA_VOLVER[$recordada['ruta']],
+    ];
+}
+
+/**
+ * Flecha de volver que va arriba de las páginas: una flecha dibujada a mano y el texto en letra de birome.
+ *   $ruta, $texto  adónde va si no se sabe de dónde vino (o si $fija es true: un formulario dentro de un listado)
+ *   $atajos        otros lugares a los que ir, como papelitos al lado: [['app/recetas.php', 'Recetas'], ...]
+ *                  (el que es igual a adonde vuelve la flecha no se muestra)
+ * Uso: <?= enlaceVolver('app/recetas.php', 'Volver a Recetas', [['app/index.php', 'Mi cocina']]) ?>
+ * @param list<array{0: string, 1: string}> $atajos
+ */
+function enlaceVolver(string $ruta, string $texto, array $atajos = [], bool $fija = false): string
+{
+    $anterior = $fija ? null : paginaAnterior();
+    $destino = $anterior['ruta'] ?? (string) strtok($ruta, '?');
+    $html = '<nav class="volver-barra" aria-label="Volver">'
+        . '<a class="volver" href="' . e($anterior['url'] ?? url($ruta)) . '">'
+        . '<span class="volver__flecha" aria-hidden="true"></span>'
+        . '<span class="volver__texto">'
+        . e($anterior !== null ? textoVolver($anterior['nombre']) : $texto) . '</span></a>';
+    $otros = array_filter($atajos, fn (array $atajo): bool => (string) strtok($atajo[0], '?') !== $destino);
+    if ($otros !== []) {
+        $html .= '<span class="volver-barra__atajos"><span class="volver-barra__ir">o ir a</span>';
+        foreach ($otros as [$rutaAtajo, $textoAtajo]) {
+            $html .= ' <a class="atajo" href="' . e(url($rutaAtajo)) . '">' . e($textoAtajo) . '</a>';
+        }
+        $html .= '</span>';
+    }
+    return $html . '</nav>';
 }
 
 /**

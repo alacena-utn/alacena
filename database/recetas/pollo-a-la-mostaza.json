@@ -1,0 +1,64 @@
+{
+  "titulo": "Pollo a la mostaza",
+  "descripcion": "Cremoso, va bien con arroz o puré.",
+  "porciones": 4,
+  "minutos_prep": 10,
+  "minutos_coccion": 25,
+  "dificultad": 1,
+  "etiquetas": [
+    "sin_tacc"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Pollo",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 3,
+      "nota": "pechugas en tiras"
+    },
+    {
+      "nombre": "Mostaza",
+      "cantidad": 2,
+      "unidad": "cda",
+      "peso": 3
+    },
+    {
+      "nombre": "Crema de leche",
+      "cantidad": 200,
+      "unidad": "ml",
+      "peso": 2
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 15,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Dorar el pollo en el aceite y retirarlo.",
+      "minutos": 8
+    },
+    {
+      "texto": "En la misma sartén, rehogar la cebolla en pluma.",
+      "minutos": 6
+    },
+    {
+      "texto": "Volver a poner el pollo, sumar {ing:crema-de-leche} y la mostaza. Cocinar a fuego bajo hasta que espese.",
+      "minutos": 10
+    }
+  ]
+}

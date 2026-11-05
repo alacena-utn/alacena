@@ -34,7 +34,7 @@ $recetas = $repo->buscar(['q' => $busqueda]);
 $titulo = 'Recetas · Administración';
 require parcial('encabezado');
 ?>
-<?= enlaceVolver('admin/index.php', 'Volver al panel') ?>
+<?= enlaceVolver('admin/index.php', 'Volver al panel', [['admin/index.php', 'Panel']]) ?>
 <div class="encabezado-pagina">
   <h1>Recetas</h1>
   <a class="boton" href="<?= e(url('admin/receta-editar.php')) ?>">+ Nueva receta</a>

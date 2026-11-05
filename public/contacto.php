@@ -120,6 +120,9 @@ require parcial('encabezado');
             src="https://www.google.com/maps?q=UTN+Facultad+Regional+Haedo,+Par%C3%ADs+532,+Haedo&amp;output=embed"
             loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     <p class="texto-suave"><small>Correo: <?= e(Config::get('MAIL_CONTACTO', 'contacto@cooki.test')) ?> (dirección de prueba del proyecto)</small></p>
+    <?php /* Lo que queda vacío abajo de la hoja (es tan alta como la del formulario) */ ?>
+    <?php $sueltos = [[14, 86, 54, -10], [46, 90, 40, 8], [76, 84, 50, -6]]; ?>
+    <?php require parcial('dibujos-sueltos'); ?>
   </section>
 </div>
 
@@ -142,6 +145,11 @@ require parcial('encabezado');
         <?php endif; ?>
       </article>
     <?php endforeach; ?>
+    <?php /* Lo que sobra de la última fila de notas se llena con dibujos sueltos */ ?>
+    <div class="mis-consultas__relleno">
+      <?php $sueltos = [[22, 48, 84, -10], [58, -32, 92, 9], [73, 54, 100, -6], [8, -54, 88, 12]]; ?>
+      <?php require parcial('dibujos-sueltos'); ?>
+    </div>
   </section>
 <?php endif; ?>
 <script src="<?= e(recurso('js/contacto.js')) ?>" defer></script>

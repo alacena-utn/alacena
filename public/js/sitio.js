@@ -152,3 +152,20 @@ for (const campo of document.querySelectorAll('input[type="password"]')) {
     campo.focus();
   });
 }
+
+// 7. El nombre "COOKI": cada tanto las letras saltan solas (la misma ola que al pasar el mouse, sin sonido).
+//    No pasa si la pestaña no está a la vista, si el mouse ya está encima o si el sistema pide menos movimiento.
+const marca = document.querySelector('.marca');
+if (marca && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  setInterval(() => {
+    if (document.hidden || marca.matches(':hover')) return;
+    marca.classList.remove('marca--ola');
+    void marca.offsetWidth;   // reinicia la animación
+    marca.classList.add('marca--ola');
+  }, 9000);
+  marca.addEventListener('animationend', (evento) => {
+    if (evento.target.classList.contains('marca__letra') && evento.target === marca.querySelector('.marca__letra:last-child')) {
+      marca.classList.remove('marca--ola');
+    }
+  });
+}

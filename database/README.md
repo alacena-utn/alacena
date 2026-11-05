@@ -5,7 +5,8 @@
 | `schema.sql` | Crea todas las tablas. Se puede correr las veces que haga falta (borra y recrea) | P3 |
 | `seed.sql` | Datos iniciales: categorías, ingredientes, sinónimos y una receta de ejemplo | P3 |
 | `datos/ingredientes.csv` | Planilla de ingredientes exportada (P2-04), fuente del seed | P2 |
-| `recetas/*.json` | Una receta por archivo, con el formato de `docs/guia-recetas.md` | todos |
+| `recetas/*.json` | Una receta por archivo, con el formato de `docs/guia-recetas.md` (50 recetas) | todos |
+| `recetas.sql` | Las recetas de `recetas/` como SQL. Se genera con `php scripts/importar-recetas.php --sql`: no editar a mano | P3 |
 
 ## Cargar la base
 
@@ -16,12 +17,13 @@ docker compose up -d        # la recrea con schema.sql + seed.sql
 ```
 
 **Sin Docker (XAMPP / Laragon) o en el hosting:** en phpMyAdmin, crear la base `cooki`
-(intercalación `utf8mb4_unicode_ci`) → pestaña **Importar** → `schema.sql`, y después `seed.sql`.
+(intercalación `utf8mb4_unicode_ci`) → pestaña **Importar** → `schema.sql`, después `seed.sql` y por último `recetas.sql`.
 
 **Por consola:**
 ```bash
 mysql -u root -p cooki < database/schema.sql
 mysql -u root -p cooki < database/seed.sql
+mysql -u root -p cooki < database/recetas.sql
 ```
 
 ## Si ya tenías la base de Alacena
@@ -47,6 +49,8 @@ mysql -u cooki -p cooki < database/migraciones/001-tanda-heladera.sql
 mysql -u cooki -p cooki < database/migraciones/002-tanda-heladera-2.sql   # siempre en orden
 mysql -u cooki -p cooki < database/migraciones/003-tanda-heladera-3.sql
 mysql -u cooki -p cooki < database/migraciones/004-tanda-heladera-4.sql
+mysql -u cooki -p cooki < database/migraciones/005-incremento-2-a.sql
+mysql -u cooki -p cooki < database/recetas.sql                           # el recetario nuevo
 ```
 
 ## Reglas

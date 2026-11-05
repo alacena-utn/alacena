@@ -1,0 +1,79 @@
+{
+  "titulo": "Hamburguesas caseras",
+  "descripcion": "Sin conservantes, se pueden freezar crudas.",
+  "porciones": 4,
+  "minutos_prep": 15,
+  "minutos_coccion": 10,
+  "dificultad": 1,
+  "etiquetas": [],
+  "ingredientes": [
+    {
+      "nombre": "Carne picada",
+      "cantidad": 600,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Pan rallado",
+      "cantidad": 3,
+      "unidad": "cda",
+      "peso": 2
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1,
+      "nota": "rallada"
+    },
+    {
+      "nombre": "Ajo",
+      "cantidad": 1,
+      "unidad": "diente",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Pan",
+      "cantidad": 4,
+      "unidad": "u",
+      "peso": 1,
+      "opcional": true,
+      "nota": "de hamburguesa"
+    },
+    {
+      "nombre": "Lechuga",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Tomate",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    "Mezclar la carne con el huevo, el pan rallado, la cebolla, el ajo y la sal, sin amasar de más.",
+    "Formar 4 bollos, aplastarlos y hacerles un hueco en el centro con el dedo (así no se inflan).",
+    {
+      "texto": "Cocinar en plancha o sartén bien caliente, 4 o 5 minutos de cada lado.",
+      "minutos": 10
+    },
+    "Armar con pan, lechuga y tomate."
+  ]
+}

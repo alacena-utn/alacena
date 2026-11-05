@@ -1,0 +1,65 @@
+{
+  "titulo": "Ensalada rusa",
+  "descripcion": "Infaltable en las fiestas.",
+  "porciones": 6,
+  "minutos_prep": 15,
+  "minutos_coccion": 20,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Papa",
+      "cantidad": 4,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Zanahoria",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Arveja",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Mayonesa",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 1,
+      "opcional": true,
+      "nota": "duros"
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Pelar y cortar las papas y las zanahorias en cubos chicos, todos iguales.",
+    {
+      "texto": "Hervir las papas y zanahorias en agua con sal hasta que estén tiernas pero firmes.",
+      "minutos": 12
+    },
+    {
+      "texto": "Sumar las arvejas los últimos minutos.",
+      "minutos": 3
+    },
+    "Escurrir, dejar enfriar y mezclar con la mayonesa. Decorar con huevo duro."
+  ]
+}

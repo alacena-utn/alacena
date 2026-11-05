@@ -1,0 +1,54 @@
+{
+  "titulo": "Torta de galletitas con dulce de leche",
+  "descripcion": "Sin horno: se arma en capas y se enfría.",
+  "porciones": 8,
+  "minutos_prep": 25,
+  "minutos_coccion": 0,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Galletitas",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "de chocolate"
+    },
+    {
+      "nombre": "Dulce de leche",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Queso crema",
+      "cantidad": 300,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Café",
+      "cantidad": 1,
+      "unidad": "taza",
+      "peso": 2,
+      "nota": "preparado, frío"
+    },
+    {
+      "nombre": "Cacao",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1,
+      "opcional": true,
+      "nota": "para decorar"
+    }
+  ],
+  "pasos": [
+    "Mezclar el dulce de leche con el queso crema hasta que quede liso.",
+    "Mojar las galletitas en el café, de a una y rápido, y armar una capa en una fuente.",
+    "Cubrir con crema y repetir las capas, terminando con crema.",
+    "Espolvorear cacao y dejar en la heladera al menos 4 horas."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "titulo": "Milanesas de berenjena",
+  "descripcion": "Crocantes, al horno o fritas.",
+  "porciones": 4,
+  "minutos_prep": 20,
+  "minutos_coccion": 20,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Berenjena",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Pan rallado",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Ajo",
+      "cantidad": 1,
+      "unidad": "diente",
+      "peso": 1
+    },
+    {
+      "nombre": "Perejil",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 50,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Cortar las berenjenas en rodajas de medio centímetro, salarlas y dejarlas 15 minutos para que larguen el agua amarga. Secarlas.",
+    "Batir los huevos con ajo, perejil y sal.",
+    "Pasar cada rodaja por huevo y después por pan rallado.",
+    {
+      "texto": "Hornear a 200 °C en una placa aceitada, dando vuelta a la mitad.",
+      "minutos": 20
+    }
+  ]
+}

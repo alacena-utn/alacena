@@ -1,0 +1,104 @@
+{
+  "titulo": "Locro sencillo",
+  "descripcion": "Una versión de una olla, sin tantas carnes, para los feriados patrios.",
+  "porciones": 8,
+  "minutos_prep": 30,
+  "minutos_coccion": 120,
+  "dificultad": 3,
+  "etiquetas": [
+    "sin_tacc"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Choclo",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 3,
+      "nota": "desgranado"
+    },
+    {
+      "nombre": "Calabaza",
+      "cantidad": 800,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Poroto",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "remojados"
+    },
+    {
+      "nombre": "Carne para guiso",
+      "cantidad": 500,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Chorizo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Panceta",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 1
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Cebolla de verdeo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 1,
+      "nota": "para la salsita"
+    },
+    {
+      "nombre": "Pimentón",
+      "cantidad": 2,
+      "unidad": "cda",
+      "peso": 1
+    },
+    {
+      "nombre": "Comino",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 50,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 2,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Dejar los porotos en remojo la noche anterior.",
+    {
+      "texto": "Dorar la carne, el chorizo y la panceta cortados en trozos en una olla grande.",
+      "minutos": 10
+    },
+    {
+      "texto": "Sumar la cebolla picada, los porotos, el choclo y agua hasta cubrir. Cocinar a fuego bajo.",
+      "minutos": 60
+    },
+    {
+      "texto": "Agregar la calabaza en cubos y seguir cocinando, revolviendo seguido, hasta que se deshaga.",
+      "minutos": 50
+    },
+    "Para la salsita: calentar el aceite con el pimentón, el comino y el verdeo picado. Servir el locro con una cucharada encima."
+  ]
+}

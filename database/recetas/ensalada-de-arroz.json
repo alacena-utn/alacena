@@ -1,0 +1,77 @@
+{
+  "titulo": "Ensalada de arroz",
+  "descripcion": "Completa y fría, para llevar en vianda.",
+  "porciones": 3,
+  "minutos_prep": 15,
+  "minutos_coccion": 15,
+  "dificultad": 1,
+  "etiquetas": [
+    "sin_tacc"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Arroz",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Jamón cocido",
+      "cantidad": 100,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Choclo",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Tomate",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2,
+      "nota": "duros"
+    },
+    {
+      "nombre": "Arveja",
+      "cantidad": 80,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Limón",
+      "cantidad": 0.5,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Hervir el arroz, enjuagarlo con agua fría y escurrir bien.",
+      "minutos": 15
+    },
+    "Cortar el jamón, el tomate y los huevos en cubitos y desgranar el choclo.",
+    "Mezclar todo y condimentar con aceite, limón y sal."
+  ]
+}

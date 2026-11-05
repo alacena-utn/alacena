@@ -1,0 +1,39 @@
+{
+  "titulo": "Licuado de banana",
+  "descripcion": "Desayuno en dos minutos.",
+  "porciones": 2,
+  "minutos_prep": 5,
+  "minutos_coccion": 0,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Banana",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 400,
+      "unidad": "ml",
+      "peso": 3
+    },
+    {
+      "nombre": "Miel",
+      "cantidad": 1,
+      "unidad": "cda",
+      "peso": 1,
+      "opcional": true
+    }
+  ],
+  "pasos": [
+    "Pelar las bananas y cortarlas en trozos.",
+    "Licuar con la leche fría y la miel hasta que quede espumoso."
+  ]
+}

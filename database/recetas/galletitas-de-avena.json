@@ -1,0 +1,74 @@
+{
+  "titulo": "Galletitas de avena",
+  "descripcion": "Para la merienda, con pasas o nueces.",
+  "porciones": 6,
+  "minutos_prep": 15,
+  "minutos_coccion": 15,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Avena",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Harina 0000",
+      "cantidad": 100,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 100,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 100,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Polvo de hornear",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Pasas de uva",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true
+    },
+    {
+      "nombre": "Nueces",
+      "cantidad": 50,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true,
+      "nota": "picadas"
+    }
+  ],
+  "pasos": [
+    "Batir la manteca blanda con el azúcar y sumar el huevo.",
+    "Agregar la avena, la harina, el polvo de hornear y las pasas o nueces.",
+    "Formar bolitas, ponerlas separadas en una placa y aplastarlas un poco.",
+    {
+      "texto": "Hornear a 180 °C: salen blandas y se endurecen al enfriar.",
+      "minutos": 15
+    }
+  ]
+}

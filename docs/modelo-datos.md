@@ -1,6 +1,6 @@
 # Modelo de datos
 
-Estructura completa en `database/schema.sql`; datos de ejemplo en `database/seed.sql`.
+Estructura completa en `database/schema.sql`; datos de ejemplo en `database/seed.sql`; recetario en `database/recetas/*.json` → `database/recetas.sql`.
 Responsable: P3.
 
 ## Tablas que usa el incremento 1
@@ -25,13 +25,23 @@ erDiagram
 | `usuario` | Cuentas. `rol` = `general` o `admin`. `hash_contrasena` con `password_hash()`. `color` = color de la heladera elegido (`verde`, `crema`, `celeste`, `rosa`, `noche`). `disposicion` = `normal` o `panoramica`. `volumen` = 0 a 100 (sonidos) | — |
 | `contacto` | Consultas del formulario de contacto. `respuesta`, `respondida_en` y `respuesta_enviada`: la respuesta de la administración (DEC-007) | `usuario_id` → usuario (NULL si no estaba logueado; `ON DELETE SET NULL`) · `respondida_por` → usuario (`ON DELETE SET NULL`) |
 | `receta` | Contenido principal del sitio | `autor_id` → usuario (`ON DELETE SET NULL`) |
-| `receta_ingrediente` | Ingredientes de cada receta, con cantidad y unidad | → receta (`CASCADE`), → ingrediente |
-| `paso` | Pasos numerados de cada receta | → receta (`CASCADE`) |
-| `etiqueta` · `receta_etiqueta` | Vegetariana, sin TACC, económica | → receta, → etiqueta |
+| `receta_ingrediente` | Ingredientes de cada receta, con cantidad y unidad. `peso` = 3 principal, 2 secundario, 1 accesorio (para el puntaje, DEC-008). `es_opcional` no cuenta para el puntaje. `nota` = "picado", "para servir"… | → receta (`CASCADE`), → ingrediente |
+| `paso` | Pasos numerados de cada receta. `instruccion` puede tener marcadores `{ing:papa}` que se reemplazan por la cantidad escalada; `segundos_timer` = temporizador del paso (modo cocina) | → receta (`CASCADE`) |
+| `etiqueta` · `receta_etiqueta` | Vegetariana, sin TACC, económica, dulce | → receta, → etiqueta |
+| `sustitucion` | "Si falta X, podés usar Y" (manteca → aceite). Cuenta como medio ingrediente en el puntaje (DEC-008) | `ingrediente_id` y `reemplazo_id` → ingrediente |
 | `categoria` · `ingrediente` · `sinonimo` | Catálogo de ingredientes y nombres alternativos (palta = aguacate). `ingrediente.usuario_id` NULL = lista general; con un usuario = ingrediente propio que agregó desde su despensa (DEC-006) | ingrediente → categoria · ingrediente → usuario (`CASCADE`) |
 | `despensa_item` | Lo que tiene cada usuario: nivel, vencimiento y ubicación | → usuario (`CASCADE`), → ingrediente |
 
-Las tablas `usuario_basico`, `restriccion_usuario`, `sustitucion`, `favorito`, `sesion_cocina` y `paso_completado` ya existen pero se usan recién en el incremento 2.
+## Incremento 2
+
+- **Entrega A (hecha):**
+  - Se usan `receta_ingrediente.peso`, `nota`, `paso.segundos_timer` y la tabla `sustitucion`.
+  - La recomendación ya consulta `usuario_basico` y `restriccion_usuario`, aunque todavía no hay pantalla para cargarlas.
+- **Entrega B:**
+  - Pantallas de preferencias (`usuario_basico`, `restriccion_usuario`, `favorito`).
+  - Modo cocina (`sesion_cocina`, `paso_completado`).
+  - Recuperar contraseña.
+  - Bloqueo por intentos.
 
 ## Reglas importantes
 

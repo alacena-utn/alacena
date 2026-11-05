@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cooki\Repositorios;
 
+use Cooki\Dominio\Puntaje;
 use PDO;
 
 /** Acceso a las recetas, sus ingredientes, pasos y etiquetas. */
@@ -94,6 +95,111 @@ final class RecetaRepositorio
     }
 
     /**
+     * Recomendaciones para el usuario con el puntaje del informe (Dominio\Puntaje): cada receta trae
+     * "puntaje", "grupo" (ahora, falta1 o casi), "faltantes", "sustituciones" y "usa_lo_que_vence".
+     * Las que no entran en ningún grupo no se devuelven; las que usan algo que el usuario no puede
+     * comer (restriccion_usuario) tampoco. Ordenadas de más a menos puntaje.
+     * @return list<array<string, mixed>>
+     */
+    public function recomendadas(int $usuarioId, int $limite = 60): array
+    {
+        $porReceta = [];
+        foreach ($this->disponibilidad($usuarioId) as $fila) {
+            $porReceta[(int) $fila['receta_id']][] = [
+                'nombre' => $fila['nombre'],
+                'peso' => (int) $fila['peso'],
+                'opcional' => (bool) $fila['es_opcional'],
+                'disponible' => match (true) {
+                    $fila['en_despensa'] || $fila['basico'] => 1.0,
+                    $fila['sustituto'] !== null => 0.5,
+                    default => 0.0,
+                },
+                'vence_pronto' => (bool) $fila['vence_pronto'],
+                'sustituto' => $fila['sustituto'],
+            ];
+        }
+        $prohibidas = $this->conRestricciones($usuarioId);
+        $recientes = $this->cocinadasHacePoco($usuarioId);
+        $resultado = [];
+        foreach ($this->buscar([], $usuarioId) as $receta) {
+            $id = (int) $receta['id'];
+            if (!isset($porReceta[$id]) || isset($prohibidas[$id])) {
+                continue;
+            }
+            $calculo = Puntaje::calcular($porReceta[$id], isset($recientes[$id]));
+            if ($calculo['grupo'] === null) {
+                continue;
+            }
+            $resultado[] = $receta + $calculo + ['minutos' => (int) $receta['minutos']];
+        }
+        usort($resultado, fn ($a, $b) => Puntaje::comparar(
+            ['puntaje' => $a['puntaje'], 'minutos' => (int) $a['minutos'], 'dificultad' => (int) $a['dificultad'],
+                'titulo' => $a['titulo']],
+            ['puntaje' => $b['puntaje'], 'minutos' => (int) $b['minutos'], 'dificultad' => (int) $b['dificultad'],
+                'titulo' => $b['titulo']]
+        ));
+        return array_slice($resultado, 0, max(1, $limite));
+    }
+
+    /**
+     * Cada ingrediente de cada receta con lo que necesita el puntaje: si el usuario lo tiene (sin vencer y
+     * con algo), si es básico (para todos o porque el usuario lo marcó como "siempre tengo"), si vence en
+     * 3 días o menos y, si le falta, el nombre de un sustituto que sí tiene (el de mejor calidad).
+     * @return list<array<string, mixed>>
+     */
+    private function disponibilidad(int $usuarioId): array
+    {
+        $consulta = $this->db->prepare(
+            'SELECT ri.receta_id, i.nombre, ri.peso, ri.es_opcional,
+                    d.ingrediente_id IS NOT NULL AS en_despensa,
+                    (i.es_basico = 1 OR ub.ingrediente_id IS NOT NULL) AS basico,
+                    COALESCE(d.vence_pronto, 0) AS vence_pronto,
+                    (SELECT i2.nombre FROM sustitucion s
+                       JOIN ingrediente i2 ON i2.id = s.reemplazo_id
+                      WHERE s.ingrediente_id = ri.ingrediente_id
+                        AND (i2.es_basico = 1 OR EXISTS (
+                             SELECT 1 FROM despensa_item d2
+                              WHERE d2.usuario_id = :usuario2 AND d2.ingrediente_id = s.reemplazo_id AND d2.nivel > 0
+                                AND (d2.fecha_vencimiento IS NULL OR d2.fecha_vencimiento >= CURDATE())))
+                      ORDER BY s.calidad DESC, i2.nombre LIMIT 1) AS sustituto
+             FROM receta_ingrediente ri
+             JOIN ingrediente i ON i.id = ri.ingrediente_id
+             LEFT JOIN (SELECT ingrediente_id,
+                               MIN(fecha_vencimiento) <= CURDATE() + INTERVAL 3 DAY AS vence_pronto
+                          FROM despensa_item
+                         WHERE usuario_id = :usuario AND nivel > 0
+                           AND (fecha_vencimiento IS NULL OR fecha_vencimiento >= CURDATE())
+                         GROUP BY ingrediente_id) d ON d.ingrediente_id = ri.ingrediente_id
+             LEFT JOIN usuario_basico ub ON ub.usuario_id = :usuario3 AND ub.ingrediente_id = ri.ingrediente_id'
+        );
+        $consulta->execute(['usuario' => $usuarioId, 'usuario2' => $usuarioId, 'usuario3' => $usuarioId]);
+        return $consulta->fetchAll();
+    }
+
+    /** @return array<int, true> recetas que usan algún ingrediente que el usuario no puede comer */
+    private function conRestricciones(int $usuarioId): array
+    {
+        $consulta = $this->db->prepare(
+            'SELECT DISTINCT ri.receta_id FROM receta_ingrediente ri
+             JOIN restriccion_usuario ru ON ru.ingrediente_id = ri.ingrediente_id AND ru.usuario_id = :usuario
+             WHERE ri.es_opcional = 0'
+        );
+        $consulta->execute(['usuario' => $usuarioId]);
+        return array_fill_keys(array_map('intval', $consulta->fetchAll(PDO::FETCH_COLUMN)), true);
+    }
+
+    /** @return array<int, true> recetas que el usuario terminó en el modo cocina en los últimos 7 días */
+    private function cocinadasHacePoco(int $usuarioId): array
+    {
+        $consulta = $this->db->prepare(
+            "SELECT DISTINCT receta_id FROM sesion_cocina
+             WHERE usuario_id = :usuario AND estado = 'completada' AND finalizada_en >= NOW() - INTERVAL 7 DAY"
+        );
+        $consulta->execute(['usuario' => $usuarioId]);
+        return array_fill_keys(array_map('intval', $consulta->fetchAll(PDO::FETCH_COLUMN)), true);
+    }
+
+    /**
      * Datos de una receta con sus ingredientes (indicando si el usuario los tiene), pasos y etiquetas.
      * @return array<string, mixed>|null
      */
@@ -109,19 +215,29 @@ final class RecetaRepositorio
         }
 
         $consulta = $this->db->prepare(
-            'SELECT ri.ingrediente_id, i.nombre, ri.cantidad, ri.unidad, ri.es_opcional, ri.nota, i.es_basico,
+            'SELECT ri.ingrediente_id, i.nombre, ri.cantidad, ri.unidad, ri.peso, ri.es_opcional, ri.nota, i.es_basico,
                     EXISTS (SELECT 1 FROM despensa_item d
                             WHERE d.usuario_id = :usuario AND d.ingrediente_id = ri.ingrediente_id AND d.nivel > 0
-                              AND (d.fecha_vencimiento IS NULL OR d.fecha_vencimiento >= CURDATE())) AS en_despensa
+                              AND (d.fecha_vencimiento IS NULL OR d.fecha_vencimiento >= CURDATE())) AS en_despensa,
+                    (SELECT CONCAT(i2.nombre, IF(s.nota IS NULL, \'\', CONCAT(\' · \', s.nota)))
+                       FROM sustitucion s JOIN ingrediente i2 ON i2.id = s.reemplazo_id
+                      WHERE s.ingrediente_id = ri.ingrediente_id
+                        AND (i2.es_basico = 1 OR EXISTS (
+                             SELECT 1 FROM despensa_item d2
+                              WHERE d2.usuario_id = :usuario2 AND d2.ingrediente_id = s.reemplazo_id AND d2.nivel > 0
+                                AND (d2.fecha_vencimiento IS NULL OR d2.fecha_vencimiento >= CURDATE())))
+                      ORDER BY s.calidad DESC, i2.nombre LIMIT 1) AS sustituto
              FROM receta_ingrediente ri
              JOIN ingrediente i ON i.id = ri.ingrediente_id
              WHERE ri.receta_id = :receta
              ORDER BY ri.es_opcional, ri.peso DESC, i.nombre'
         );
-        $consulta->execute(['usuario' => $usuarioId, 'receta' => $id]);
+        $consulta->execute(['usuario' => $usuarioId, 'usuario2' => $usuarioId, 'receta' => $id]);
         $receta['ingredientes'] = $consulta->fetchAll();
 
-        $consulta = $this->db->prepare('SELECT numero, instruccion FROM paso WHERE receta_id = :id ORDER BY numero');
+        $consulta = $this->db->prepare(
+            'SELECT id, numero, instruccion, segundos_timer FROM paso WHERE receta_id = :id ORDER BY numero'
+        );
         $consulta->execute(['id' => $id]);
         $receta['pasos'] = $consulta->fetchAll();
 
@@ -158,7 +274,7 @@ final class RecetaRepositorio
      * si algo falla, no queda nada guardado a medias.
      *
      * @param array<string, mixed> $datos titulo, descripcion, porciones_base, minutos_prep, minutos_coccion, dificultad
-     * @param list<array{id: int, cantidad: ?float, unidad: string, opcional: bool}> $ingredientes
+     * @param list<array{id: int, cantidad: ?float, unidad: string, peso?: int, opcional: bool}> $ingredientes
      * @param list<string> $pasos
      * @param list<int> $etiquetas
      */
@@ -202,8 +318,8 @@ final class RecetaRepositorio
             }
 
             $insertar = $this->db->prepare(
-                'INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad, unidad, es_opcional)
-                 VALUES (:receta, :ingrediente, :cantidad, :unidad, :opcional)'
+                'INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad, unidad, peso, es_opcional, nota)
+                 VALUES (:receta, :ingrediente, :cantidad, :unidad, :peso, :opcional, :nota)'
             );
             foreach ($ingredientes as $ing) {
                 $insertar->execute([
@@ -211,14 +327,23 @@ final class RecetaRepositorio
                     'ingrediente' => $ing['id'],
                     'cantidad' => $ing['cantidad'],
                     'unidad' => $ing['unidad'] !== '' ? $ing['unidad'] : null,
+                    'peso' => max(1, min(3, (int) ($ing['peso'] ?? 2))),
                     'opcional' => $ing['opcional'] ? 1 : 0,
+                    'nota' => trim((string) ($ing['nota'] ?? '')) !== '' ? mb_substr(trim($ing['nota']), 0, 100) : null,
                 ]);
             }
             $insertar = $this->db->prepare(
-                'INSERT INTO paso (receta_id, numero, instruccion) VALUES (:receta, :numero, :texto)'
+                'INSERT INTO paso (receta_id, numero, instruccion, segundos_timer)
+                 VALUES (:receta, :numero, :texto, :segundos)'
             );
-            foreach (array_values($pasos) as $i => $texto) {
-                $insertar->execute(['receta' => $id, 'numero' => $i + 1, 'texto' => $texto]);
+            // Cada paso puede ser un texto o ['texto' => ..., 'segundos' => ...] (con temporizador)
+            foreach (array_values($pasos) as $i => $paso) {
+                $insertar->execute([
+                    'receta' => $id,
+                    'numero' => $i + 1,
+                    'texto' => is_array($paso) ? $paso['texto'] : $paso,
+                    'segundos' => is_array($paso) && !empty($paso['segundos']) ? (int) $paso['segundos'] : null,
+                ]);
             }
             $insertar = $this->db->prepare(
                 'INSERT INTO receta_etiqueta (receta_id, etiqueta_id) VALUES (:receta, :etiqueta)'

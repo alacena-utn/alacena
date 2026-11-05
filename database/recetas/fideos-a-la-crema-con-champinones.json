@@ -1,0 +1,74 @@
+{
+  "titulo": "Fideos a la crema con champiñones",
+  "descripcion": "Cremosos y rendidores.",
+  "porciones": 4,
+  "minutos_prep": 10,
+  "minutos_coccion": 15,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Fideos",
+      "cantidad": 400,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Champiñón",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 3,
+      "nota": "fileteados"
+    },
+    {
+      "nombre": "Crema de leche",
+      "cantidad": 200,
+      "unidad": "ml",
+      "peso": 3
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Manteca",
+      "cantidad": 30,
+      "unidad": "g",
+      "peso": 1
+    },
+    {
+      "nombre": "Queso rallado",
+      "cantidad": 40,
+      "unidad": "g",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    },
+    {
+      "nombre": "Pimienta",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Poner a hervir los fideos.",
+    {
+      "texto": "Saltear la cebolla y los champiñones en la manteca hasta que se doren.",
+      "minutos": 8
+    },
+    {
+      "texto": "Sumar la crema, sal y pimienta y dejar reducir un poco.",
+      "minutos": 4
+    },
+    "Mezclar con los fideos escurridos y el queso."
+  ]
+}

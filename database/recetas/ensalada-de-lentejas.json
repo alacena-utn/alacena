@@ -1,0 +1,74 @@
+{
+  "titulo": "Ensalada de lentejas",
+  "descripcion": "Tibia, con verduras crocantes.",
+  "porciones": 3,
+  "minutos_prep": 15,
+  "minutos_coccion": 25,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Lenteja",
+      "cantidad": 250,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Tomate",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Zanahoria",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2,
+      "nota": "rallada"
+    },
+    {
+      "nombre": "Cebolla de verdeo",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 1,
+      "opcional": true,
+      "nota": "duros"
+    },
+    {
+      "nombre": "Vinagre",
+      "cantidad": 15,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 30,
+      "unidad": "ml",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Hervir las lentejas en agua sin sal hasta que estén tiernas pero enteras.",
+      "minutos": 25
+    },
+    "Escurrir y dejar entibiar.",
+    "Mezclar con el tomate, la zanahoria y el verdeo picados, y condimentar con aceite, vinagre y sal."
+  ]
+}

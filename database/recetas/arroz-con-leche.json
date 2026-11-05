@@ -1,0 +1,62 @@
+{
+  "titulo": "Arroz con leche",
+  "descripcion": "Cremoso y perfumado con limón.",
+  "porciones": 4,
+  "minutos_prep": 5,
+  "minutos_coccion": 40,
+  "dificultad": 1,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "economica",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Arroz",
+      "cantidad": 150,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 1000,
+      "unidad": "ml",
+      "peso": 3
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 120,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Limón",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 1,
+      "nota": "la cáscara"
+    },
+    {
+      "nombre": "Esencia de vainilla",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Hervir el arroz en agua 5 minutos y escurrir.",
+      "minutos": 5
+    },
+    {
+      "texto": "Sumarlo a la leche con la cáscara de limón y cocinar a fuego bajo, revolviendo seguido.",
+      "minutos": 30
+    },
+    {
+      "texto": "Agregar el azúcar y la esencia y cocinar hasta que espese.",
+      "minutos": 5
+    },
+    "Sacar la cáscara y servir tibio o frío."
+  ]
+}

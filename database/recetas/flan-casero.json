@@ -1,0 +1,59 @@
+{
+  "titulo": "Flan casero",
+  "descripcion": "Con caramelo, para comer con dulce de leche.",
+  "porciones": 6,
+  "minutos_prep": 15,
+  "minutos_coccion": 50,
+  "dificultad": 2,
+  "etiquetas": [
+    "vegetariana",
+    "sin_tacc",
+    "dulce"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Huevo",
+      "cantidad": 5,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Leche",
+      "cantidad": 750,
+      "unidad": "ml",
+      "peso": 3
+    },
+    {
+      "nombre": "Azúcar",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 3
+    },
+    {
+      "nombre": "Esencia de vainilla",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Dulce de leche",
+      "cantidad": 200,
+      "unidad": "g",
+      "peso": 1,
+      "opcional": true,
+      "nota": "para servir"
+    }
+  ],
+  "pasos": [
+    {
+      "texto": "Hacer un caramelo con 100 g de azúcar en la flanera, a fuego bajo.",
+      "minutos": 6
+    },
+    "Batir los huevos con el resto del azúcar y la esencia, sin hacer espuma. Sumar la leche tibia.",
+    {
+      "texto": "Volcar en la flanera y cocinar a baño María en el horno a 170 °C.",
+      "minutos": 50
+    },
+    "Enfriar en la heladera al menos 4 horas y desmoldar."
+  ]
+}

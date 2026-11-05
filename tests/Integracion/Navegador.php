@@ -19,10 +19,19 @@ final class Navegador
     private string $ultimoHtml = '';
     /** Otras cookies que manda siempre (por ejemplo, el color elegido sin cuenta). */
     private string $otrasCookies = '';
+    /** Página de la que "viene" el próximo pedido (el encabezado Referer, como al tocar un enlace). */
+    private string $referer = '';
 
     public function agregarCookie(string $nombre, string $valor): void
     {
         $this->otrasCookies .= '; ' . $nombre . '=' . rawurlencode($valor);
+    }
+
+    /** El próximo pedido se hace como si se hubiera tocado un enlace en $ruta (una dirección completa también sirve). */
+    public function desde(string $ruta): self
+    {
+        $this->referer = str_contains($ruta, '://') ? $ruta : ClienteApi::base() . '/' . ltrim($ruta, '/');
+        return $this;
     }
 
     /** @return array{0: int, 1: string, 2: string} [código HTTP, HTML, Location] */
@@ -57,6 +66,10 @@ final class Navegador
         $cookies = ltrim($this->cookie . $this->otrasCookies, '; ');
         if ($cookies !== '') {
             $encabezados[] = 'Cookie: ' . $cookies;
+        }
+        if ($this->referer !== '') {
+            $encabezados[] = 'Referer: ' . $this->referer;
+            $this->referer = '';
         }
         $contexto = stream_context_create(['http' => [
             'method' => $metodo,

@@ -1,0 +1,79 @@
+{
+  "titulo": "Tarta de acelga",
+  "descripcion": "Verde, suave y con mucho queso.",
+  "porciones": 6,
+  "minutos_prep": 25,
+  "minutos_coccion": 35,
+  "dificultad": 2,
+  "etiquetas": [
+    "vegetariana"
+  ],
+  "ingredientes": [
+    {
+      "nombre": "Tapa de tarta",
+      "cantidad": 2,
+      "unidad": "u",
+      "peso": 3
+    },
+    {
+      "nombre": "Acelga",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 3,
+      "nota": "un atado"
+    },
+    {
+      "nombre": "Cebolla",
+      "cantidad": 1,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Huevo",
+      "cantidad": 3,
+      "unidad": "u",
+      "peso": 2
+    },
+    {
+      "nombre": "Queso rallado",
+      "cantidad": 80,
+      "unidad": "g",
+      "peso": 2
+    },
+    {
+      "nombre": "Nuez moscada",
+      "cantidad": 1,
+      "unidad": "pizca",
+      "peso": 1
+    },
+    {
+      "nombre": "Sal",
+      "cantidad": 1,
+      "unidad": "cdita",
+      "peso": 1
+    },
+    {
+      "nombre": "Aceite",
+      "cantidad": 15,
+      "unidad": "ml",
+      "peso": 1
+    }
+  ],
+  "pasos": [
+    "Lavar la acelga, separar las hojas de las pencas y cortarlas en tiras.",
+    {
+      "texto": "Hervir la acelga 3 minutos, escurrir muy bien y picar.",
+      "minutos": 3
+    },
+    {
+      "texto": "Rehogar la cebolla picada en el aceite.",
+      "minutos": 6
+    },
+    "Mezclar la acelga, la cebolla, los huevos batidos, el queso, la sal y la nuez moscada.",
+    "Forrar un molde con una tapa, volcar el relleno y cubrir con la otra. Pinchar la tapa de arriba.",
+    {
+      "texto": "Hornear a 180 °C hasta que esté dorada.",
+      "minutos": 35
+    }
+  ]
+}
