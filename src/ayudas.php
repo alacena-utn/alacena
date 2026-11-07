@@ -106,8 +106,7 @@ function iconoIngrediente(string $nombre, bool $propio = false): string
     if ($propio) {
         return url('img/ingredientes/frasco.svg');
     }
-    $texto = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($nombre)) ?: $nombre;
-    $palabras = preg_split('/[^a-z]+/', strtolower($texto), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    $palabras = preg_split('/[^a-z]+/', \Cooki\Dominio\Texto::sinTildes($nombre), -1, PREG_SPLIT_NO_EMPTY) ?: [];
     foreach ([implode('-', $palabras), $palabras[0] ?? ''] as $candidato) {
         $archivo = 'img/ingredientes/' . $candidato . '.svg';
         if ($candidato !== '' && is_file(dirname(__DIR__) . '/public/' . $archivo)) {

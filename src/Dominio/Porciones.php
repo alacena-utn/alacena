@@ -73,8 +73,7 @@ final class Porciones
     /** "Cebolla de verdeo" → "cebolla-de-verdeo" (el mismo nombre que usan los dibujos y los marcadores). */
     public static function slug(string $texto): string
     {
-        $ascii = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($texto)) ?: $texto;
-        return trim((string) preg_replace('/[^a-z0-9]+/', '-', strtolower($ascii)), '-');
+        return Texto::slug($texto);
     }
 
     /** 1.5 → "1 ½", 0.25 → "¼", 2 → "2" (redondeado al cuarto más cercano; nunca 0). */

@@ -26,3 +26,6 @@ desktop.ini
 
 # Paquete para subir al hosting (scripts/empaquetar.php)
 /cooki-hosting.zip
+
+# Carpeta de videos promocionales
+video/
