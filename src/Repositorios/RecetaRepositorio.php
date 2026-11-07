@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cooki\Repositorios;
 
 use Cooki\Dominio\Puntaje;
+use Cooki\Dominio\Texto;
 use PDO;
 
 /** Acceso a las recetas, sus ingredientes, pasos y etiquetas. */
@@ -407,8 +408,7 @@ final class RecetaRepositorio
     /** "Arroz con pollo" → "arroz-con-pollo" (y "arroz-con-pollo-2" si ya existe). */
     private function slugUnico(string $titulo, int $exceptoId): string
     {
-        $texto = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($titulo)) ?: $titulo;
-        $base = trim((string) preg_replace('/[^a-z0-9]+/', '-', strtolower($texto)), '-') ?: 'receta';
+        $base = Texto::slug($titulo) ?: 'receta';
         $slug = $base;
         $consulta = $this->db->prepare('SELECT COUNT(*) FROM receta WHERE slug = :slug AND id <> :id');
         for ($n = 2; $consulta->execute(['slug' => $slug, 'id' => $exceptoId]) && $consulta->fetchColumn() > 0; $n++) {
